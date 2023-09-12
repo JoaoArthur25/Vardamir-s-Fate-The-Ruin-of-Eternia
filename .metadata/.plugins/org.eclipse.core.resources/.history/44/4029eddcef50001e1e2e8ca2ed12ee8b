@@ -1,0 +1,30 @@
+public class Weapon {
+    public static final String SWORD_LIGHT = "Light Sword";
+    public static final String SWORD_HEAVY = "Heavy Sword";
+    public static final String BOW = "Bow";
+    public static final String CROSSBOW = "Crossbow";
+
+    private String category;
+    private int damageConstant;
+
+    public Weapon(String category, int damageConstant) {
+        if (isValidCategory(category)) {
+            this.category = category;
+        } else {
+            throw new IllegalArgumentException("Invalid weapon category: " + category);
+        }
+        this.damageConstant = damageConstant;
+    }
+
+    private boolean isValidCategory(String category) {
+        return category.equals(SWORD_LIGHT) || category.equals(SWORD_HEAVY) || category.equals(BOW) || category.equals(CROSSBOW);
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int getDamageConstant() {
+        return damageConstant;
+    }
+}

@@ -1,0 +1,33 @@
+public class Main {
+    public static void main(String[] args) {
+        Weapon weapon = new Weapon(Weapon.SWORD_LIGHT, 10);
+        Armor armor = new Armor(5);
+
+        Character player = new Character("Player", 15, 20, 10, 12, weapon, armor);
+
+        Character enemy = new Character("Enemy", 10, 15, 8, 10, new Weapon(Weapon.SWORD_HEAVY, 12), new Armor(8));
+
+        while (player.isAlive() && enemy.isAlive()) {
+            int playerDamage = player.calculateDamage();
+            int enemyDamage = enemy.calculateDamage();
+
+            System.out.println(player.getName() + " attacks " + enemy.getName() + " for " + playerDamage + " damage.");
+            enemy.receiveDamage(playerDamage);
+
+            System.out.println(enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage + " damage.");
+            player.receiveDamage(enemyDamage);
+
+            System.out.println(player.getName() + " HP: " + player.getHitPoints());
+            System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+            System.out.println("------");
+        }
+
+        if (player.isAlive()) {
+            System.out.println(player.getName() + " wins!");
+        } else if (enemy.isAlive()) {
+            System.out.println(enemy.getName() + " wins!");
+        } else {
+            System.out.println("It's a draw!");
+        }
+    }
+}

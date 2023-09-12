@@ -1,0 +1,163 @@
+import java.util.Random;
+
+class Character {
+	private String name;
+	private int hp;
+	private int strength;
+	private int constitution;
+	private int agility;
+	private int dexterity;
+	private Weapon weapon;
+	private Armor armor;
+	
+
+	public Character(String name, int strength, int constitution, int agility, int dexterity, Weapon weapon,
+			Armor armor) {
+		this.setName(name);
+		this.strength = strength;
+		this.constitution = constitution;
+		this.setAgility(agility);
+		this.dexterity = dexterity;
+		this.weapon = weapon;
+		this.setArmor(armor);
+		this.hp = calculateHitPoints();
+	}
+
+	private int calculateHitPoints() {
+		return rollD6() + rollD6() + rollD6() + constitution;
+	}
+
+	public int calculateDamage() {
+        int weaponDamage = 0;
+
+        if (weapon.getCategory().equals(Weapon.LONG_SWORD)) {
+            weaponDamage = rollD12();
+            return weaponDamage + (int) (0.5 * strength) + weapon.getDamageConstant();
+        } else if (weapon.getCategory().equals(Weapon.DAGGER)) {
+            weaponDamage = rollD6() + rollD6() + rollD4();
+            return weaponDamage + (int) (0.33 * dexterity) + weapon.getDamageConstant();
+        } else if (weapon.getCategory().equals(Weapon.BOW)) {
+            weaponDamage = rollD6() + rollD6() + rollD4();
+            return weaponDamage + (int) (0.33 * agility) + weapon.getDamageConstant();
+        } else if (weapon.getCategory().equals(Weapon.CROSSBOW)) {
+            weaponDamage = rollD12();
+            return weaponDamage + (int) (0.5 * dexterity) + weapon.getDamageConstant();
+        }
+
+        return 0;
+    }
+
+    public int heal() {
+    	return hp = hp + rollD6();
+    }
+	private int rollD12() {
+		Random rand = new Random();
+		return rand.nextInt(12) + 1;
+	}
+	
+	private int rollD6() {
+		Random rand = new Random();
+		return rand.nextInt(6) + 1;
+	}
+
+	private int rollD4() {
+		Random rand = new Random();
+		return rand.nextInt(4) + 1;
+	}
+
+	public int getHitPoints() {
+		return hp;
+	}
+
+	public void receiveDamage(int damage) {
+		hp -= damage;
+		if (hp < 0) {
+			hp = 0;
+		}
+	}
+
+	public boolean isAlive() {
+		return hp > 0;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Weapon getWeapon() {
+		return weapon;
+	}
+
+	public void setWeapon(Weapon weapon) {
+		this.weapon = weapon;
+	}
+
+	public Armor getArmor() {
+		return armor;
+	}
+
+	public void setArmor(Armor armor) {
+		this.armor = armor;
+	}
+
+	public int getAgility() {
+		return agility;
+	}
+
+	public void setAgility(int agility) {
+		this.agility = agility;
+	}
+
+	public int getStrenght() {
+		return strength;
+	}
+
+	public void setStrenght(int strength) {
+		this.strength = strength;
+	}
+
+	public int getConstitution() {
+		return constitution;
+	}
+
+	public void setConstitution(int constitution) {
+		this.constitution = constitution;
+	}
+
+	public int getDexterity() {
+		return dexterity;
+	}
+
+	public void setDexterity(int dexterity) {
+		this.dexterity = dexterity;
+	}
+	
+	public int getTotalDamage() {
+        int weaponDamage = calculateDamage();
+        return weaponDamage;
+    }
+
+	 @Override
+	    public String toString() {
+	        return name
+	                + "\nHP: "
+	                + getHitPoints()
+	                + "\nStrength: "
+	                + getStrenght()
+	                + "\nConstitution: "
+	                + getConstitution()
+	                + "\nAgility: "
+	                + getAgility()
+	                + "\nDexterity: "
+	                + getDexterity()
+	                + "\nWeapon: "
+	                + getWeapon().toString()
+	                + "\nArmor: "
+	                + getArmor().toString();	                       
+	    }
+
+}

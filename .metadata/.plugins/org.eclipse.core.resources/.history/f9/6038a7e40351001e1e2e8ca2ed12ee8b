@@ -1,0 +1,183 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Character Creation");
+        System.out.print("Enter character name: ");
+        String playerName = scanner.nextLine();
+
+        int pointsRemaining = 15;
+        int strength = 0;
+        int constitution = 0;
+        int agility = 0;
+        int dexterity = 0;
+        
+        while (pointsRemaining > 0) {
+            System.out.println("Points Remaining: " + pointsRemaining);
+            System.out.println("1. Add to Strength");
+            System.out.println("2. Add to Constitution");
+            System.out.println("3. Add to Agility");
+            System.out.println("4. Add to Dexterity");
+            System.out.print("Choose an attribute to increase (1-4): ");
+            int choice = getIntInput(scanner);
+
+            if (choice < 1 || choice > 4) {
+                System.out.println("Invalid choice. Please choose a valid attribute.");
+                continue;
+            }
+
+            System.out.print("Enter the number of points to add: ");
+            int pointsToAdd = getIntInput(scanner);
+
+            if (pointsToAdd <= 0 || pointsToAdd > pointsRemaining) {
+                System.out.println("Invalid number of points. Please enter a valid number.");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    strength += pointsToAdd;
+                    break;
+                case 2:
+                    constitution += pointsToAdd;
+                    break;
+                case 3:
+                    agility += pointsToAdd;
+                    break;
+                case 4:
+                    dexterity += pointsToAdd;
+                    break;
+            }
+
+            pointsRemaining -= pointsToAdd;
+        }
+
+        System.out.println("Character " + playerName);
+        System.out.println("Strength: " + strength);
+        System.out.println("Constitution: " + constitution);
+        System.out.println("Agility: " + agility);
+        System.out.println("Dexterity: " + dexterity);
+
+        System.out.println("Choose a weapon: ");
+        System.out.println("1. Light Sword");
+        System.out.println("2. Heavy Sword");
+        System.out.println("3. Bow");
+        System.out.println("4. Crossbow");
+        int weaponChoice = getIntInput(scanner);
+        Weapon weapon = createWeapon(weaponChoice);
+
+        Character player = new Character(playerName, strength, constitution, agility, dexterity, weapon, null);
+
+        player.setArmor(createArmor(player));
+        
+        System.out.println(player.toString() + "\n\n"); 
+
+        Character enemy = new Character("Enemy", 4, 6, 3, 2, new Weapon(Weapon.LONG_SWORD), null);
+        
+        enemy.setArmor(new Armor(Armor.HEAVY, enemy));
+        
+        System.out.println("\n" + enemy.toString() + "\n\n"); 
+
+        while (player.isAlive() && enemy.isAlive()) {
+            int playerDamage = player.calculateDamage();
+            int enemyDamage = enemy.calculateDamage();
+            
+            System.out.println("Player HP: " + player.getHitPoints());
+            System.out.println("Monster HP: " + enemy.getHitPoints());
+
+            System.out.println(player.getName() + " attacks " + enemy.getName() + " for " + playerDamage + " damage.");
+            enemy.receiveDamage(playerDamage);
+
+            System.out.println(enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage + " damage.");
+            player.receiveDamage(enemyDamage);
+
+            System.out.println(player.getName() + " HP: " + player.getHitPoints());
+            System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+            
+            System.out.println(player.getName() + " Armor: " + player.getWeapon().getCategory());
+            System.out.println(enemy.getName() + " Armor: " + enemy.getWeapon().getCategory());
+
+            System.out.println(player.getName() + " Armor: " + player.getArmor().getCategory());
+            System.out.println(enemy.getName() + " Armor: " + enemy.getArmor().getCategory());
+
+            System.out.println("Player Total Damage: " + player.getTotalDamage());
+            System.out.println("Enemy Total Damage: " + enemy.getTotalDamage());
+
+            System.out.println("------");
+        }
+
+        if (player.isAlive()) {
+            System.out.println(player.getName() + " wins!");
+        } else if (enemy.isAlive()) {
+            System.out.println(enemy.getName() + " wins!");
+        } else {
+            System.out.println("It's a draw!");
+        }
+
+        scanner.close();
+    }
+    
+    private static int getIntInput(Scanner scanner) {
+        int input = 0;
+        boolean validInput = false;
+        do {
+            try {
+                input = scanner.nextInt();
+                validInput = true;
+            } catch (java.util.InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.nextLine();
+            }
+        } while (!validInput);
+        return input;
+    }
+
+    private static Weapon createWeapon(int choice) {
+        try {
+            switch (choice) {
+                case 1:
+                    return new Weapon(Weapon.DAGGER);
+                case 2:
+                    return new Weapon(Weapon.LONG_SWORD);
+                case 3:
+                    return new Weapon(Weapon.BOW);
+                case 4:
+                    return new Weapon(Weapon.CROSSBOW);
+                default:
+                    throw new IllegalArgumentException("Invalid weapon choice.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
+            System.exit(1);
+        }
+        return null;
+    }
+
+    private static Armor createArmor(Character character) {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Choose armor: ");
+            System.out.println("1. Light Armor");
+            System.out.println("2. Medium Armor");
+            System.out.println("3. Heavy Armor");
+            int armorChoice = getIntInput(scanner);
+
+            switch (armorChoice) {
+                case 1:
+                    return new Armor(Armor.LIGHT, character);
+                case 2:
+                    return new Armor(Armor.HEAVY, character);
+                case 3: 
+                	return new Armor(Armor.MEDIUM, character);
+                default:
+                    throw new IllegalArgumentException("Invalid armor choice.");
+            }
+        } catch (IllegalArgumentException e) {
+            System.err.println("Error: " + e.getMessage());
+            System.exit(1);
+        }
+        return null;
+    }
+}

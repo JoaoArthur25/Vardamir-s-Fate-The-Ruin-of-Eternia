@@ -1,0 +1,41 @@
+public class Armor {
+    public static final String LIGHT = "Light Armor";
+    public static final String HEAVY = "Heavy Armor";
+
+    private String category;
+    private int defenceConstant;
+    private Character character;
+
+    public Armor(String category, Character character) {
+        if (isValidCategory(category)) {
+            this.category = category;
+            this.character = character; 
+            this.defenceConstant = setDefenceConstant(category);
+        } else {
+            throw new IllegalArgumentException("Invalid armor category: " + category);
+        }
+    }
+
+    private boolean isValidCategory(String category) {
+        return category.equals(LIGHT) || category.equals(HEAVY);
+    }
+
+    private int setDefenceConstant(String category) {
+        switch (category) {
+            case LIGHT:
+                return (int) (0.25 * character.getConstitution());
+            case HEAVY:
+                return (int) (0.5 * character.getConstitution()); 
+            default:
+                return 0;
+        }
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int getDefenceConstant() {
+        return defenceConstant;
+    }
+}
