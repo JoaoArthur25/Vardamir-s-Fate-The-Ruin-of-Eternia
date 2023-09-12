@@ -9,10 +9,11 @@ class Character {
 	private int dexterity;
 	private Weapon weapon;
 	private Armor armor;
+	private Magic magic;
 	
 
 	public Character(String name, int strength, int constitution, int agility, int dexterity, Weapon weapon,
-			Armor armor) {
+			Armor armor, Magic magic) {
 		this.setName(name);
 		this.strength = strength;
 		this.constitution = constitution;
@@ -21,6 +22,7 @@ class Character {
 		this.weapon = weapon;
 		this.setArmor(armor);
 		this.hp = calculateHitPoints();
+		this.magic = magic;
 	}
 
 	private int calculateHitPoints() {
@@ -29,6 +31,7 @@ class Character {
 
 	public int calculateDamage() {
         int weaponDamage = 0;
+        //int magicDamage = 0;
 
         if (weapon.getCategory().equals(Weapon.LONG_SWORD)) {
             weaponDamage = rollD12();
@@ -42,13 +45,21 @@ class Character {
         } else if (weapon.getCategory().equals(Weapon.CROSSBOW)) {
             weaponDamage = rollD12();
             return weaponDamage + (int) (0.5 * dexterity) + weapon.getDamageConstant();
+        /*} else if(magic.getCategory().equals(Magic.FIRE)) {
+        	return magicDamage = rollD6() + rollD4();
+        } else if(magic.getCategory().equals(Magic.ICE)) {
+        	return magicDamage = rollD6() + rollD4();
+        } else if(magic.getCategory().equals(Magic.ELECTRICITY)) {
+        	return magicDamage = rollD6() + rollD4();
+        } else if(magic.getCategory().equals(Magic.POISON)) {
+        	return magicDamage = rollD6() + rollD4();*/
         }
-
+        
         return 0;
     }
 
     public int heal() {
-    	return hp = hp + rollD6();
+    	return hp = hp + rollD6() + rollD6() + rollD6();
     }
 	private int rollD12() {
 		Random rand = new Random();
@@ -75,7 +86,7 @@ class Character {
 			hp = 0;
 		}
 	}
-
+	
 	public boolean isAlive() {
 		return hp > 0;
 	}
@@ -94,6 +105,14 @@ class Character {
 
 	public void setWeapon(Weapon weapon) {
 		this.weapon = weapon;
+	}
+	
+	public Magic getMagic() {
+		return magic;
+	}
+	
+	public void setMagic(Magic magic) {
+		this.magic = magic;
 	}
 
 	public Armor getArmor() {
@@ -157,7 +176,9 @@ class Character {
 	                + "\nWeapon: "
 	                + getWeapon().toString()
 	                + "\nArmor: "
-	                + getArmor().toString();	                       
+	                + getArmor().toString()	
+	        		+ "\nMagic: "
+	        		+ getMagic().toString();
 	    }
 
 }
