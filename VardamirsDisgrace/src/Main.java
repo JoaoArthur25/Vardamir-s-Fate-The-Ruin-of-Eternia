@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
-        
+
         beforeFirstBattleTale();
 
         System.out.println("Character Creation");
@@ -72,84 +72,115 @@ public class Main {
         int weaponChoice = getIntInput(scanner);
         Weapon weapon = createWeapon(weaponChoice);
 
-        Character player = new Character(playerName, strength, constitution, agility, dexterity, weapon, null, null);
+        Character player = new Character(playerName, strength, constitution, agility, dexterity, weapon, null,
+                new Potion(Potion.SMALL));
+
+        int magicCounter = 0;
+        while (magicCounter < 2) {
+            System.out.println("Choose two magics: ");
+            System.out.println("1. Fire");
+            System.out.println("2. Poison");
+            System.out.println("3. Ice");
+            System.out.println("4. Electric");
+            int magicChoice = getIntInput(scanner);
+            createMagic(magicChoice, player);
+            magicCounter++;
+        }
+
+        player.getMagics();
 
         player.setArmor(createArmor(player));
-        
-        player.setMagic(createMagic(player));
 
         System.out.println(player.toString() + "\n\n");
 
-        Character enemy = new Character("Enemy", 3, 3, 2, 2, new Weapon(Weapon.LONG_SWORD), null, null);
+        Character enemy = new Character("Enemy", 3, 3, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
+                new Potion(Potion.SMALL));
 
         enemy.setArmor(new Armor(Armor.HEAVY, enemy));
-        
-        enemy.setMagic(new Magic(Magic.DARK, enemy));
 
         System.out.println("\n" + enemy.toString() + "\n\n");
 
         while (player.isAlive() && enemy.isAlive()) {
             int playerAction = getPlayerAction(scanner);
-            System.out.println(player.getArmor().getDefence()); 
+            System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             enemy.getArmor().setDefence();
+            if (enemy.getFireEffectTurns() > 0) {
+                enemy.applyFireEffect();
+            }
+
+            if(enemy.getPoisonEffectTurns() > 0){
+                enemy.applyPoisonEffect();
+            }
+
             switch (playerAction) {
                 case 0:
-                	System.out.println();
+                    System.out.println();
                     int playerDamage = player.calculateDamage();
                     int enemyDefense = enemy.getArmor().setDefence();
                     int damageDealt = playerDamage - enemyDefense;
 
                     if (damageDealt > 0) {
-                        System.out.println(player.getName() + " attacks " + enemy.getName() + " for " + playerDamage + " damage.");
+                        System.out.println(
+                                player.getName() + " attacks " + enemy.getName() + " for " + playerDamage + " damage.");
                         enemy.receiveDamage(damageDealt);
                     } else {
                         System.out.println(player.getName() + " attacks " + enemy.getName() + " but does no damage.");
                     }
                     break;
-                    
-                case 1:
-                	
 
-                case 2: 
+                case 1:
+                    System.out.println("Choose a magic to use: ");
+
+                    System.out.println("0. " + player.getMagic(0));
+                    System.out.println("1. " + player.getMagic(1));
+
+                    int magicChoice = getIntInput(scanner);
+
+                    player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                    
+                    break;
+
+                case 2:
                     player.getArmor().doubleDefence();
                     System.out.println(player.getName() + " doubles their defense for 1 round.");
-                    System.out.println("Defesa atual: " + player.getArmor().getDefence()); 
+                    System.out.println("Defesa atual: " + player.getArmor().getDefence());
                     break;
 
                 case 3:
-                    player.heal();
-                    System.out.println(player.getName() + " uses a potion and now has " + player.getHitPoints()  + " HP.");
-                    System.out.println(player.getArmor().getDefence()); 
+                    player.heal(player.getHeal());
+                    System.out.println(player.getName() + " uses a potion and recovers " + player.getHeal() + " HP.");
+                    System.out.println(player.getArmor().getDefence());
                     break;
             }
 
             int computerAction = random.nextInt(3);
 
             switch (computerAction) {
-            
-                case 0: 
+
+                case 0:
                     int enemyDamage = enemy.calculateDamage();
                     int playerDefense = enemy.getArmor().setDefence();
                     int damageDealt = enemyDamage - playerDefense;
 
                     if (damageDealt > 0) {
-                        System.out.println(enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage + " damage.");
+                        System.out.println(
+                                enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage + " damage.");
                         player.receiveDamage(damageDealt);
                     } else {
                         System.out.println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
                     }
                     break;
 
-                case 1: 
+                case 1:
                     enemy.getArmor().doubleDefence();
                     System.out.println(enemy.getName() + " doubles their defense for 1 round.");
-                    System.out.println("Defesa atual: " + enemy.getArmor().getDefence()); 
+                    System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
                     break;
 
-                case 2: 
-                    enemy.heal();
-                    System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHitPoints() + " HP.");
+                case 2:
+                    enemy.heal(enemy.getHeal());
+                    System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
                     break;
             }
 
@@ -230,26 +261,25 @@ public class Main {
         }
         return null;
     }
-    
-    private static Magic createMagic(Character character) {
-        try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Choose magic: ");
-            System.out.println("1. Fire Magic");
-            System.out.println("2. Ice Magic");
-            System.out.println("3. Electricity Magic");
-            System.out.println("4. Poison Magic");
-            int magicChoice = getIntInput(scanner);
 
+    private static Magic createMagic(int magicChoice, Character character) {
+        try {
             switch (magicChoice) {
                 case 1:
-                    return new Magic(Magic.FIRE, character);
+                    character.addMagic(new Magic(Magic.FIRE));
+                    break;
                 case 2:
-                    return new Magic(Magic.ICE, character);
+                    character.addMagic(new Magic(Magic.POISON));
+                    break;
                 case 3:
-                    return new Magic(Magic.ELECTRICITY, character);
+                    character.addMagic(new Magic(Magic.ICE));
+                    break;
                 case 4:
-                	return new Magic(Magic.POISON, character);
+                    character.addMagic(new Magic(Magic.ELECTRIC));
+                    break;
+                case 5:
+                    character.addMagic(new Magic(Magic.DARK));
+                    break;
                 default:
                     throw new IllegalArgumentException("Invalid magic choice.");
             }
@@ -277,37 +307,38 @@ public class Main {
 
         return choice;
     }
-    
+
     private static void beforeFirstBattleTale() {
-    	
-    	System.out.println("After a lengthy patrol along the distant borders of your city,\n"
-        		+ " you and your steadfast friend conclude your watch, opting to embark on the journey back home.\n"
-        		+ " The path home stretches out, a seemingly endless ribbon through the untamed wilderness.\n"
-        		+ " The air carries a sense of freshness, soothing your senses as you drink in the tranquil surroundings.\n"
-        		+ "\n"
-        		+ "Nature's symphony surrounds you, the harmonious chorus of Eternia's vibrant and thriving kingdom filling the air.\n"
-        		+ " The songbirds sing their melodious tunes, while the gentle rustling of leaves adds a soft,\n"
-        		+ " soothing backdrop to the tranquil ambiance. But for how long...?\n "
-        		+ "After an hour of walking, you and Finrod finally arrive close to the capital, and he says with an eager grin,\n"
-        		+ " \"We're finally getting close to it, I can't wait to eat my wife's beef stew!\"\n"
-        		+ "\n"
-        		+ "But something is amiss, the air, once so fresh and rejuvenating, has taken on an ominous heaviness.\n");
+
+        System.out.println("After a lengthy patrol along the distant borders of your city,\n"
+                + " you and your steadfast friend conclude your watch, opting to embark on the journey back home.\n"
+                + " The path home stretches out, a seemingly endless ribbon through the untamed wilderness.\n"
+                + " The air carries a sense of freshness, soothing your senses as you drink in the tranquil surroundings.\n"
+                + "\n"
+                + "Nature's symphony surrounds you, the harmonious chorus of Eternia's vibrant and thriving kingdom filling the air.\n"
+                + " The songbirds sing their melodious tunes, while the gentle rustling of leaves adds a soft,\n"
+                + " soothing backdrop to the tranquil ambiance. But for how long...?\n "
+                + "After an hour of walking, you and Finrod finally arrive close to the capital, and he says with an eager grin,\n"
+                + " \"We're finally getting close to it, I can't wait to eat my wife's beef stew!\"\n"
+                + "\n"
+                + "But something is amiss, the air, once so fresh and rejuvenating, has taken on an ominous heaviness.\n");
         System.out.println("Before you can reply, Finrod's voice trembles as he calls you urgently.\n"
-        		+ " His usually resolute demeanor now betrays a deep, primal fear, something he has never experienced before.\n");
+                + " His usually resolute demeanor now betrays a deep, primal fear, something he has never experienced before.\n");
         System.out.println("Following his frantic gaze, you look towards the city, and your heart plummets.\n"
-        		+ " The city, your beloved capital, is engulfed in a raging inferno.\n"
-        		+ " The towering flames lick the night sky, casting an eerie,\n"
-        		+ " malevolent glow that defies the tranquility that once enveloped the kingdom. \n");
-        System.out.println("A shiver runs down your spine as you witness a horrifying sight—a colossal tornado of dark energy descends from the heavens,\n "
-        		+ "its ominous presence creating an otherworldly tempest. The once-clear skies are now obscured by thick, foreboding clouds,\n"
-        		+ " and the once-proud city is plunged into chaos.\n\n"
-        		+ "Piercing screams of terror pierce the air as innocent citizens flee for their lives, their homes reduced to ashes before their eyes.\n"
-        		+ " You and Finrod stand at the edge of the darkened forest, frozen in dread as the malevolent force continues its relentless descent upon"
-        		+ " the heart of your kingdom.\n"
-        		+ "\n"
-        		+ "In the midst of the chaos and devastation, you sense that something unspeakable has been awakened, and your fate,\n"
-        		+ " along with that of Eternia, hangs precariously in the balance.\n");
-        
+                + " The city, your beloved capital, is engulfed in a raging inferno.\n"
+                + " The towering flames lick the night sky, casting an eerie,\n"
+                + " malevolent glow that defies the tranquility that once enveloped the kingdom. \n");
+        System.out.println(
+                "A shiver runs down your spine as you witness a horrifying sight, a colossal tornado of dark energy descends from the heavens,\n "
+                        + "its ominous presence creating an otherworldly tempest. The once-clear skies are now obscured by thick, foreboding clouds,\n"
+                        + " and the once-proud city is plunged into chaos.\n\n"
+                        + "Piercing screams of terror pierce the air as innocent citizens flee for their lives, their homes reduced to ashes before their eyes.\n"
+                        + " You and Finrod stand at the edge of the darkened forest, frozen in dread as the malevolent force continues its relentless descent upon"
+                        + " the heart of your kingdom.\n"
+                        + "\n"
+                        + "In the midst of the chaos and devastation, you sense that something unspeakable has been awakened, and your fate,\n"
+                        + " along with that of Eternia, hangs precariously in the balance.\n");
+
     }
 
 }
