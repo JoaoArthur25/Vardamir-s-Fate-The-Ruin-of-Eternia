@@ -157,21 +157,14 @@ public class Main {
 
                     if (magicName.equals("Eletric Magic")) {
                         shockUsed = true;
-<<<<<<< HEAD
                     }
 
                     if (magicName.equals("Ice Magic")) {
                         coldUsed = true;
-=======
-                        System.out.println(shockUsed);
                     }
-
-                    System.out.println(shockUsed);
-
+                    
                     if (magicName.equals("Ice Magic")) {
                         coldUsed = true;
-                        System.out.println(coldUsed);
->>>>>>> e15a574a2f73fcfe9d4a9f517d91bacfae1e83c6
                     }
 
                     System.out.println(player.getMagic(magicChoice).toString() + " used.");
