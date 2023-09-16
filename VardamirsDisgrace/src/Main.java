@@ -99,15 +99,13 @@ public class Main {
         enemy.setArmor(new Armor(Armor.HEAVY, enemy));
 
         System.out.println("\n" + enemy.toString() + "\n\n");
-         boolean coldUsed = false;
-            boolean shockUsed = false;
+        boolean coldUsed = false;
+        boolean shockUsed = false;
 
         while (player.isAlive() && enemy.isAlive()) {
             int playerAction = getPlayerAction(scanner);
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
-            enemy.getArmor().setDefence();
-           
 
             if (player.getFireEffectTurns() > 0) {
                 enemy.applyFireEffect();
@@ -120,7 +118,7 @@ public class Main {
             if (player.getColdEffectTurns() <= 0) {
                 enemy.removeColdEffect();
                 coldUsed = false;
-                 player.setColdEffectTurns();
+                player.setColdEffectTurns();
             }
 
             if (player.getShockEffectTurns() <= 0) {
@@ -162,14 +160,13 @@ public class Main {
                     if (magicName.equals("Eletric Magic")) {
                         shockUsed = true;
                         System.out.println(shockUsed);
-
                     }
+
                     System.out.println(shockUsed);
 
                     if (magicName.equals("Ice Magic")) {
                         coldUsed = true;
                         System.out.println(coldUsed);
-
                     }
                     System.out.println(coldUsed);
 
@@ -193,7 +190,7 @@ public class Main {
                     break;
 
                 case 3:
-                    player.heal(player.getHeal());
+                    player.heal();
                     System.out.println(player.getName() + " uses a potion and recovers " + player.getHeal() + " HP.");
                     System.out.println(player.getArmor().getDefence());
                     System.out.println(enemy.toString() + "\n\n");
@@ -203,6 +200,7 @@ public class Main {
             }
 
             int computerAction = random.nextInt(3);
+             enemy.getArmor().setDefence();
 
             switch (computerAction) {
 

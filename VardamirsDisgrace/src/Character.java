@@ -17,7 +17,7 @@ class Character {
     private int coldEffectTurns = 2;
     private int shockEffectTurns = 2;
 
-    private int healUses;
+    private int healUses = 0;
 
     public Character(String name, int strength, int constitution, int agility, int dexterity, Weapon weapon,
             Armor armor, Potion potion) {
@@ -32,7 +32,6 @@ class Character {
         this.hp = calculateHitPoints();
         this.fireEffectTurns = 0;
         this.poisonEffectTurns = 0;
-        this.healUses = 0;
         this.magic = new ArrayList<Magic>();
     }
 
@@ -41,27 +40,43 @@ class Character {
     }
 
     public int calculateDamage() {
-        int weaponDamage = 0;
+        int weaponDamage = weapon.getDamageConstant();
 
-        if (weapon.getCategory().equals(Weapon.LONG_SWORD)) {
-            weaponDamage = rollD12();
-            return weaponDamage + (int) (0.5 * strength) + weapon.getDamageConstant();
-        } else if (weapon.getCategory().equals(Weapon.DAGGER)) {
-            weaponDamage = rollD6() + rollD6() + rollD4();
-            return weaponDamage + (int) (0.33 * dexterity) + weapon.getDamageConstant();
-        } else if (weapon.getCategory().equals(Weapon.BOW)) {
-            weaponDamage = rollD6() + rollD6() + rollD4();
-            return weaponDamage + (int) (0.33 * agility) + weapon.getDamageConstant();
-        } else if (weapon.getCategory().equals(Weapon.CROSSBOW)) {
-            weaponDamage = rollD12();
-            return weaponDamage + (int) (0.5 * dexterity) + weapon.getDamageConstant();
+        switch (weapon.getCategory()) {
+            case Weapon.LONG_SWORD:
+                weaponDamage += rollD12();
+                weaponDamage += (int) (0.5 * strength);
+                break;
+            case Weapon.DAGGER:
+                weaponDamage += rollD6() + rollD6() + rollD4();
+                weaponDamage += (int) (0.33 * dexterity);
+                break;
+            case Weapon.BOW:
+                weaponDamage += rollD6() + rollD6() + rollD4();
+                weaponDamage += (int) (0.33 * agility);
+                break;
+            case Weapon.CROSSBOW:
+                weaponDamage += rollD12();
+                weaponDamage += (int) (0.5 * dexterity);
+                break;
         }
-        return 0;
+
+        return Math.max(0, weaponDamage);
+    }
+
+    public int heal() {
+        if (healUses < 3) {
+            healUses++;
+            int healingAmount = potion.getHealing();
+            hp += healingAmount;
+            return healingAmount;
+        } else {
+            return 0;
+        }
     }
 
     public int getHeal() {
         if (healUses < 3) {
-            healUses++;
             return potion.getHealing();
         } else {
             return 0;
@@ -84,8 +99,8 @@ class Character {
         this.magic.add(magic);
     }
 
-    public void heal(int getHeal) {
-        hp += getHeal();
+    public void heal(int healingAmount) {
+        hp += healingAmount;
     }
 
     private int rollD12() {
@@ -202,7 +217,7 @@ class Character {
     public void addStrength(int amount) {
         strength += amount;
     }
-    
+
     public void reduceConstitution(int amount) {
         constitution -= amount;
     }
@@ -264,19 +279,19 @@ class Character {
     }
 
     public void applyColdEffect() {
-            reduceAgility(2);
-            reduceDexterity(2);
-            reduceConstitution(1);
+        reduceAgility(2);
+        reduceDexterity(2);
+        reduceConstitution(1);
     }
 
     public void applyShockEffect() {
         reduceDexterity(2);
     }
 
-    public void removeColdEffect(){
+    public void removeColdEffect() {
         addAgility(2);
-        addDexterity(2); 
-        addConstitution(1); 
+        addDexterity(2);
+        addConstitution(1);
     }
 
     @Override
