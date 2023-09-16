@@ -162,9 +162,7 @@ public class Main {
                     if (magicName.equals("Ice Magic")) {
                         coldUsed = true;
                     }
-
-                    System.out.println(shockUsed);
-
+                    
                     if (magicName.equals("Ice Magic")) {
                         coldUsed = true;
                     }
