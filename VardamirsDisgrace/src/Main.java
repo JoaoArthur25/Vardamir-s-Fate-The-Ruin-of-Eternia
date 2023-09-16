@@ -99,12 +99,15 @@ public class Main {
         enemy.setArmor(new Armor(Armor.HEAVY, enemy));
 
         System.out.println("\n" + enemy.toString() + "\n\n");
+         boolean coldUsed = false;
+            boolean shockUsed = false;
 
         while (player.isAlive() && enemy.isAlive()) {
             int playerAction = getPlayerAction(scanner);
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             enemy.getArmor().setDefence();
+           
 
             if (player.getFireEffectTurns() > 0) {
                 enemy.applyFireEffect();
@@ -114,18 +117,16 @@ public class Main {
                 enemy.applyPoisonEffect();
             }
 
-            if (player.getColdEffectTurns() > 0) {
-                player.removeColdEffectTurns();
-            } 
-            else {
+            if (player.getColdEffectTurns() <= 0) {
                 enemy.removeColdEffect();
+                coldUsed = false;
+                 player.setColdEffectTurns();
             }
-            
-            if (player.getShockEffectTurns() > 0) {
-                player.removeShockEffectTurns();
-            } 
-            else {
+
+            if (player.getShockEffectTurns() <= 0) {
                 enemy.addDexterity(2);
+                shockUsed = false;
+                player.setShockEffectTurns();
             }
 
             switch (playerAction) {
@@ -154,6 +155,26 @@ public class Main {
 
                     int magicChoice = getIntInput(scanner);
 
+                    String magicName = player.getMagic(magicChoice).toString();
+
+                    System.out.println("Magic Name: " + magicName);
+
+                    if (magicName.equals("Eletric Magic")) {
+                        shockUsed = true;
+                        System.out.println(shockUsed);
+
+                    }
+                    System.out.println(shockUsed);
+
+                    if (magicName.equals("Ice Magic")) {
+                        coldUsed = true;
+                        System.out.println(coldUsed);
+
+                    }
+                    System.out.println(coldUsed);
+
+                    System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
                     player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
                     System.out.println(player.toString() + "\n\n");
                     System.out.println(enemy.toString() + "\n\n");
@@ -167,6 +188,7 @@ public class Main {
                     System.out.println(player.getName() + " doubles their defense for 1 round.");
                     System.out.println("Defesa atual: " + player.getArmor().getDefence());
                     System.out.println(enemy.toString() + "\n\n");
+                    System.out.println(player.getShockEffectTurns());
 
                     break;
 
@@ -175,6 +197,7 @@ public class Main {
                     System.out.println(player.getName() + " uses a potion and recovers " + player.getHeal() + " HP.");
                     System.out.println(player.getArmor().getDefence());
                     System.out.println(enemy.toString() + "\n\n");
+                    System.out.println(player.getShockEffectTurns());
 
                     break;
             }
@@ -212,6 +235,16 @@ public class Main {
             System.out.println(player.getName() + " HP: " + player.getHitPoints());
             System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
             System.out.println("------");
+
+            if (coldUsed) {
+                System.out.println(player.getColdEffectTurns());
+                player.removeColdEffectTurns();
+            }
+            System.out.println(shockUsed);
+            if (shockUsed) {
+                System.out.println(player.getShockEffectTurns());
+                player.removeShockEffectTurns();
+            }
         }
 
         if (player.isAlive()) {

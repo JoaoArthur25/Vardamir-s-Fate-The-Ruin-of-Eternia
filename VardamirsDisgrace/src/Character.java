@@ -276,7 +276,7 @@ class Character {
     public void removeColdEffect(){
         addAgility(2);
         addDexterity(2); 
-        addConstitution(2); 
+        addConstitution(1); 
     }
 
     @Override
