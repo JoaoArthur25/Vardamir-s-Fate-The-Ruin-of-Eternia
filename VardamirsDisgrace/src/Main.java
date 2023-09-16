@@ -19,7 +19,7 @@ public class Main {
         int dexterity = 0;
 
         while (pointsRemaining > 0) {
-            System.out.println("Points Remaining: " + pointsRemaining);
+            System.out.println("\nPoints Remaining: " + pointsRemaining);
             System.out.println("1. Add to Strength");
             System.out.println("2. Add to Constitution");
             System.out.println("3. Add to Agility");
@@ -58,13 +58,13 @@ public class Main {
             pointsRemaining -= pointsToAdd;
         }
 
-        System.out.println("Character " + playerName);
+        System.out.println("\nCharacter " + playerName);
         System.out.println("Strength: " + strength);
         System.out.println("Constitution: " + constitution);
         System.out.println("Agility: " + agility);
         System.out.println("Dexterity: " + dexterity);
 
-        System.out.println("Choose a weapon: ");
+        System.out.println("\nChoose a weapon: ");
         System.out.println("1. Light Sword");
         System.out.println("2. Heavy Sword");
         System.out.println("3. Bow");
@@ -77,7 +77,7 @@ public class Main {
 
         int magicCounter = 0;
         while (magicCounter < 2) {
-            System.out.println("Choose two magics: ");
+            System.out.println("\nChoose two magics: ");
             System.out.println("1. Fire");
             System.out.println("2. Poison");
             System.out.println("3. Ice");
@@ -99,8 +99,8 @@ public class Main {
         enemy.setArmor(new Armor(Armor.HEAVY, enemy));
 
         System.out.println("\n" + enemy.toString() + "\n\n");
-         boolean coldUsed = false;
-            boolean shockUsed = false;
+        boolean coldUsed = false;
+        boolean shockUsed = false;
 
         while (player.isAlive() && enemy.isAlive()) {
             int playerAction = getPlayerAction(scanner);
@@ -120,7 +120,7 @@ public class Main {
             if (player.getColdEffectTurns() <= 0) {
                 enemy.removeColdEffect();
                 coldUsed = false;
-                 player.setColdEffectTurns();
+                player.setColdEffectTurns();
             }
 
             if (player.getShockEffectTurns() <= 0) {
@@ -157,29 +157,19 @@ public class Main {
 
                     String magicName = player.getMagic(magicChoice).toString();
 
-                    System.out.println("Magic Name: " + magicName);
-
                     if (magicName.equals("Eletric Magic")) {
                         shockUsed = true;
-                        System.out.println(shockUsed);
-
                     }
-                    System.out.println(shockUsed);
 
                     if (magicName.equals("Ice Magic")) {
                         coldUsed = true;
-                        System.out.println(coldUsed);
-
                     }
-                    System.out.println(coldUsed);
 
                     System.out.println(player.getMagic(magicChoice).toString() + " used.");
 
                     player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
                     System.out.println(player.toString() + "\n\n");
                     System.out.println(enemy.toString() + "\n\n");
-
-                    System.out.println(player.getShockEffectTurns());
 
                     break;
 
@@ -188,7 +178,6 @@ public class Main {
                     System.out.println(player.getName() + " doubles their defense for 1 round.");
                     System.out.println("Defesa atual: " + player.getArmor().getDefence());
                     System.out.println(enemy.toString() + "\n\n");
-                    System.out.println(player.getShockEffectTurns());
 
                     break;
 
@@ -197,7 +186,6 @@ public class Main {
                     System.out.println(player.getName() + " uses a potion and recovers " + player.getHeal() + " HP.");
                     System.out.println(player.getArmor().getDefence());
                     System.out.println(enemy.toString() + "\n\n");
-                    System.out.println(player.getShockEffectTurns());
 
                     break;
             }
@@ -237,12 +225,9 @@ public class Main {
             System.out.println("------");
 
             if (coldUsed) {
-                System.out.println(player.getColdEffectTurns());
                 player.removeColdEffectTurns();
             }
-            System.out.println(shockUsed);
             if (shockUsed) {
-                System.out.println(player.getShockEffectTurns());
                 player.removeShockEffectTurns();
             }
         }
@@ -297,7 +282,7 @@ public class Main {
     private static Armor createArmor(Character character) {
         try {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("Choose armor: ");
+            System.out.println("\nChoose armor: ");
             System.out.println("1. Light Armor");
             System.out.println("2. Medium Armor");
             System.out.println("3. Heavy Armor");
@@ -386,16 +371,25 @@ public class Main {
                 + " The city, your beloved capital, is engulfed in a raging inferno.\n"
                 + " The towering flames lick the night sky, casting an eerie,\n"
                 + " malevolent glow that defies the tranquility that once enveloped the kingdom. \n");
-        System.out.println(
-                "A shiver runs down your spine as you witness a horrifying sight, a colossal tornado of dark energy descends from the heavens,\n "
-                        + "its ominous presence creating an otherworldly tempest. The once-clear skies are now obscured by thick, foreboding clouds,\n"
-                        + " and the once-proud city is plunged into chaos.\n\n"
-                        + "Piercing screams of terror pierce the air as innocent citizens flee for their lives, their homes reduced to ashes before their eyes.\n"
-                        + " You and Finrod stand at the edge of the darkened forest, frozen in dread as the malevolent force continues its relentless descent upon"
-                        + " the heart of your kingdom.\n"
-                        + "\n"
-                        + "In the midst of the chaos and devastation, you sense that something unspeakable has been awakened, and your fate,\n"
-                        + " along with that of Eternia, hangs precariously in the balance.\n");
+        System.out.println("A shiver runs down your spine as you witness a horrifying sight, a colossal tornado of dark energy descends from the heavens,\n "
+                + "its ominous presence creating an otherworldly tempest. The once-clear skies are now obscured by thick, foreboding clouds,\n"
+                + " and the once-proud city is plunged into chaos.\n\n"
+                + "Piercing screams of terror pierce the air as innocent citizens flee for their lives, their homes reduced to ashes before their eyes.\n"
+                + " You and Finrod stand at the edge of the darkened forest, frozen in dread as the malevolent force continues its relentless descent upon"
+                + " the heart of your kingdom.\n"
+                + "\n"
+                + "In the midst of the chaos and devastation, you sense that something unspeakable has been awakened, and your fate,\n"
+                + " along with that of Eternia, hangs precariously in the balance.\n");
+
+    }
+
+    private static void firstChooseAction(){
+        System.out.println("After triumphing over these malevolent creatures, \n"
+               + " you look at your lost friend's body and realise a hard choice lies ahead. \n" 
+               + " Will you venture to your residence, where your beloved wife Elwyn may be in grave danger, \n" 
+               + " in a valiant attempt to render assistance? \n" 
+               + "Or will you follow the rational course of action, as prescribed by your guard protocol, \n" 
+               + " by heading to the outpost to seek your commander's orders on protecting the city from these vile threats?");
 
     }
 

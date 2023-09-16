@@ -285,6 +285,6 @@ class Character {
                 + getConstitution()
                 + "\nAgility: " + getAgility() + "\nDexterity: " + getDexterity() + "\nWeapon: "
                 + getWeapon().toString()
-                + "\nArmor: " + getArmor().toString() + "\nMagic: " + getMagics();
+                + "\nArmor: " + getArmor().toString() + "\nMagics: " + getMagics().toString();
     }
 }
