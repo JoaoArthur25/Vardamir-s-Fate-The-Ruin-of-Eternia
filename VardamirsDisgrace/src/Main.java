@@ -157,21 +157,16 @@ public class Main {
 
                     if (magicName.equals("Eletric Magic")) {
                         shockUsed = true;
-<<<<<<< HEAD
                     }
 
                     if (magicName.equals("Ice Magic")) {
                         coldUsed = true;
-=======
-                        System.out.println(shockUsed);
                     }
 
                     System.out.println(shockUsed);
 
                     if (magicName.equals("Ice Magic")) {
                         coldUsed = true;
-                        System.out.println(coldUsed);
->>>>>>> e15a574a2f73fcfe9d4a9f517d91bacfae1e83c6
                     }
 
                     System.out.println(player.getMagic(magicChoice).toString() + " used.");
@@ -242,8 +237,9 @@ public class Main {
             }
         }
 
+
         if (player.isAlive()) {
-            System.out.println(player.getName() + " wins!");
+                firstChoiceText();
         } else if (enemy.isAlive()) {
             System.out.println(enemy.getName() + " wins!");
         } else {
@@ -393,8 +389,8 @@ public class Main {
 
     }
 
-    private static void firstChooseAction(){
-        System.out.println("After triumphing over these malevolent creatures, \n"
+    private static void firstChoiceText(){
+        System.out.println("\n\nAfter triumphing over these malevolent creatures, \n"
                + " you look at your lost friend's body and realise a hard choice lies ahead. \n" 
                + " Will you venture to your residence, where your beloved wife Elwyn may be in grave danger, \n" 
                + " in a valiant attempt to render assistance? \n" 
