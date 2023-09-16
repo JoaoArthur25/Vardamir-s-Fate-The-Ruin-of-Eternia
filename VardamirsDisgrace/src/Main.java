@@ -93,7 +93,7 @@ public class Main {
 
         System.out.println(player.toString() + "\n\n");
 
-        Character enemy = new Character("Enemy", 3, 3, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
+        Character enemy = new Character("Enemy", 3, 8, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
                 new Potion(Potion.SMALL));
 
         enemy.setArmor(new Armor(Armor.HEAVY, enemy));
@@ -105,12 +105,27 @@ public class Main {
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             enemy.getArmor().setDefence();
-            if (enemy.getFireEffectTurns() > 0) {
+
+            if (player.getFireEffectTurns() > 0) {
                 enemy.applyFireEffect();
             }
 
-            if(enemy.getPoisonEffectTurns() > 0){
+            if (player.getPoisonEffectTurns() > 0) {
                 enemy.applyPoisonEffect();
+            }
+
+            if (player.getColdEffectTurns() > 0) {
+                player.removeColdEffectTurns();
+            } 
+            else {
+                enemy.removeColdEffect();
+            }
+            
+            if (player.getShockEffectTurns() > 0) {
+                player.removeShockEffectTurns();
+            } 
+            else {
+                enemy.addDexterity(2);
             }
 
             switch (playerAction) {
@@ -127,6 +142,8 @@ public class Main {
                     } else {
                         System.out.println(player.getName() + " attacks " + enemy.getName() + " but does no damage.");
                     }
+                    System.out.println(enemy.toString() + "\n\n");
+
                     break;
 
                 case 1:
@@ -138,19 +155,27 @@ public class Main {
                     int magicChoice = getIntInput(scanner);
 
                     player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
-                    
+                    System.out.println(player.toString() + "\n\n");
+                    System.out.println(enemy.toString() + "\n\n");
+
+                    System.out.println(player.getShockEffectTurns());
+
                     break;
 
                 case 2:
                     player.getArmor().doubleDefence();
                     System.out.println(player.getName() + " doubles their defense for 1 round.");
                     System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                    System.out.println(enemy.toString() + "\n\n");
+
                     break;
 
                 case 3:
                     player.heal(player.getHeal());
                     System.out.println(player.getName() + " uses a potion and recovers " + player.getHeal() + " HP.");
                     System.out.println(player.getArmor().getDefence());
+                    System.out.println(enemy.toString() + "\n\n");
+
                     break;
             }
 
@@ -292,10 +317,10 @@ public class Main {
 
     private static int getPlayerAction(Scanner scanner) {
         System.out.println("Choose an action:");
-        System.out.println("0 - Atacar");
-        System.out.println("1 - Usar Magia");
-        System.out.println("2 - Defender");
-        System.out.println("3 - Usar Pocao");
+        System.out.println("0 - Attack");
+        System.out.println("1 - Use magic");
+        System.out.println("2 - Defend");
+        System.out.println("3 - Use Potion");
         System.out.print("Enter your choice (0-3): ");
         int choice = getIntInput(scanner);
 

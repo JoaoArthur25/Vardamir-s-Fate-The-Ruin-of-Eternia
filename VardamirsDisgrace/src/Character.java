@@ -12,8 +12,10 @@ class Character {
     private Armor armor;
     private ArrayList<Magic> magic;
     private Potion potion;
-    private int fireEffectTurns; 
-    private int poisonEffectTurns;
+    private int fireEffectTurns = 3;
+    private int poisonEffectTurns = 4;
+    private int coldEffectTurns = 2;
+    private int shockEffectTurns = 2;
 
     private int healUses;
 
@@ -58,7 +60,7 @@ class Character {
     }
 
     public int getHeal() {
-       if (healUses < 3) {
+        if (healUses < 3) {
             healUses++;
             return potion.getHealing();
         } else {
@@ -70,11 +72,11 @@ class Character {
         return magic.toArray(new Magic[magic.size()]);
     }
 
-    public String getMagic(int index){
-        return magic.get(index).getMagicCategory();
+    public String getMagic(int index) {
+        return magic.get(index).toString();
     }
 
-    public void castMagic(Character target, int index, String magicCategory){
+    public void castMagic(Character target, int index, String magicCategory) {
         magic.get(index).cast(target, magicCategory);
     }
 
@@ -177,7 +179,7 @@ class Character {
         return weaponDamage;
     }
 
-	public void reduceAgility(int amount) {
+    public void reduceAgility(int amount) {
         agility -= amount;
     }
 
@@ -185,11 +187,27 @@ class Character {
         dexterity -= amount;
     }
 
+    public void addAgility(int amount) {
+        agility += amount;
+    }
+
+    public void addDexterity(int amount) {
+        dexterity += amount;
+    }
+
+    public void addConstitution(int amount) {
+        constitution += amount;
+    }
+
+    public void addStrength(int amount) {
+        strength += amount;
+    }
+    
     public void reduceConstitution(int amount) {
         constitution -= amount;
     }
 
-	public void reduceStrength(int amount) {
+    public void reduceStrength(int amount) {
         strength -= amount;
     }
 
@@ -197,34 +215,76 @@ class Character {
         return fireEffectTurns;
     }
 
-    public int setFireEffectTurns() {
-        return fireEffectTurns = 3;
+    public void setFireEffectTurns() {
+        fireEffectTurns = 3;
     }
 
     public int getPoisonEffectTurns() {
         return poisonEffectTurns;
     }
 
-    public int setPoisonEffectTurns() {
-        return poisonEffectTurns = 4;
+    public void setPoisonEffectTurns() {
+        poisonEffectTurns = 4;
+    }
+
+    public int getColdEffectTurns() {
+        return coldEffectTurns;
+    }
+
+    public void setColdEffectTurns() {
+        coldEffectTurns = 2;
+    }
+
+    public void removeColdEffectTurns() {
+        coldEffectTurns--;
+    }
+
+    public int getShockEffectTurns() {
+        return shockEffectTurns;
+    }
+
+    public void setShockEffectTurns() {
+        shockEffectTurns = 2;
+    }
+
+    public void removeShockEffectTurns() {
+        shockEffectTurns--;
     }
 
     public void applyFireEffect() {
-            int fireTurnDamage = 3;
-            receiveDamage(fireTurnDamage);
-            fireEffectTurns--;
+        int fireTurnDamage = 3;
+        receiveDamage(fireTurnDamage);
+        fireEffectTurns--;
     }
 
     public void applyPoisonEffect() {
-            int poisonTurnDamage = 2;
-            receiveDamage(poisonTurnDamage);
-            poisonEffectTurns--;
+        int poisonTurnDamage = 2;
+        receiveDamage(poisonTurnDamage);
+        poisonEffectTurns--;
+    }
+
+    public void applyColdEffect() {
+            reduceAgility(2);
+            reduceDexterity(2);
+            reduceConstitution(1);
+    }
+
+    public void applyShockEffect() {
+        reduceDexterity(2);
+    }
+
+    public void removeColdEffect(){
+        addAgility(2);
+        addDexterity(2); 
+        addConstitution(2); 
     }
 
     @Override
     public String toString() {
-        return name + "\nHP: " + getHitPoints() + "\nStrength: " + getStrength() + "\nConstitution: " + getConstitution()
-                + "\nAgility: " + getAgility() + "\nDexterity: " + getDexterity() + "\nWeapon: " + getWeapon().toString()
+        return name + "\nHP: " + getHitPoints() + "\nStrength: " + getStrength() + "\nConstitution: "
+                + getConstitution()
+                + "\nAgility: " + getAgility() + "\nDexterity: " + getDexterity() + "\nWeapon: "
+                + getWeapon().toString()
                 + "\nArmor: " + getArmor().toString() + "\nMagic: " + getMagics();
     }
 }

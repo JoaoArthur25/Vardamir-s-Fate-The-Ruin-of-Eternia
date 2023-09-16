@@ -27,25 +27,24 @@ public class Magic {
                 target.receiveDamage(fireDamage);
 
                 dice = rand.nextInt(2);
-                if (dice == 0) {
+                //if (dice == 0) {
                     target.setFireEffectTurns();
                     target.applyFireEffect();
-                }
+                //}
                 break;
 
             case ICE:
-                target.reduceAgility(2);
-                target.reduceDexterity(2);
-                target.reduceConstitution(1);
-
                 int iceDamage = rollD6();
                 target.receiveDamage(iceDamage);
+                target.setColdEffectTurns();
+                target.applyColdEffect();
                 break;
 
             case ELECTRIC:
                 int electricDamage = rollD6() + rollD6();
                 target.receiveDamage(electricDamage);
-                target.reduceDexterity(2);
+                target.setShockEffectTurns();
+                target.applyShockEffect();
                 break;
 
             case POISON:
@@ -53,10 +52,10 @@ public class Magic {
                 target.receiveDamage(poisonDamge);
 
                 dice = rand.nextInt(2);
-                if (dice == 0) {
+               // if (dice == 0) {
                     target.setPoisonEffectTurns();
                     target.applyPoisonEffect();
-                }
+                //}
                 break;
 
             case DARK:
@@ -84,5 +83,10 @@ public class Magic {
     private int rollD4() {
         Random rand = new Random();
         return rand.nextInt(4) + 1;
+    }
+
+    @Override
+    public String toString(){
+        return magicCategory;
     }
 }
