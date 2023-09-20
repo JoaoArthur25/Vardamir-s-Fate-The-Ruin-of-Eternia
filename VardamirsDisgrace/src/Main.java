@@ -19,15 +19,15 @@ public class Main {
         Character esqueleto = new Character("Esqueleto", 6, 5, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
                 new Potion(Potion.MEDIUM));
 
-        int enemy1 = random.nextInt(3);
-        Character enemy = null; 
-        System.out.println(enemy1);
-        if (enemy1 == 0) {
-            enemy = diabrete; 
-        } else if (enemy1 == 1) {
-            enemy = aranha; 
+        int enemyChoice = random.nextInt(3);
+        Character enemy = null;
+        System.out.println(enemyChoice);
+        if (enemyChoice == 0) {
+            enemy = diabrete;
+        } else if (enemyChoice == 1) {
+            enemy = aranha;
         } else {
-            enemy = esqueleto; 
+            enemy = esqueleto;
         }
 
         System.out.println("\n" + enemy.toString() + "\n\n");
@@ -36,57 +36,202 @@ public class Main {
         boolean necroticUsed = false;
 
         while (player.isAlive() && enemy.isAlive()) {
-
-            if (player.getFireEffectTurns() > 0) {
-                enemy.applyFireEffect();
-            }
-
-            if (player.getPoisonEffectTurns() > 0) {
-                enemy.applyPoisonEffect();
-            }
-
-            if (player.getColdEffectTurns() <= 0) {
-                enemy.removeColdEffect();
-                coldUsed = false;
-                player.setColdEffectTurns();
-            }
-
-            if (player.getNecroticEffectTurns() <= 0) {
-                enemy.removeNecroticEffect();
-                necroticUsed = false;
-                player.setNecroticEffectTurns();
-            }
-
-            if (player.getShockEffectTurns() <= 0) {
-                enemy.addDexterity(2);
-                shockUsed = false;
-                player.setShockEffectTurns();
-            }
-
-            if (player.getAgility() >= enemy.getAgility()) {
-                int playerAction = getPlayerAction(scanner);
-                System.out.println(player.getArmor().getDefence());
-                player.getArmor().setDefence();
-                playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-                int computerAction = random.nextInt(2);
-                computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
-            }
-
-            else {
-                int computerAction = random.nextInt(2);
-                computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
-                int playerAction = getPlayerAction(scanner);
-                System.out.println(player.getArmor().getDefence());
-                player.getArmor().setDefence();
-                playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-            }
+            manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
+            combat1(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
         }
         if (player.isAlive()) {
             firstChoiceText();
+            System.out.println("1. Go to your house");
+            System.out.println("2. Go to the outpost");
+            int choice = getIntInput(scanner);
+            while (choice < 1 || choice > 2) {
+                System.out.println("Invalid choice. Please choose a valid action (1-2).");
+                System.out.print("Enter your choice (1-2): ");
+                choice = getIntInput(scanner);
+            }
+            if (choice == 1) {
+                searchWifeChoice();
+                System.out.println("1. Save your wife");
+                System.out.println("2. Save the triplets");
+                choice = getIntInput(scanner);
+
+                while (choice < 1 || choice > 2) {
+                    System.out.println("Invalid choice. Please choose a valid action (1-2).");
+                    System.out.print("Enter your choice (1-2): ");
+                    choice = getIntInput(scanner);
+                }
+
+                if (choice == 1) {
+                    Character nidere = new Character("Nidere", 5, 5, 5, 5, new Weapon(Weapon.DAGGER), null,
+                            new Potion(Potion.SMALL));
+                    Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
+                            new Potion(Potion.SMALL));
+                    createMagic(5, specter);
+
+                    enemyChoice = random.nextInt(2);
+                    enemy = null;
+                    System.out.println(enemyChoice);
+                    if (enemyChoice == 0) {
+                        enemy = nidere;
+                    } else {
+                        enemy = specter;
+                    }
+
+                    System.out.println("\n" + enemy.toString() + "\n\n");
+                    coldUsed = false;
+                    shockUsed = false;
+                    necroticUsed = false;
+
+                    while (player.isAlive() && enemy.isAlive()) {
+
+                        manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
+                        combat2(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                    }
+
+                    if(player.isAlive()){
+                        saveWifeChoice();
+
+                    }
+                    else if(enemy.isAlive()){
+                        System.out.println("You are dead!");
+                    }
+                    else{
+                        System.out.println("You are dead!");
+                    }
+
+                }
+                else if(choice ==2){
+                    Character nidere = new Character("Nidere", 5, 5, 5, 5, new Weapon(Weapon.DAGGER), null,
+                            new Potion(Potion.SMALL));
+                    Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
+                            new Potion(Potion.SMALL));
+                    createMagic(5, specter);
+
+                    enemyChoice = random.nextInt(2);
+                    enemy = null;
+                    System.out.println(enemyChoice);
+                    if (enemyChoice == 0) {
+                        enemy = nidere;
+                    } else {
+                        enemy = specter;
+                    }
+
+                    System.out.println("\n" + enemy.toString() + "\n\n");
+                    coldUsed = false;
+                    shockUsed = false;
+                    necroticUsed = false;
+
+                    while (player.isAlive() && enemy.isAlive()) {
+
+                        manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
+                        combat2(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                    }
+
+                    if(player.isAlive()){
+                        saveTripletsChoice();
+                        findingVardamir();
+                    }
+                    else if(enemy.isAlive()){
+                        System.out.println("You are dead!");
+                    }
+                    else{
+                        System.out.println("You are dead!");
+                    }
+
+                }
+            } else if (choice == 2) {
+                goToOutpostChoice();
+                System.out.println("1. Go to the master's room");
+                System.out.println("2. Go directaly the heart of the city");
+                choice = getIntInput(scanner);
+
+                while (choice < 1 || choice > 2) {
+                    System.out.println("Invalid choice. Please choose a valid action (1-2).");
+                    System.out.print("Enter your choice (1-2): ");
+                    choice = getIntInput(scanner);
+                }
+
+                if(choice == 1){
+                    goSearchTheMasterChoice();
+                    Character nidere = new Character("Nidere", 5, 5, 5, 5, new Weapon(Weapon.DAGGER), null,
+                            new Potion(Potion.SMALL));
+                    Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
+                            new Potion(Potion.SMALL));
+                    createMagic(5, specter);
+
+                    enemyChoice = random.nextInt(2);
+                    enemy = null;
+                    System.out.println(enemyChoice);
+                    if (enemyChoice == 0) {
+                        enemy = nidere;
+                    } else {
+                        enemy = specter;
+                    }
+
+                    System.out.println("\n" + enemy.toString() + "\n\n");
+                    coldUsed = false;
+                    shockUsed = false;
+                    necroticUsed = false;
+
+                    while (player.isAlive() && enemy.isAlive()) {
+
+                        manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
+                        combat2(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                    }
+                    if(player.isAlive()){
+                        afterReachingMaster();
+                        findingVardamir();
+                    }
+                    else if(enemy.isAlive()){
+                        System.out.println("You are dead!");
+                    }
+                    else{
+                        System.out.println("You are dead!");
+                    }
+                }
+                else if(choice == 2){
+                    goAwayChoice();
+                    Character nidere = new Character("Nidere", 5, 5, 5, 5, new Weapon(Weapon.DAGGER), null,
+                            new Potion(Potion.SMALL));
+                    Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
+                            new Potion(Potion.SMALL));
+                    createMagic(5, specter);
+
+                    enemyChoice = random.nextInt(2);
+                    enemy = null;
+                    System.out.println(enemyChoice);
+                    if (enemyChoice == 0) {
+                        enemy = nidere;
+                    } else {
+                        enemy = specter;
+                    }
+
+                    System.out.println("\n" + enemy.toString() + "\n\n");
+                    coldUsed = false;
+                    shockUsed = false;
+                    necroticUsed = false;
+
+                    while (player.isAlive() && enemy.isAlive()) {
+
+                        manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
+                        combat2(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                    }
+                    if(player.isAlive()){
+                        findingVardamir();
+                    }
+                    else if(enemy.isAlive()){
+                        System.out.println("You are dead!");
+                    }
+                    else{
+                        System.out.println("You are dead!");
+                    }
+                }
+            }
+
         } else if (enemy.isAlive()) {
-            System.out.println(enemy.getName() + " wins!");
+            System.out.println("You are dead!");
         } else {
-            System.out.println("It's a draw!");
+            System.out.println("You are dead!");
         }
 
         scanner.close();
@@ -265,10 +410,9 @@ public class Main {
                         + " You spot the Finland triplets, the elven blacksmith who has always been like a father to you since your own father's death, \n"
                         + "in grave danger, \n"
                         + "surrounded by giant wolves twisted by all the chaos, like wolves of darkness, with pitch-black fur, \n"
-                        + "hollow red eyes and sharp teeth, ready to rip apart the lifes of that children.\n"
+                        + "hollow red eyes and sharp teeth, ready to rip apart the lifes of that children, in addition to the night wraiths, creatures drawn from the depths of darkness, insatiable in their thirst for souls and terror..\n"
                         + "\n"
-                        + " Simultaneously, your gaze falls upon a face most dear, Elwyn, the person you hold closest to your heart, besieged by night specters, \n"
-                        + "creatures drawn from the depths of darkness, insatiable in their thirst for souls and terror. \n"
+                        + " Simultaneously, your gaze falls upon a face most dear, Elwyn, the person you hold closest to your heart, besieged by the same creature. \n"
                         + "\n"
                         + " The weight of your choice presses upon you: to rescue your wife or to safeguard the lives of the three innocent children. \n");
     }
@@ -325,7 +469,7 @@ public class Main {
 
     }
 
-    private static void goSearcheTheMasterChoice() {
+    private static void goSearchTheMasterChoice() {
         slowPrint(
                 " You opt to search for your commander, driven by the need for guidance in this nightmarish situation.\n"
                         + "Climbing the stairs to the second floor, a sense of trepidation grips you, intensified by the eerie silence that pervades the outpost.\n"
@@ -334,8 +478,11 @@ public class Main {
                         + "Your commander lies on the floor, grievously wounded, with a monstrous creature looming over him. \n"
                         + "The creature's grotesque features and malevolent aura leave no doubt that it's responsible for the carnage in the outpost. \n"
                         + "With grim determination, you engage the monster in a fierce battle, your skill and bravery pitted against its unholy might. \n"
-                        + "\n"
-                        + " After a grueling struggle, you manage to defeat the creature, but your commander's injuries are severe, \n"
+                        + "\n");                  
+    }
+
+    private static void afterReachingMaster(){
+         slowPrint(" After a grueling struggle, you manage to defeat the creature, but your commander's injuries are severe, \n"
                         + "and his time is running out. \n"
                         + "As you kneel beside him, he weakly imparts his final words of wisdom and guidance, \n"
                         + "entrusting you with his legendary two-edged sword, a symbol of honor and strength. \n"
@@ -644,9 +791,104 @@ public class Main {
                 break;
 
             case 1:
+
+                String magicName = enemy.getMagic(0).toString();
+
+                if (magicName.equals("Necrotic Magic")) {
+                    necroticUsed = true;
+                }
+
+                System.out.println(player.getMagic(0).toString() + " used.");
+
+                enemy.castMagic(player, 0, enemy.getMagic(0));
+                System.out.println(player.getCharacter() + "\n\n");
+                System.out.println(enemy.toString() + "\n\n");
+
+            case 2:
                 enemy.heal(enemy.getHeal());
                 System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
-                break;                
+                break;
+        }
+
+        System.out.println(player.getName() + " HP: " + player.getHitPoints());
+        System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+        System.out.println("------");
+
+        if (coldUsed) {
+            player.removeColdEffectTurns();
+        }
+        if (shockUsed) {
+            player.removeShockEffectTurns();
+        }
+
+        if (necroticUsed) {
+            enemy.removeNecroticEffectTurns();
+        }
+    }
+
+    public static void combat1(Character player, Character enemy, Scanner scanner, boolean coldUsed, boolean shockUsed,
+            boolean necroticUsed, Random random) {
+        if (player.getAgility() >= enemy.getAgility()) {
+            int playerAction = getPlayerAction(scanner);
+            System.out.println(player.getArmor().getDefence());
+            player.getArmor().setDefence();
+            playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            int computerAction = random.nextInt(2);
+            computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
+        }
+
+        else {
+            int computerAction = random.nextInt(2);
+            computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
+            int playerAction = getPlayerAction(scanner);
+            System.out.println(player.getArmor().getDefence());
+            player.getArmor().setDefence();
+            playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+        }
+    }
+
+    public static void combat2(Character player, Character enemy, Scanner scanner, boolean coldUsed, boolean shockUsed,
+            boolean necroticUsed, Random random) {
+        if (player.getAgility() >= enemy.getAgility()) {
+            int playerAction = getPlayerAction(scanner);
+            System.out.println(player.getArmor().getDefence());
+            player.getArmor().setDefence();
+            playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            int computerAction = random.nextInt(3);
+            computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
+        }
+
+        else {
+            int computerAction = random.nextInt(3);
+            computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
+            int playerAction = getPlayerAction(scanner);
+            System.out.println(player.getArmor().getDefence());
+            player.getArmor().setDefence();
+            playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+        }
+    }
+
+    public static void computerAction2(Scanner scanner, Character player, Character enemy, boolean coldUsed,
+            boolean shockUsed, boolean necroticUsed, int computerAction) {
+        switch (computerAction) {
+            case 0:
+                int enemyDamage = enemy.calculateDamage();
+                int playerDefense = player.getArmor().setDefence();
+                int damageDealt = enemyDamage - playerDefense;
+
+                if (damageDealt > 0) {
+                    System.out.println(
+                            enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage + " damage.");
+                    player.receiveDamage(damageDealt);
+                } else {
+                    System.out.println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
+                }
+                break;
+
+            case 1:
+                enemy.heal(enemy.getHeal());
+                System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
+                break;
         }
 
         System.out.println(player.getName() + " HP: " + player.getHitPoints());
@@ -662,6 +904,34 @@ public class Main {
 
         if (necroticUsed) {
             player.removeNecroticEffectTurns();
+        }
+    }
+    public static void manageEffects(Character player, Character enemy, boolean coldUsed, boolean shockUsed,
+            boolean necroticUsed) {
+        if (player.getFireEffectTurns() > 0) {
+            enemy.applyFireEffect();
+        }
+
+        if (player.getPoisonEffectTurns() > 0) {
+            enemy.applyPoisonEffect();
+        }
+
+        if (player.getColdEffectTurns() <= 0) {
+            enemy.removeColdEffect();
+            coldUsed = false;
+            player.setColdEffectTurns();
+        }
+
+        if (enemy.getNecroticEffectTurns() <= 0) {
+            player.removeNecroticEffect();
+            necroticUsed = false;
+            enemy.setNecroticEffectTurns();
+        }
+
+        if (player.getShockEffectTurns() <= 0) {
+            enemy.addDexterity(2);
+            shockUsed = false;
+            player.setShockEffectTurns();
         }
     }
 
