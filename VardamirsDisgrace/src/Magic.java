@@ -6,6 +6,7 @@ public class Magic {
     public static final String ELECTRIC = "Eletric Magic";
     public static final String POISON = "Poison Magic";
     public static final String DARK = "Dark Magic";
+    public static final String NECROTIC = "Necrotic Magic";
 
     private String magicCategory;
 
@@ -26,11 +27,11 @@ public class Magic {
                 int fireDamage = rollD6() + rollD6() + rollD6();
                 target.receiveDamage(fireDamage);
 
-                dice = rand.nextInt(2);
-                //if (dice == 0) {
+                dice = rand.nextInt(4);
+                if (dice == 0) {
                     target.setFireEffectTurns();
                     target.applyFireEffect();
-                //}
+                }
                 break;
 
             case ICE:
@@ -52,21 +53,29 @@ public class Magic {
                 target.receiveDamage(poisonDamge);
 
                 dice = rand.nextInt(2);
-               // if (dice == 0) {
+                    if (dice == 0) {
                     target.setPoisonEffectTurns();
                     target.applyPoisonEffect();
-                //}
+                }
                 break;
 
             case DARK:
-                int darkDamage = rollD12() + rollD6();
+                int darkDamage = rollD12() + rollD12();
                 target.receiveDamage(darkDamage);
 
-                dice = rand.nextInt(4);
+                dice = rand.nextInt(3);
                 if (dice != 0) {
                     target.reduceStrength(2);
                 }
                 break;
+
+            case NECROTIC:
+                int necroticDamage = rollD4() + rollD6();
+                target.receiveDamage(necroticDamage);
+                target.reduceStrength(2);
+
+                break;
+
         }
     }
 

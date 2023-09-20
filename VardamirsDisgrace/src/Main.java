@@ -6,101 +6,17 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
 
-        vardamirPerspectiveFinal();
+        beforeFirstBattleTale();
 
-        System.out.println("Character Creation");
-        System.out.print("Enter character name: ");
-        String playerName = scanner.nextLine();
-
-        int pointsRemaining = 15;
-        int strength = 0;
-        int constitution = 0;
-        int agility = 0;
-        int dexterity = 0;
-
-        while (pointsRemaining > 0) {
-            System.out.println("\nPoints Remaining: " + pointsRemaining);
-            System.out.println("1. Add to Strength");
-            System.out.println("2. Add to Constitution");
-            System.out.println("3. Add to Agility");
-            System.out.println("4. Add to Dexterity");
-            System.out.print("Choose an attribute to increase (1-4): ");
-            int choice = getIntInput(scanner);
-
-            if (choice < 1 || choice > 4) {
-                System.out.println("Invalid choice. Please choose a valid attribute.");
-                continue;
-            }
-
-            System.out.print("Enter the number of points to add: ");
-            int pointsToAdd = getIntInput(scanner);
-
-            if (pointsToAdd <= 0 || pointsToAdd > pointsRemaining) {
-                System.out.println("Invalid number of points. Please enter a valid number.");
-                continue;
-            }
-
-            switch (choice) {
-                case 1:
-                    strength += pointsToAdd;
-                    break;
-                case 2:
-                    constitution += pointsToAdd;
-                    break;
-                case 3:
-                    agility += pointsToAdd;
-                    break;
-                case 4:
-                    dexterity += pointsToAdd;
-                    break;
-            }
-
-            pointsRemaining -= pointsToAdd;
-        }
-
-        System.out.println("\nCharacter " + playerName);
-        System.out.println("Strength: " + strength);
-        System.out.println("Constitution: " + constitution);
-        System.out.println("Agility: " + agility);
-        System.out.println("Dexterity: " + dexterity);
-
-        System.out.println("\nChoose a weapon: ");
-        System.out.println("1. Light Sword");
-        System.out.println("2. Heavy Sword");
-        System.out.println("3. Bow");
-        System.out.println("4. Crossbow");
-        int weaponChoice = getIntInput(scanner);
-        Weapon weapon = createWeapon(weaponChoice);
-
-        Character player = new Character(playerName, strength, constitution, agility, dexterity, weapon, null,
-                new Potion(Potion.SMALL));
-
-        int magicCounter = 0;
-        while (magicCounter < 2) {
-            System.out.println("\nChoose two magics: ");
-            System.out.println("1. Fire");
-            System.out.println("2. Poison");
-            System.out.println("3. Ice");
-            System.out.println("4. Electric");
-            int magicChoice = getIntInput(scanner);
-            createMagic(magicChoice, player);
-            magicCounter++;
-        }
-
-        player.getMagics();
-
-        player.setArmor(createArmor(player));
-
-        System.out.println(player.toString() + "\n\n");
-
-        Character enemy = new Character("Enemy", 3, 8, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
-                new Potion(Potion.SMALL));
+        Character player = createCharacter(scanner);
+        Character enemy = new Character("Enemy", 3, 8, 2, 2, new Weapon(Weapon.LONG_SWORD), null, new Potion(Potion.SMALL));
 
         enemy.setArmor(new Armor(Armor.HEAVY, enemy));
 
         System.out.println("\n" + enemy.toString() + "\n\n");
         boolean coldUsed = false;
         boolean shockUsed = false;
+        boolean necroticUsed = false;
 
         while (player.isAlive() && enemy.isAlive()) {
             int playerAction = getPlayerAction(scanner);
@@ -119,6 +35,12 @@ public class Main {
                 enemy.removeColdEffect();
                 coldUsed = false;
                 player.setColdEffectTurns();
+            }
+
+            if (player.getNecroticEffectTurns() <= 0) {
+                enemy.removeNecroticEffect();
+                necroticUsed = false;
+                player.setNecroticEffectTurns();
             }
 
             if (player.getShockEffectTurns() <= 0) {
@@ -163,8 +85,8 @@ public class Main {
                         coldUsed = true;
                     }
                     
-                    if (magicName.equals("Ice Magic")) {
-                        coldUsed = true;
+                    if (magicName.equals("Necrotic Magic")) {
+                        necroticUsed = true;
                     }
 
                     System.out.println(player.getMagic(magicChoice).toString() + " used.");
@@ -232,6 +154,10 @@ public class Main {
             }
             if (shockUsed) {
                 player.removeShockEffectTurns();
+            }
+
+            if (necroticUsed) {
+                player.removeNecroticEffectTurns();
             }
         }
 
@@ -325,6 +251,9 @@ public class Main {
                     character.addMagic(new Magic(Magic.ELECTRIC));
                     break;
                 case 5:
+                    character.addMagic(new Magic(Magic.NECROTIC));
+                    break;
+                case 6:
                     character.addMagic(new Magic(Magic.DARK));
                     break;
                 default:
@@ -357,7 +286,7 @@ public class Main {
 
     private static void beforeFirstBattleTale() {
 
-        System.out.println(" After a lengthy patrol along the distant borders of your city,\n"
+        slowPrint(" After a lengthy patrol along the distant borders of your city,\n"
                 + "you and your steadfast friend conclude your watch, opting to embark on the journey back home.\n"
                 + "The path home stretches out, a seemingly endless ribbon through the untamed wilderness.\n"
                 + "The air carries a sense of freshness, soothing your senses as you drink in the tranquil surroundings.\n"
@@ -369,13 +298,13 @@ public class Main {
                 + "We're finally getting close to it, I can't wait to eat my wife's beef stew! \n"
                 + "\n"
                 + " But something is amiss, the air, once so fresh and rejuvenating, has taken on an ominous heaviness.\n");
-        System.out.println(" Before you can reply, Finrod's voice trembles as he calls you urgently.\n"
+        slowPrint(" Before you can reply, Finrod's voice trembles as he calls you urgently.\n"
                 + "His usually resolute demeanor now betrays a deep, primal fear, something he has never experienced before.\n");
-        System.out.println(" Following his frantic gaze, you look towards the city, and your heart plummets.\n"
+        slowPrint(" Following his frantic gaze, you look towards the city, and your heart plummets.\n"
                 + "The city, your beloved capital, is engulfed in a raging inferno.\n"
                 + "The towering flames lick the night sky, casting an eerie,\n"
                 + "malevolent glow that defies the tranquility that once enveloped the kingdom. \n");
-        System.out.println(" A shiver runs down your spine as you witness a horrifying sight, a colossal tornado of dark energy descends from the heavens,\n"
+        slowPrint(" A shiver runs down your spine as you witness a horrifying sight, a colossal tornado of dark energy descends from the heavens,\n"
                 + "its ominous presence creating an otherworldly tempest. The once-clear skies are now obscured by thick, foreboding clouds,\n"
                 + "and the once-proud city is plunged into chaos.\n\n"
                 + " Piercing screams of terror pierce the air as innocent citizens flee for their lives, their homes reduced to ashes before their eyes.\n"
@@ -388,7 +317,7 @@ public class Main {
     }
 
     private static void firstChoiceText(){
-        System.out.println("\n\n After triumphing over these malevolent creatures, \n"
+        slowPrint("\n\n After triumphing over these malevolent creatures, \n"
                + "you look at your lost friend's body and realise a hard choice lies ahead. \n" 
                + "Will you venture to your residence, where your beloved wife Elwyn may be in grave danger, \n" 
                + "in a valiant attempt to render assistance? \n" 
@@ -398,7 +327,7 @@ public class Main {
     }
 
     private static void searchWifeChoice(){
-        System.out.println(" You find yourself at a crossroads, torn between the urgent need to reach your home and assist your beloved wife. \n"
+        slowPrint(" You find yourself at a crossroads, torn between the urgent need to reach your home and assist your beloved wife. \n"
                + "Your residence lies a substantial 20-minute journey from the city's entrance, yet a cautious approach could secure your safe arrival. \n"
                + "\n"
                + " Understanding the turmoil unfolding around you proves a daunting task. \n" 
@@ -424,7 +353,7 @@ public class Main {
     }
 
     private static void saveWifeChoice(){
-        System.out.println(" You made your choice, unsure if it's right, but determined to save your beloved Elwyn. \n" 
+        slowPrint(" You made your choice, unsure if it's right, but determined to save your beloved Elwyn. \n" 
         + "After battling the darkness, you rescue your wife and take her to safety, knowing it might be your last chance if you both don't escape. \n"
         + "\n"
         + " Leaving her in the woods for safety, you head towards the heart of the town, where the darkness is strongest. \n" 
@@ -438,7 +367,7 @@ public class Main {
     }
 
     private static void saveTripletsChoice(){
-        System.out.println(" You made your choice, your resolve unwavering, even though uncertainty lingers in your mind. \n" 
+        slowPrint(" You made your choice, your resolve unwavering, even though uncertainty lingers in your mind. \n" 
         + "You were determined to save the children, even if it meant the possibility of never reuniting with your beloved wife. \n" 
         + "In your relentless battle against the encroaching darkness, you successfully rescued the triplets. \n"
         + "However, a devastating sight awaited you – Elwyn, once full of life and warmth, now lay lifeless and soulless, \n" 
@@ -456,7 +385,7 @@ public class Main {
     }
 
     private static void goToOutpostChoice(){
-        System.out.println(" You choose to adhere to the decision dictated by your guard protocol, \n"
+        slowPrint(" You choose to adhere to the decision dictated by your guard protocol, \n"
         + "even though you never thought you'd have to face such fear and darkness. \n"
         + "\n"
         + " Comprehending the chaos unfurling around you is a formidable challenge. \n" 
@@ -476,7 +405,7 @@ public class Main {
     }
 
     private static void goSearcheTheMasterChoice(){
-        System.out.println(" You opt to search for your commander, driven by the need for guidance in this nightmarish situation.\n"
+        slowPrint(" You opt to search for your commander, driven by the need for guidance in this nightmarish situation.\n"
         + "Climbing the stairs to the second floor, a sense of trepidation grips you, intensified by the eerie silence that pervades the outpost.\n"
         + "\n"
         + " As you reach the upper level, a chilling sight awaits you. \n" 
@@ -495,7 +424,7 @@ public class Main {
     }
 
     private static void goAwayChoice(){
-        System.out.println(" You choose to turn away from the outpost and head toward the heart of the city, \n" 
+        slowPrint(" You choose to turn away from the outpost and head toward the heart of the city, \n" 
         + "where the surging and malevolent dark energy emanates from the skies. \n" 
         + "It seems to be the epicenter of this unrelenting chaos. \n" 
         + "As you make your way towards the city center, an ominous realization dawns upon you: \n"
@@ -512,7 +441,7 @@ public class Main {
     }
 
     private static void findingVardamir(){
-        System.out.println(" After an endless journey of suffering and agony, you finally reach the heart of the kingdom, \n" 
+        slowPrint(" After an endless journey of suffering and agony, you finally reach the heart of the kingdom, \n" 
         + "Eternia's central square, where heroes are honored and the eternal Eternia Tree stands, \n" 
         + "now shrouded in a whirlwind of dark magic. \n" 
         + "An eerie attraction to this malevolent air grips you, and your body struggles to withstand such power. \n" 
@@ -563,7 +492,7 @@ public class Main {
     }
 
     private static void afterFinalBattleText(){
-        System.out.println(" After a relentless battle, \n" 
+        slowPrint(" After a relentless battle, \n" 
         + "your strength wanes as you grapple with the pure malevolence that has consumed your once friend. \n" 
         + "You're on the brink of collapse, your homeland's darkness now seeping into your very soul. \n"
         + "\n"
@@ -586,7 +515,7 @@ public class Main {
     }
 
     private static void ifTheWifeWasSavedFinal(){
-        System.out.println(" Eternia, once a prosperous kingdom, now lay in ruins, reduced to smoldering ashes. \n" 
+        slowPrint(" Eternia, once a prosperous kingdom, now lay in ruins, reduced to smoldering ashes. \n" 
         + "However, the kingdom's last Hero had succeeded in sealing the malevolence, preventing it from escaping and further ravaging the land. \n"
         + "\n"
         + " Now, Elwyn, having awoken from the trauma, finds herself in a desolate world, her heart heavy with the absence of her beloved husband. \n" 
@@ -609,7 +538,7 @@ public class Main {
     }
 
     private static void ifTheTripletsWereSavedFinal(){
-        System.out.println(" Eternia, once a thriving kingdom, now lay in ruins, reduced to smoldering ashes. \n" 
+        slowPrint(" Eternia, once a thriving kingdom, now lay in ruins, reduced to smoldering ashes. \n" 
         + "However, the kingdom's last Hero had succeeded in sealing the malevolence, preventing it from escaping and further ravaging the land. \n"
         + "\n"
         + " Now, the Finland triplets, having awoken from the trauma of their near-death experience, find themselves in a desolate world, \n" 
@@ -642,7 +571,7 @@ public class Main {
     }
 
     private static void ifNoOneWasSavedFinal(){
-        System.out.println(" Eternia, once a flourishing kingdom, now lay in ruins, its grandeur reduced to smoldering ashes. \n" 
+        slowPrint(" Eternia, once a flourishing kingdom, now lay in ruins, its grandeur reduced to smoldering ashes. \n" 
         + "The malevolence that had threatened to engulf the land was sealed away, but at a tremendous cost—the life of the kingdom's last Hero. \n"
         + "\n"
         + " In the heart of this desolation, the Hero stands lifeless on the floor, a symbol of unparalleled valor and sacrifice. \n" 
@@ -660,7 +589,7 @@ public class Main {
     }
 
     private static void vardamirPerspectiveFinal(){
-        System.out.println(" In the aftermath of the cataclysmic battle, the malevolent shroud that had ensnared Vardamir's being begins to unravel, \n" 
+        slowPrint(" In the aftermath of the cataclysmic battle, the malevolent shroud that had ensnared Vardamir's being begins to unravel, \n" 
         + "unveiling a figure left battered and shattered by the relentless grip of dark magic. \n" 
         + "Slowly, as if rousing from an agonizing and endless slumber, Vardamir stirs. \n"
         + "\n"
@@ -692,6 +621,104 @@ public class Main {
         + "Vardamir seeks to atone for his misdeeds by hunting down dark magic to contain and rectify the wrongs he has committed, \n" 
         + "hoping that one day he will be able to find Velyar and avenge all that he destroied. \n");
     }
+    private static void slowPrint(String text) {
+        int delay = 25; 
+    
+        for (char c : text.toCharArray()) {
+            System.out.print(c);
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException e) {
+            }
+        }
+        System.out.println(); 
     }
 
+    public static Character createCharacter(Scanner scanner) {
+        System.out.println("Character Creation");
+        System.out.print("Enter character name: ");
+        String playerName = scanner.nextLine();
 
+        int pointsRemaining = 15;
+        int strength = 0;
+        int constitution = 0;
+        int agility = 0;
+        int dexterity = 0;
+
+        while (pointsRemaining > 0) {
+            System.out.println("\nPoints Remaining: " + pointsRemaining);
+            System.out.println("1. Add to Strength");
+            System.out.println("2. Add to Constitution");
+            System.out.println("3. Add to Agility");
+            System.out.println("4. Add to Dexterity");
+            System.out.print("Choose an attribute to increase (1-4): ");
+            int choice = getIntInput(scanner);
+
+            if (choice < 1 || choice > 4) {
+                System.out.println("Invalid choice. Please choose a valid attribute.");
+                continue;
+            }
+
+            System.out.print("Enter the number of points to add: ");
+            int pointsToAdd = getIntInput(scanner);
+
+            if (pointsToAdd <= 0 || pointsToAdd > pointsRemaining) {
+                System.out.println("Invalid number of points. Please enter a valid number.");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    strength += pointsToAdd;
+                    break;
+                case 2:
+                    constitution += pointsToAdd;
+                    break;
+                case 3:
+                    agility += pointsToAdd;
+                    break;
+                case 4:
+                    dexterity += pointsToAdd;
+                    break;
+            }
+
+            pointsRemaining -= pointsToAdd;
+        }
+
+        System.out.println("\nCharacter " + playerName);
+        System.out.println("Strength: " + strength);
+        System.out.println("Constitution: " + constitution);
+        System.out.println("Agility: " + agility);
+        System.out.println("Dexterity: " + dexterity);
+
+        System.out.println("\nChoose a weapon: ");
+        System.out.println("1. Dagger");
+        System.out.println("2. Heavy Sword");
+        System.out.println("3. Bow");
+        System.out.println("4. Crossbow");
+        int weaponChoice = getIntInput(scanner);
+        Weapon weapon = createWeapon(weaponChoice);
+
+        Character player = new Character(playerName, strength, constitution, agility, dexterity, weapon, null,
+                new Potion(Potion.SMALL));
+
+        int magicCounter = 0;
+        while (magicCounter < 2) {
+            System.out.println("\nChoose two magics: ");
+            System.out.println("1. Fire");
+            System.out.println("2. Poison");
+            System.out.println("3. Ice");
+            System.out.println("4. Electric");
+            int magicChoice = getIntInput(scanner);
+            createMagic(magicChoice, player);
+            magicCounter++;
+        }
+
+        player.getMagics();
+
+        player.setArmor(createArmor(player));
+
+        return player;
+    }
+}
+    

@@ -16,6 +16,7 @@ class Character {
     private int poisonEffectTurns = 4;
     private int coldEffectTurns = 2;
     private int shockEffectTurns = 2;
+    private int necroticEffectTurns = 3;
 
     private int healUses = 0;
 
@@ -250,10 +251,22 @@ class Character {
         coldEffectTurns = 2;
     }
 
-    public void removeColdEffectTurns() {
+     public void removeColdEffectTurns() {
         coldEffectTurns--;
     }
 
+    public int getNecroticEffectTurns() {
+        return necroticEffectTurns;
+    }
+
+    public void setNecroticEffectTurns() {
+        necroticEffectTurns = 3;
+    }
+
+    public void removeNecroticEffectTurns() {
+        necroticEffectTurns--;
+    }
+   
     public int getShockEffectTurns() {
         return shockEffectTurns;
     }
@@ -292,6 +305,15 @@ class Character {
         addAgility(2);
         addDexterity(2);
         addConstitution(1);
+    }
+
+    public void applyNecroticEffect() {
+        reduceStrength(2);
+        necroticEffectTurns--;
+    }
+
+    public void removeNecroticEffect() {
+        addStrength(2);
     }
 
     @Override
