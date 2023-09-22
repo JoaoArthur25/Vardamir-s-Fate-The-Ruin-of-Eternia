@@ -321,7 +321,7 @@ class Character {
         return name + "\nHP: " + getHitPoints() + "\nStrength: " + getStrength() + "\nConstitution: "
                 + getConstitution()
                 + "\nAgility: " + getAgility() + "\nDexterity: " + getDexterity() + "\nWeapon: "
-                + getWeapon().toString();
+                + getWeapon().toString() + "\n";
     }
 
     public String getCharacter(){
@@ -329,6 +329,6 @@ class Character {
                 + getConstitution()
                 + "\nAgility: " + getAgility() + "\nDexterity: " + getDexterity() + "\nWeapon: "
                 + getWeapon().toString()
-                + "\nArmor: " + getArmor().toString();
+                + "\nArmor: " + getArmor().toString() + "\n";
     }
 }

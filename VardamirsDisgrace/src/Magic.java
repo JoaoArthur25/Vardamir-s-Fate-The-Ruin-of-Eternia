@@ -73,6 +73,7 @@ public class Magic {
                 int necroticDamage = rollD4() + rollD6();
                 target.receiveDamage(necroticDamage);
                 target.reduceStrength(2);
+                target.setNecroticEffectTurns();
 
                 break;
 

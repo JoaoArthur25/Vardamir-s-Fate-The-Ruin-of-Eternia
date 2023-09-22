@@ -1,8 +1,10 @@
 import java.util.Scanner;
+import java.io.IOException;
 import java.util.Random;
+import java.lang.Thread;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
 
@@ -35,10 +37,19 @@ public class Main {
         boolean shockUsed = false;
         boolean necroticUsed = false;
 
+        clrscr();
+
         while (player.isAlive() && enemy.isAlive()) {
             manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
+            System.out.println(player.toString());
+            System.out.println(enemy.toString());
             combat1(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
         }
+
+        //Thread.sleep(2000);
+
+        clrscr();
+
         if (player.isAlive()) {
             firstChoiceText();
             System.out.println("1. Go to your house");
@@ -68,7 +79,6 @@ public class Main {
                             new Potion(Potion.SMALL));
                     createMagic(5, specter);
                     createMagic(5, nidere);
-
 
                     enemyChoice = random.nextInt(2);
                     enemy = null;
@@ -847,7 +857,7 @@ public class Main {
                 } else {
                     System.out.println(player.getName() + " attacks " + enemy.getName() + " but does no damage.");
                 }
-                System.out.println(enemy.toString() + "\n\n");
+                //System.out.println(enemy.toString() + "\n\n");
 
                 break;
 
@@ -869,12 +879,10 @@ public class Main {
                     coldUsed = true;
                 }
 
-
                 System.out.println(player.getMagic(magicChoice).toString() + " used.");
 
                 player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
-                System.out.println(player.toString() + "\n\n");
-                System.out.println(enemy.toString() + "\n\n");
+                //System.out.println(enemy.toString() + "\n\n");
 
                 break;
 
@@ -882,7 +890,7 @@ public class Main {
                 player.getArmor().doubleDefence();
                 System.out.println(player.getName() + " doubles their defense for 1 round.");
                 System.out.println("Defesa atual: " + player.getArmor().getDefence());
-                System.out.println(enemy.toString() + "\n\n");
+                //System.out.println(enemy.toString() + "\n\n");
 
                 break;
 
@@ -890,11 +898,14 @@ public class Main {
                 player.heal();
                 System.out.println(player.getName() + " uses a potion and recovers " + player.getHeal() + " HP.");
                 System.out.println(player.getArmor().getDefence());
-                System.out.println(enemy.toString() + "\n\n");
+                //System.out.println(enemy.toString() + "\n\n");
 
                 break;
         }
-        if()
+
+        System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+        System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+        System.out.println("------");
     }
 
     public static void computerAction1(Scanner scanner, Character player, Character enemy, boolean coldUsed,
@@ -913,16 +924,18 @@ public class Main {
                 } else {
                     System.out.println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
                 }
+                //System.out.println(player.toString() + "\n\n");
                 break;
 
             case 1:
                 enemy.heal(enemy.getHeal());
                 System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
+                //System.out.println(player.toString());
                 break;
 
         }
 
-        System.out.println(player.getName() + " HP: " + player.getHitPoints());
+        System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
         System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
         System.out.println("------");
     }
@@ -934,20 +947,20 @@ public class Main {
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-            if(enemy.isAlive()){
-            int computerAction = random.nextInt(2);
-            computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
+            if (enemy.isAlive()) {
+                int computerAction = random.nextInt(2);
+                computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
             }
         }
 
         else {
             int computerAction = random.nextInt(2);
             computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
-            if(player.isAlive()){
-            int playerAction = getPlayerAction(scanner);
-            System.out.println(player.getArmor().getDefence());
-            player.getArmor().setDefence();
-            playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            if (player.isAlive()) {
+                int playerAction = getPlayerAction(scanner);
+                System.out.println(player.getArmor().getDefence());
+                player.getArmor().setDefence();
+                playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
             }
         }
     }
@@ -959,20 +972,20 @@ public class Main {
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-            if(enemy.isAlive()){
-            int computerAction = random.nextInt(3);
-            computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
+            if (enemy.isAlive()) {
+                int computerAction = random.nextInt(3);
+                computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
             }
         }
 
         else {
             int computerAction = random.nextInt(3);
             computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
-            if(player.isAlive()){
-            int playerAction = getPlayerAction(scanner);
-            System.out.println(player.getArmor().getDefence());
-            player.getArmor().setDefence();
-            playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            if (player.isAlive()) {
+                int playerAction = getPlayerAction(scanner);
+                System.out.println(player.getArmor().getDefence());
+                player.getArmor().setDefence();
+                playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
             }
         }
     }
@@ -984,10 +997,10 @@ public class Main {
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-            if(enemy.isAlive()){
-            int computerAction = random.nextInt(4);
-            player.getArmor().setDefence();
-            vardamirAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
+            if (enemy.isAlive()) {
+                int computerAction = random.nextInt(4);
+                player.getArmor().setDefence();
+                vardamirAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
             }
         }
 
@@ -995,11 +1008,11 @@ public class Main {
             int computerAction = random.nextInt(4);
             player.getArmor().setDefence();
             vardamirAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
-            if(player.isAlive()){
-            int playerAction = getPlayerAction(scanner);
-            System.out.println(player.getArmor().getDefence());
-            player.getArmor().setDefence();
-            playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            if (player.isAlive()) {
+                int playerAction = getPlayerAction(scanner);
+                System.out.println(player.getArmor().getDefence());
+                player.getArmor().setDefence();
+                playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
             }
         }
     }
@@ -1061,13 +1074,13 @@ public class Main {
 
         }
 
-        if(necroticUsed){
+        if (necroticUsed) {
             enemy.removeNecroticEffectTurns();
         }
-        if(shockUsed){
+        if (shockUsed) {
             enemy.removeShockEffectTurns();
         }
-        if(coldUsed){
+        if (coldUsed) {
             enemy.removeColdEffectTurns();
         }
 
@@ -1084,8 +1097,8 @@ public class Main {
                 if (damageDealt > 0) {
                     System.out.println(
                             enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage + " damage.");
-                            System.out.println("Dano dado: " + damageDealt);
-                            System.out.println("Defesa atual: " + playerDefense);
+                    System.out.println("Dano dado: " + damageDealt);
+                    System.out.println("Defesa atual: " + playerDefense);
                     player.receiveDamage(damageDealt);
                 } else {
                     System.out.println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
@@ -1097,11 +1110,9 @@ public class Main {
                 System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
                 break;
 
-            case 2: 
+            case 2:
 
-
-
-               necroticUsed = true;
+                necroticUsed = true;
 
                 System.out.println(enemy.getMagic(0).toString() + " used.");
 
@@ -1253,5 +1264,16 @@ public class Main {
         player.setArmor(createArmor(player));
 
         return player;
+    }
+
+    public static void clrscr() {
+        // Clears Screen in java
+        try {
+            if (System.getProperty("os.name").contains("Windows"))
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            else
+                Runtime.getRuntime().exec("clear");
+        } catch (IOException | InterruptedException ex) {
+        }
     }
 }
