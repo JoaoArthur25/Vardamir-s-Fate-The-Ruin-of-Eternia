@@ -242,6 +242,7 @@ public class Main {
                         afterReachingMaster();
                         findingVardamir();
                         Character vardamir= new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD), null, new Potion(Potion.LARGE));
+                        vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
                         createMagic(1, vardamir);
                         createMagic(2, vardamir);
                         createMagic(3, vardamir);
@@ -307,6 +308,7 @@ public class Main {
                     if (player.isAlive()) {
                         findingVardamir();
                         Character vardamir= new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD), null, new Potion(Potion.LARGE));
+                        vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
                         createMagic(1, vardamir);
                         createMagic(2, vardamir);
                         createMagic(3, vardamir);
