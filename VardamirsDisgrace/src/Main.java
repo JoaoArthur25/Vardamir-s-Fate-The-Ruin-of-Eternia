@@ -67,6 +67,8 @@ public class Main {
                     Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
                             new Potion(Potion.SMALL));
                     createMagic(5, specter);
+                    createMagic(5, nidere);
+
 
                     enemyChoice = random.nextInt(2);
                     enemy = null;
@@ -91,13 +93,15 @@ public class Main {
                     if (player.isAlive()) {
                         saveWifeChoice();
                         findingVardamir();
-                        Character vardamir= new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD), null, new Potion(Potion.LARGE));
+                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD),
+                                null, new Potion(Potion.LARGE));
                         createMagic(1, vardamir);
                         createMagic(2, vardamir);
                         createMagic(3, vardamir);
                         createMagic(4, vardamir);
                         createMagic(5, vardamir);
                         createMagic(6, vardamir);
+                        vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
 
                         enemy = vardamir;
 
@@ -112,12 +116,11 @@ public class Main {
                             bossFight(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
                         }
 
-                        if(player.isAlive()){
+                        if (player.isAlive()) {
                             afterFinalBattleText();
                             vardamirPerspectiveFinal();
                             ifTheWifeWasSavedFinal();
-                        }
-                        else if (enemy.isAlive()) {
+                        } else if (enemy.isAlive()) {
                             System.out.println("You are dead!");
                         } else {
                             System.out.println("You are dead!");
@@ -135,6 +138,7 @@ public class Main {
                     Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
                             new Potion(Potion.SMALL));
                     createMagic(5, specter);
+                    createMagic(5, nidere);
 
                     enemyChoice = random.nextInt(2);
                     enemy = null;
@@ -160,7 +164,9 @@ public class Main {
                         saveTripletsChoice();
                         findingVardamir();
 
-                        Character vardamir= new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD), null, new Potion(Potion.LARGE));
+                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD),
+                                null, new Potion(Potion.LARGE));
+                        vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
                         createMagic(1, vardamir);
                         createMagic(2, vardamir);
                         createMagic(3, vardamir);
@@ -181,22 +187,21 @@ public class Main {
                             bossFight(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
                         }
 
-                        if(player.isAlive()){
+                        if (player.isAlive()) {
                             afterFinalBattleText();
                             vardamirPerspectiveFinal();
                             ifTheTripletsWereSavedFinal();
-                        }
-                        else if (enemy.isAlive()) {
-                            System.out.println("You are dead!");
-                        } else {
-                            System.out.println("You are dead!");
-                        }
-
                         } else if (enemy.isAlive()) {
                             System.out.println("You are dead!");
                         } else {
                             System.out.println("You are dead!");
                         }
+
+                    } else if (enemy.isAlive()) {
+                        System.out.println("You are dead!");
+                    } else {
+                        System.out.println("You are dead!");
+                    }
 
                 }
             } else if (choice == 2) {
@@ -218,6 +223,7 @@ public class Main {
                     Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
                             new Potion(Potion.SMALL));
                     createMagic(5, specter);
+                    createMagic(5, nidere);
 
                     enemyChoice = random.nextInt(2);
                     enemy = null;
@@ -241,7 +247,8 @@ public class Main {
                     if (player.isAlive()) {
                         afterReachingMaster();
                         findingVardamir();
-                        Character vardamir= new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD), null, new Potion(Potion.LARGE));
+                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD),
+                                null, new Potion(Potion.LARGE));
                         vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
                         createMagic(1, vardamir);
                         createMagic(2, vardamir);
@@ -263,12 +270,11 @@ public class Main {
                             bossFight(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
                         }
 
-                        if(player.isAlive()){
+                        if (player.isAlive()) {
                             afterFinalBattleText();
                             vardamirPerspectiveFinal();
                             ifNoOneWasSavedFinal();
-                        }
-                        else if (enemy.isAlive()) {
+                        } else if (enemy.isAlive()) {
                             System.out.println("You are dead!");
                         } else {
                             System.out.println("You are dead!");
@@ -285,6 +291,7 @@ public class Main {
                     Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
                             new Potion(Potion.SMALL));
                     createMagic(5, specter);
+                    createMagic(5, nidere);
 
                     enemyChoice = random.nextInt(2);
                     enemy = null;
@@ -307,7 +314,8 @@ public class Main {
                     }
                     if (player.isAlive()) {
                         findingVardamir();
-                        Character vardamir= new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD), null, new Potion(Potion.LARGE));
+                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD),
+                                null, new Potion(Potion.LARGE));
                         vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
                         createMagic(1, vardamir);
                         createMagic(2, vardamir);
@@ -329,12 +337,11 @@ public class Main {
                             bossFight(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
                         }
 
-                        if(player.isAlive()){
+                        if (player.isAlive()) {
                             afterFinalBattleText();
                             vardamirPerspectiveFinal();
                             ifNoOneWasSavedFinal();
-                        }
-                        else if (enemy.isAlive()) {
+                        } else if (enemy.isAlive()) {
                             System.out.println("You are dead!");
                         } else {
                             System.out.println("You are dead!");
@@ -862,9 +869,6 @@ public class Main {
                     coldUsed = true;
                 }
 
-                if (magicName.equals("Necrotic Magic")) {
-                    necroticUsed = true;
-                }
 
                 System.out.println(player.getMagic(magicChoice).toString() + " used.");
 
@@ -890,6 +894,7 @@ public class Main {
 
                 break;
         }
+        if()
     }
 
     public static void computerAction1(Scanner scanner, Character player, Character enemy, boolean coldUsed,
@@ -911,39 +916,15 @@ public class Main {
                 break;
 
             case 1:
-
-                String magicName = enemy.getMagic(0).toString();
-
-                if (magicName.equals("Necrotic Magic")) {
-                    necroticUsed = true;
-                }
-
-                System.out.println(player.getMagic(0).toString() + " used.");
-
-                enemy.castMagic(player, 0, enemy.getMagic(0));
-                System.out.println(player.getCharacter() + "\n\n");
-                System.out.println(enemy.toString() + "\n\n");
-
-            case 2:
                 enemy.heal(enemy.getHeal());
                 System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
                 break;
+
         }
 
         System.out.println(player.getName() + " HP: " + player.getHitPoints());
         System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
         System.out.println("------");
-
-        if (coldUsed) {
-            player.removeColdEffectTurns();
-        }
-        if (shockUsed) {
-            player.removeShockEffectTurns();
-        }
-
-        if (necroticUsed) {
-            enemy.removeNecroticEffectTurns();
-        }
     }
 
     public static void combat1(Character player, Character enemy, Scanner scanner, boolean coldUsed, boolean shockUsed,
@@ -953,17 +934,21 @@ public class Main {
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            if(enemy.isAlive()){
             int computerAction = random.nextInt(2);
             computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
+            }
         }
 
         else {
             int computerAction = random.nextInt(2);
             computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
+            if(player.isAlive()){
             int playerAction = getPlayerAction(scanner);
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            }
         }
     }
 
@@ -974,17 +959,21 @@ public class Main {
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            if(enemy.isAlive()){
             int computerAction = random.nextInt(3);
-            computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
+            computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
+            }
         }
 
         else {
             int computerAction = random.nextInt(3);
-            computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
+            computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
+            if(player.isAlive()){
             int playerAction = getPlayerAction(scanner);
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            }
         }
     }
 
@@ -995,19 +984,23 @@ public class Main {
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            if(enemy.isAlive()){
             int computerAction = random.nextInt(4);
             player.getArmor().setDefence();
             vardamirAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
+            }
         }
 
         else {
             int computerAction = random.nextInt(4);
             player.getArmor().setDefence();
             vardamirAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
+            if(player.isAlive()){
             int playerAction = getPlayerAction(scanner);
             System.out.println(player.getArmor().getDefence());
             player.getArmor().setDefence();
             playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
+            }
         }
     }
 
@@ -1067,10 +1060,21 @@ public class Main {
                 break;
 
         }
+
+        if(necroticUsed){
+            enemy.removeNecroticEffectTurns();
+        }
+        if(shockUsed){
+            enemy.removeShockEffectTurns();
+        }
+        if(coldUsed){
+            enemy.removeColdEffectTurns();
+        }
+
     }
 
     public static void computerAction2(Scanner scanner, Character player, Character enemy, boolean coldUsed,
-            boolean shockUsed, boolean necroticUsed, int computerAction) {
+            boolean shockUsed, boolean necroticUsed, int computerAction, Random random) {
         switch (computerAction) {
             case 0:
                 int enemyDamage = enemy.calculateDamage();
@@ -1080,6 +1084,8 @@ public class Main {
                 if (damageDealt > 0) {
                     System.out.println(
                             enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage + " damage.");
+                            System.out.println("Dano dado: " + damageDealt);
+                            System.out.println("Defesa atual: " + playerDefense);
                     player.receiveDamage(damageDealt);
                 } else {
                     System.out.println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
@@ -1090,21 +1096,26 @@ public class Main {
                 enemy.heal(enemy.getHeal());
                 System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
                 break;
+
+            case 2: 
+
+
+
+               necroticUsed = true;
+
+                System.out.println(enemy.getMagic(0).toString() + " used.");
+
+                player.castMagic(player, 0, enemy.getMagic(0));
+                System.out.println(player.toString() + "\n\n");
+                System.out.println(enemy.toString() + "\n\n");
         }
 
         System.out.println(player.getName() + " HP: " + player.getHitPoints());
         System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
         System.out.println("------");
 
-        if (coldUsed) {
-            player.removeColdEffectTurns();
-        }
-        if (shockUsed) {
-            player.removeShockEffectTurns();
-        }
-
         if (necroticUsed) {
-            player.removeNecroticEffectTurns();
+            enemy.removeNecroticEffectTurns();
         }
     }
 
