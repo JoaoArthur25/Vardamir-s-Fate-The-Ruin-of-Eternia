@@ -660,25 +660,19 @@ public class Main {
                     if (player.isAlive()) {
                         saveWifeChoice();
                         findingVardamir();
-                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD),
+                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, null,
                                 null, new Potion(Potion.LARGE));
+
+                        vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
                         createMagic(1, vardamir);
                         createMagic(2, vardamir);
                         createMagic(3, vardamir);
                         createMagic(4, vardamir);
                         createMagic(5, vardamir);
                         createMagic(6, vardamir);
-                        System.out.println("0. " + enemy.getMagic(0));
-                                        System.out.println("1. " + enemy.getMagic(1));
-                                        System.out.println("0. " + player.getMagic(2));
-                                        System.out.println("1. " + player.getMagic(3));
-                                        System.out.println("0. " + player.getMagic(4));
-                                        System.out.println("1. " + player.getMagic(5));
-                        vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
-
                         enemy = vardamir;
 
-                        System.out.println("\n" + enemy.toString() + "\n\n");
+                        System.out.println("\n" + vardamir.toString() + "\n\n");
                         coldUsed = false;
                         shockUsed = false;
                         necroticUsed = false;
@@ -823,29 +817,12 @@ public class Main {
                                 System.out.println("------");
 
                                 if (enemy.isAlive()) {
-                                    computerAction = random.nextInt(4);
+                                    computerAction = random.nextInt(3);
                                     switch (computerAction) {
                                         case 0:
-                                            int enemyDamage = enemy.calculateDamage();
-                                            int playerDefense = player.getArmor().setDefence();
-                                            int damageDealt = enemyDamage - playerDefense;
-
-                                            if (damageDealt > 0) {
-                                                System.out.println(
-                                                        enemy.getName() + " attacks " + player.getName() + " for "
-                                                                + enemyDamage + " damage.");
-                                                player.receiveDamage(damageDealt);
-                                            } else {
-                                                System.out.println(enemy.getName() + " attacks " + player.getName()
-                                                        + " but does no damage.");
-                                            }
-                                            break;
-
-                                        case 1:
-
                                             int magicChoice = random.nextInt(6);
 
-                                            String magicName = player.getMagic(magicChoice).toString();
+                                            String magicName = enemy.getMagic(magicChoice).toString();
 
                                             if (magicName.equals("Eletric Magic")) {
                                                 shockUsed = true;
@@ -861,17 +838,19 @@ public class Main {
 
                                             System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
 
-                                            player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            enemy.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
                                             System.out.println(player.toString() + "\n\n");
                                             System.out.println(enemy.toString() + "\n\n");
 
-                                        case 2:
+                                        case 1:
+
                                             enemy.heal();
                                             System.out.println(enemy.getName() + " uses a potion and recovers "
                                                     + enemy.getHeal() + " HP.");
                                             break;
 
-                                        case 3:
+                                        case 2:
+                                            
 
                                             enemy.getArmor().doubleDefence();
                                             System.out.println(
@@ -880,7 +859,6 @@ public class Main {
                                             System.out.println(player.toString() + "\n\n");
 
                                             break;
-
                                     }
 
                                     if (necroticUsed) {
@@ -894,74 +872,59 @@ public class Main {
                                     }
                                 }
                             } else {
-                                computerAction = random.nextInt(4);
-                                switch (computerAction) {
-                                    case 0:
-                                        int enemyDamage = enemy.calculateDamage();
-                                        int playerDefense = player.getArmor().setDefence();
-                                        int damageDealt = enemyDamage - playerDefense;
+                               computerAction = random.nextInt(3);
+                                    switch (computerAction) {
+                                        case 0:
+                                            int magicChoice = random.nextInt(6);
 
-                                        if (damageDealt > 0) {
+                                            String magicName = enemy.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                            }
+
+                                            if (magicName.equals("Necrotic Magic")) {
+                                                necroticUsed = true;
+                                            }
+
+                                            System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                            enemy.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            System.out.println(player.toString() + "\n\n");
+                                            System.out.println(enemy.toString() + "\n\n");
+
+                                        case 1:
+
+                                            enemy.heal();
+                                            System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                    + enemy.getHeal() + " HP.");
+                                            break;
+
+                                        case 2:
+                                            
+
+                                            enemy.getArmor().doubleDefence();
                                             System.out.println(
-                                                    enemy.getName() + " attacks " + player.getName() + " for "
-                                                            + enemyDamage + " damage.");
-                                            player.receiveDamage(damageDealt);
-                                        } else {
-                                            System.out.println(enemy.getName() + " attacks " + player.getName()
-                                                    + " but does no damage.");
-                                        }
-                                        break;
+                                                    enemy.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                            System.out.println(player.toString() + "\n\n");
 
-                                    case 1:
+                                            break;
+                                    }
 
-                                        int magicChoice = random.nextInt(6);
-
-                                        String magicName = player.getMagic(magicChoice).toString();
-
-                                        if (magicName.equals("Eletric Magic")) {
-                                            shockUsed = true;
-                                        }
-
-                                        if (magicName.equals("Ice Magic")) {
-                                            coldUsed = true;
-                                        }
-
-                                        if (magicName.equals("Necrotic Magic")) {
-                                            necroticUsed = true;
-                                        }
-
-                                        System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
-
-                                        player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
-                                        System.out.println(player.toString() + "\n\n");
-                                        System.out.println(enemy.toString() + "\n\n");
-
-                                    case 2:
-                                        enemy.heal();
-                                        System.out.println(enemy.getName() + " uses a potion and recovers "
-                                                + enemy.getHeal() + " HP.");
-                                        break;
-
-                                    case 3:
-
-                                        enemy.getArmor().doubleDefence();
-                                        System.out.println(enemy.getName() + " doubles their defense for 1 round.");
-                                        System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
-                                        System.out.println(player.toString() + "\n\n");
-
-                                        break;
-
-                                }
-
-                                if (necroticUsed) {
-                                    enemy.removeNecroticEffectTurns();
-                                }
-                                if (shockUsed) {
-                                    enemy.removeShockEffectTurns();
-                                }
-                                if (coldUsed) {
-                                    enemy.removeColdEffectTurns();
-                                }
+                                    if (necroticUsed) {
+                                        enemy.removeNecroticEffectTurns();
+                                    }
+                                    if (shockUsed) {
+                                        enemy.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        enemy.removeColdEffectTurns();
+                                    }
                                 if (player.isAlive()) {
 
                                     playerAction = getPlayerAction(scanner);
@@ -1390,7 +1353,7 @@ public class Main {
                         saveTripletsChoice();
                         findingVardamir();
 
-                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD),
+                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, null,
                                 null, new Potion(Potion.LARGE));
                         vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
                         createMagic(1, vardamir);
@@ -1399,7 +1362,6 @@ public class Main {
                         createMagic(4, vardamir);
                         createMagic(5, vardamir);
                         createMagic(6, vardamir);
-
                         enemy = vardamir;
 
                         System.out.println("\n" + enemy.toString() + "\n\n");
@@ -1546,29 +1508,12 @@ public class Main {
                                 System.out.println("------");
 
                                 if (enemy.isAlive()) {
-                                    computerAction = random.nextInt(4);
+                                   computerAction = random.nextInt(3);
                                     switch (computerAction) {
                                         case 0:
-                                            int enemyDamage = enemy.calculateDamage();
-                                            int playerDefense = player.getArmor().setDefence();
-                                            int damageDealt = enemyDamage - playerDefense;
-
-                                            if (damageDealt > 0) {
-                                                System.out.println(
-                                                        enemy.getName() + " attacks " + player.getName() + " for "
-                                                                + enemyDamage + " damage.");
-                                                player.receiveDamage(damageDealt);
-                                            } else {
-                                                System.out.println(enemy.getName() + " attacks " + player.getName()
-                                                        + " but does no damage.");
-                                            }
-                                            break;
-
-                                        case 1:
-
                                             int magicChoice = random.nextInt(6);
 
-                                            String magicName = player.getMagic(magicChoice).toString();
+                                            String magicName = enemy.getMagic(magicChoice).toString();
 
                                             if (magicName.equals("Eletric Magic")) {
                                                 shockUsed = true;
@@ -1584,17 +1529,19 @@ public class Main {
 
                                             System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
 
-                                            player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            enemy.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
                                             System.out.println(player.toString() + "\n\n");
                                             System.out.println(enemy.toString() + "\n\n");
 
-                                        case 2:
+                                        case 1:
+
                                             enemy.heal();
                                             System.out.println(enemy.getName() + " uses a potion and recovers "
                                                     + enemy.getHeal() + " HP.");
                                             break;
 
-                                        case 3:
+                                        case 2:
+                                            
 
                                             enemy.getArmor().doubleDefence();
                                             System.out.println(
@@ -1603,7 +1550,6 @@ public class Main {
                                             System.out.println(player.toString() + "\n\n");
 
                                             break;
-
                                     }
 
                                     if (necroticUsed) {
@@ -1617,74 +1563,59 @@ public class Main {
                                     }
                                 }
                             } else {
-                                computerAction = random.nextInt(4);
-                                switch (computerAction) {
-                                    case 0:
-                                        int enemyDamage = enemy.calculateDamage();
-                                        int playerDefense = player.getArmor().setDefence();
-                                        int damageDealt = enemyDamage - playerDefense;
+                                computerAction = random.nextInt(3);
+                                    switch (computerAction) {
+                                        case 0:
+                                            int magicChoice = random.nextInt(6);
 
-                                        if (damageDealt > 0) {
+                                            String magicName = enemy.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                            }
+
+                                            if (magicName.equals("Necrotic Magic")) {
+                                                necroticUsed = true;
+                                            }
+
+                                            System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                            enemy.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            System.out.println(player.toString() + "\n\n");
+                                            System.out.println(enemy.toString() + "\n\n");
+
+                                        case 1:
+
+                                            enemy.heal();
+                                            System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                    + enemy.getHeal() + " HP.");
+                                            break;
+
+                                        case 2:
+                                            
+
+                                            enemy.getArmor().doubleDefence();
                                             System.out.println(
-                                                    enemy.getName() + " attacks " + player.getName() + " for "
-                                                            + enemyDamage + " damage.");
-                                            player.receiveDamage(damageDealt);
-                                        } else {
-                                            System.out.println(enemy.getName() + " attacks " + player.getName()
-                                                    + " but does no damage.");
-                                        }
-                                        break;
+                                                    enemy.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                            System.out.println(player.toString() + "\n\n");
 
-                                    case 1:
+                                            break;
+                                    }
 
-                                        int magicChoice = random.nextInt(6);
-
-                                        String magicName = player.getMagic(magicChoice).toString();
-
-                                        if (magicName.equals("Eletric Magic")) {
-                                            shockUsed = true;
-                                        }
-
-                                        if (magicName.equals("Ice Magic")) {
-                                            coldUsed = true;
-                                        }
-
-                                        if (magicName.equals("Necrotic Magic")) {
-                                            necroticUsed = true;
-                                        }
-
-                                        System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
-
-                                        player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
-                                        System.out.println(player.toString() + "\n\n");
-                                        System.out.println(enemy.toString() + "\n\n");
-
-                                    case 2:
-                                        enemy.heal();
-                                        System.out.println(enemy.getName() + " uses a potion and recovers "
-                                                + enemy.getHeal() + " HP.");
-                                        break;
-
-                                    case 3:
-
-                                        enemy.getArmor().doubleDefence();
-                                        System.out.println(enemy.getName() + " doubles their defense for 1 round.");
-                                        System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
-                                        System.out.println(player.toString() + "\n\n");
-
-                                        break;
-
-                                }
-
-                                if (necroticUsed) {
-                                    enemy.removeNecroticEffectTurns();
-                                }
-                                if (shockUsed) {
-                                    enemy.removeShockEffectTurns();
-                                }
-                                if (coldUsed) {
-                                    enemy.removeColdEffectTurns();
-                                }
+                                    if (necroticUsed) {
+                                        enemy.removeNecroticEffectTurns();
+                                    }
+                                    if (shockUsed) {
+                                        enemy.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        enemy.removeColdEffectTurns();
+                                    }
 
                                 if (player.isAlive()) {
 
@@ -2133,7 +2064,7 @@ public class Main {
                     if (player.isAlive()) {
                         afterReachingMaster();
                         findingVardamir();
-                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD),
+                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, null,
                                 null, new Potion(Potion.LARGE));
                         vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
                         createMagic(1, vardamir);
@@ -2142,7 +2073,6 @@ public class Main {
                         createMagic(4, vardamir);
                         createMagic(5, vardamir);
                         createMagic(6, vardamir);
-
                         enemy = vardamir;
 
                         System.out.println("\n" + enemy.toString() + "\n\n");
@@ -2289,29 +2219,12 @@ public class Main {
                                 System.out.println("------");
 
                                 if (enemy.isAlive()) {
-                                    computerAction = random.nextInt(4);
+                                    computerAction = random.nextInt(3);
                                     switch (computerAction) {
                                         case 0:
-                                            int enemyDamage = enemy.calculateDamage();
-                                            int playerDefense = player.getArmor().setDefence();
-                                            int damageDealt = enemyDamage - playerDefense;
-
-                                            if (damageDealt > 0) {
-                                                System.out.println(
-                                                        enemy.getName() + " attacks " + player.getName() + " for "
-                                                                + enemyDamage + " damage.");
-                                                player.receiveDamage(damageDealt);
-                                            } else {
-                                                System.out.println(enemy.getName() + " attacks " + player.getName()
-                                                        + " but does no damage.");
-                                            }
-                                            break;
-
-                                        case 1:
-
                                             int magicChoice = random.nextInt(6);
 
-                                            String magicName = player.getMagic(magicChoice).toString();
+                                            String magicName = enemy.getMagic(magicChoice).toString();
 
                                             if (magicName.equals("Eletric Magic")) {
                                                 shockUsed = true;
@@ -2327,17 +2240,19 @@ public class Main {
 
                                             System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
 
-                                            player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            enemy.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
                                             System.out.println(player.toString() + "\n\n");
                                             System.out.println(enemy.toString() + "\n\n");
 
-                                        case 2:
+                                        case 1:
+
                                             enemy.heal();
                                             System.out.println(enemy.getName() + " uses a potion and recovers "
                                                     + enemy.getHeal() + " HP.");
                                             break;
 
-                                        case 3:
+                                        case 2:
+                                            
 
                                             enemy.getArmor().doubleDefence();
                                             System.out.println(
@@ -2346,7 +2261,6 @@ public class Main {
                                             System.out.println(player.toString() + "\n\n");
 
                                             break;
-
                                     }
 
                                     if (necroticUsed) {
@@ -2360,74 +2274,59 @@ public class Main {
                                     }
                                 }
                             } else {
-                                computerAction = random.nextInt(4);
-                                switch (computerAction) {
-                                    case 0:
-                                        int enemyDamage = enemy.calculateDamage();
-                                        int playerDefense = player.getArmor().setDefence();
-                                        int damageDealt = enemyDamage - playerDefense;
+                                computerAction = random.nextInt(3);
+                                    switch (computerAction) {
+                                        case 0:
+                                            int magicChoice = random.nextInt(6);
 
-                                        if (damageDealt > 0) {
+                                            String magicName = enemy.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                            }
+
+                                            if (magicName.equals("Necrotic Magic")) {
+                                                necroticUsed = true;
+                                            }
+
+                                            System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                            enemy.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            System.out.println(player.toString() + "\n\n");
+                                            System.out.println(enemy.toString() + "\n\n");
+
+                                        case 1:
+
+                                            enemy.heal();
+                                            System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                    + enemy.getHeal() + " HP.");
+                                            break;
+
+                                        case 2:
+                                            
+
+                                            enemy.getArmor().doubleDefence();
                                             System.out.println(
-                                                    enemy.getName() + " attacks " + player.getName() + " for "
-                                                            + enemyDamage + " damage.");
-                                            player.receiveDamage(damageDealt);
-                                        } else {
-                                            System.out.println(enemy.getName() + " attacks " + player.getName()
-                                                    + " but does no damage.");
-                                        }
-                                        break;
+                                                    enemy.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                            System.out.println(player.toString() + "\n\n");
 
-                                    case 1:
+                                            break;
+                                    }
 
-                                        int magicChoice = random.nextInt(6);
-
-                                        String magicName = player.getMagic(magicChoice).toString();
-
-                                        if (magicName.equals("Eletric Magic")) {
-                                            shockUsed = true;
-                                        }
-
-                                        if (magicName.equals("Ice Magic")) {
-                                            coldUsed = true;
-                                        }
-
-                                        if (magicName.equals("Necrotic Magic")) {
-                                            necroticUsed = true;
-                                        }
-
-                                        System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
-
-                                        player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
-                                        System.out.println(player.toString() + "\n\n");
-                                        System.out.println(enemy.toString() + "\n\n");
-
-                                    case 2:
-                                        enemy.heal();
-                                        System.out.println(enemy.getName() + " uses a potion and recovers "
-                                                + enemy.getHeal() + " HP.");
-                                        break;
-
-                                    case 3:
-
-                                        enemy.getArmor().doubleDefence();
-                                        System.out.println(enemy.getName() + " doubles their defense for 1 round.");
-                                        System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
-                                        System.out.println(player.toString() + "\n\n");
-
-                                        break;
-
-                                }
-
-                                if (necroticUsed) {
-                                    enemy.removeNecroticEffectTurns();
-                                }
-                                if (shockUsed) {
-                                    enemy.removeShockEffectTurns();
-                                }
-                                if (coldUsed) {
-                                    enemy.removeColdEffectTurns();
-                                }
+                                    if (necroticUsed) {
+                                        enemy.removeNecroticEffectTurns();
+                                    }
+                                    if (shockUsed) {
+                                        enemy.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        enemy.removeColdEffectTurns();
+                                    }
                                 if (player.isAlive()) {
 
                                     playerAction = getPlayerAction(scanner);
@@ -2859,7 +2758,7 @@ public class Main {
                     }
                     if (player.isAlive()) {
                         findingVardamir();
-                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, new Weapon(Weapon.LONG_SWORD),
+                        Character vardamir = new Character("Vardamir", 10, 10, 5, 5, null,
                                 null, new Potion(Potion.LARGE));
                         vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
                         createMagic(1, vardamir);
@@ -2868,7 +2767,6 @@ public class Main {
                         createMagic(4, vardamir);
                         createMagic(5, vardamir);
                         createMagic(6, vardamir);
-
                         enemy = vardamir;
 
                         System.out.println("\n" + enemy.toString() + "\n\n");
@@ -3009,29 +2907,12 @@ public class Main {
                                 System.out.println("------");
 
                                 if (enemy.isAlive()) {
-                                    computerAction = random.nextInt(4);
+                                    computerAction = random.nextInt(3);
                                     switch (computerAction) {
                                         case 0:
-                                            int enemyDamage = enemy.calculateDamage();
-                                            int playerDefense = player.getArmor().setDefence();
-                                            int damageDealt = enemyDamage - playerDefense;
-
-                                            if (damageDealt > 0) {
-                                                System.out.println(
-                                                        enemy.getName() + " attacks " + player.getName() + " for "
-                                                                + enemyDamage + " damage.");
-                                                player.receiveDamage(damageDealt);
-                                            } else {
-                                                System.out.println(enemy.getName() + " attacks " + player.getName()
-                                                        + " but does no damage.");
-                                            }
-                                            break;
-
-                                        case 1:
-
                                             int magicChoice = random.nextInt(6);
 
-                                            String magicName = player.getMagic(magicChoice).toString();
+                                            String magicName = enemy.getMagic(magicChoice).toString();
 
                                             if (magicName.equals("Eletric Magic")) {
                                                 shockUsed = true;
@@ -3047,17 +2928,19 @@ public class Main {
 
                                             System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
 
-                                            player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            enemy.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
                                             System.out.println(player.toString() + "\n\n");
                                             System.out.println(enemy.toString() + "\n\n");
 
-                                        case 2:
+                                        case 1:
+
                                             enemy.heal();
                                             System.out.println(enemy.getName() + " uses a potion and recovers "
                                                     + enemy.getHeal() + " HP.");
                                             break;
 
-                                        case 3:
+                                        case 2:
+                                            
 
                                             enemy.getArmor().doubleDefence();
                                             System.out.println(
@@ -3066,7 +2949,6 @@ public class Main {
                                             System.out.println(player.toString() + "\n\n");
 
                                             break;
-
                                     }
 
                                     if (necroticUsed) {
@@ -3080,74 +2962,59 @@ public class Main {
                                     }
                                 }
                             } else {
-                                computerAction = random.nextInt(4);
-                                switch (computerAction) {
-                                    case 0:
-                                        int enemyDamage = enemy.calculateDamage();
-                                        int playerDefense = player.getArmor().setDefence();
-                                        int damageDealt = enemyDamage - playerDefense;
+                               computerAction = random.nextInt(3);
+                                    switch (computerAction) {
+                                        case 0:
+                                            int magicChoice = random.nextInt(6);
 
-                                        if (damageDealt > 0) {
+                                            String magicName = enemy.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                            }
+
+                                            if (magicName.equals("Necrotic Magic")) {
+                                                necroticUsed = true;
+                                            }
+
+                                            System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                            enemy.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            System.out.println(player.toString() + "\n\n");
+                                            System.out.println(enemy.toString() + "\n\n");
+
+                                        case 1:
+
+                                            enemy.heal();
+                                            System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                    + enemy.getHeal() + " HP.");
+                                            break;
+
+                                        case 2:
+                                            
+
+                                            enemy.getArmor().doubleDefence();
                                             System.out.println(
-                                                    enemy.getName() + " attacks " + player.getName() + " for "
-                                                            + enemyDamage + " damage.");
-                                            player.receiveDamage(damageDealt);
-                                        } else {
-                                            System.out.println(enemy.getName() + " attacks " + player.getName()
-                                                    + " but does no damage.");
-                                        }
-                                        break;
+                                                    enemy.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                            System.out.println(player.toString() + "\n\n");
 
-                                    case 1:
+                                            break;
+                                    }
 
-                                        int magicChoice = random.nextInt(6);
-
-                                        String magicName = player.getMagic(magicChoice).toString();
-
-                                        if (magicName.equals("Eletric Magic")) {
-                                            shockUsed = true;
-                                        }
-
-                                        if (magicName.equals("Ice Magic")) {
-                                            coldUsed = true;
-                                        }
-
-                                        if (magicName.equals("Necrotic Magic")) {
-                                            necroticUsed = true;
-                                        }
-
-                                        System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
-
-                                        player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
-                                        System.out.println(player.toString() + "\n\n");
-                                        System.out.println(enemy.toString() + "\n\n");
-
-                                    case 2:
-                                        enemy.heal();
-                                        System.out.println(enemy.getName() + " uses a potion and recovers "
-                                                + enemy.getHeal() + " HP.");
-                                        break;
-
-                                    case 3:
-
-                                        enemy.getArmor().doubleDefence();
-                                        System.out.println(enemy.getName() + " doubles their defense for 1 round.");
-                                        System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
-                                        System.out.println(player.toString() + "\n\n");
-
-                                        break;
-
-                                }
-
-                                if (necroticUsed) {
-                                    enemy.removeNecroticEffectTurns();
-                                }
-                                if (shockUsed) {
-                                    enemy.removeShockEffectTurns();
-                                }
-                                if (coldUsed) {
-                                    enemy.removeColdEffectTurns();
-                                }
+                                    if (necroticUsed) {
+                                        enemy.removeNecroticEffectTurns();
+                                    }
+                                    if (shockUsed) {
+                                        enemy.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        enemy.removeColdEffectTurns();
+                                    }
                                 if (player.isAlive()) {
 
                                     playerAction = getPlayerAction(scanner);

@@ -309,8 +309,7 @@ class Character {
     public String toString() {
         return name + "\nHP: " + getHitPoints() + "\nStrength: " + getStrength() + "\nConstitution: "
                 + getConstitution()
-                + "\nAgility: " + getAgility() + "\nDexterity: " + getDexterity() + "\nWeapon: "
-                + getWeapon().toString() + "\n";
+                + "\nAgility: " + getAgility() + "\nDexterity: " + getDexterity();
     }
 
     public String getCharacter(){
