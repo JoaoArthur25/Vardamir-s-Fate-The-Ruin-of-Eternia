@@ -37,7 +37,7 @@ class Character {
     }
 
     private int calculateHitPoints() {
-        return rollD6() + rollD6() + rollD6() + constitution;
+        return rollD12() + rollD6() + rollD6() + constitution;
     }
 
     public int calculateDamage() {
@@ -45,19 +45,19 @@ class Character {
 
         switch (weapon.getCategory()) {
             case Weapon.LONG_SWORD:
-                weaponDamage += rollD12();
+                weaponDamage += rollD12() - 2;
                 weaponDamage += (int) (0.5 * strength);
                 break;
             case Weapon.DAGGER:
-                weaponDamage += rollD6() + rollD6() + rollD4();
-                weaponDamage += (int) (0.33 * dexterity);
+                weaponDamage += rollD6() + rollD6() + 2 /*+ rollD4()*/;
+                weaponDamage += (int) (0.4 * dexterity);
                 break;
             case Weapon.BOW:
-                weaponDamage += rollD6() + rollD6() + rollD4();
-                weaponDamage += (int) (0.33 * agility);
+                weaponDamage += rollD6() + rollD6() + 2 /*+ rollD4()*/;
+                weaponDamage += (int) (0.4 * agility);
                 break;
             case Weapon.CROSSBOW:
-                weaponDamage += rollD12();
+                weaponDamage += rollD12() - 2;
                 weaponDamage += (int) (0.5 * dexterity);
                 break;
         }
@@ -84,6 +84,11 @@ class Character {
         }
     }
 
+    //DEBUG
+    public int getHealUses(){
+        return healUses;
+    }
+
     public Magic[] getMagics() {
         return magic.toArray(new Magic[magic.size()]);
     }
@@ -98,10 +103,6 @@ class Character {
 
     public void addMagic(Magic magic) {
         this.magic.add(magic);
-    }
-
-    public void heal(int healingAmount) {
-        hp += healingAmount;
     }
 
     private int rollD12() {

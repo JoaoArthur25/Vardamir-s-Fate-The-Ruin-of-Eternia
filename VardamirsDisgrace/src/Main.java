@@ -46,7 +46,7 @@ public class Main {
             combat1(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
         }
 
-        //Thread.sleep(2000);
+        Thread.sleep(2000);
 
         clrscr();
 
@@ -857,8 +857,7 @@ public class Main {
                 } else {
                     System.out.println(player.getName() + " attacks " + enemy.getName() + " but does no damage.");
                 }
-                //System.out.println(enemy.toString() + "\n\n");
-
+                
                 break;
 
             case 1:
@@ -882,23 +881,24 @@ public class Main {
                 System.out.println(player.getMagic(magicChoice).toString() + " used.");
 
                 player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
-                //System.out.println(enemy.toString() + "\n\n");
-
+                
                 break;
 
             case 2:
                 player.getArmor().doubleDefence();
                 System.out.println(player.getName() + " doubles their defense for 1 round.");
                 System.out.println("Defesa atual: " + player.getArmor().getDefence());
-                //System.out.println(enemy.toString() + "\n\n");
 
+                /*DEBUG*/System.out.println(enemy.getHealUses());
+                /*DEBUG*/System.out.println(enemy.getHeal());
+                
                 break;
 
             case 3:
                 player.heal();
                 System.out.println(player.getName() + " uses a potion and recovers " + player.getHeal() + " HP.");
                 System.out.println(player.getArmor().getDefence());
-                //System.out.println(enemy.toString() + "\n\n");
+                
 
                 break;
         }
@@ -924,13 +924,14 @@ public class Main {
                 } else {
                     System.out.println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
                 }
-                //System.out.println(player.toString() + "\n\n");
+                
                 break;
 
             case 1:
-                enemy.heal(enemy.getHeal());
+                enemy.heal();
                 System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
-                //System.out.println(player.toString());
+                /*DEBUG*/System.out.println(enemy.getHealUses());
+                /*DEBUG*/System.out.println(enemy.getHeal());
                 break;
 
         }
@@ -1059,7 +1060,7 @@ public class Main {
                 System.out.println(enemy.toString() + "\n\n");
 
             case 2:
-                enemy.heal(enemy.getHeal());
+                enemy.heal();
                 System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
                 break;
 
@@ -1106,7 +1107,7 @@ public class Main {
                 break;
 
             case 1:
-                enemy.heal(enemy.getHeal());
+                enemy.heal();
                 System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
                 break;
 
