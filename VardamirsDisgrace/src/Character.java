@@ -3,7 +3,8 @@ import java.util.Random;
 
 class Character {
     private String name;
-    private int hp;
+    int hp;
+    int originalHp;
     private int strength;
     private int constitution;
     private int agility;
@@ -31,6 +32,7 @@ class Character {
         this.armor = armor;
         this.potion = potion;
         this.hp = calculateHitPoints();
+        this.originalHp = hp;
         this.magic = new ArrayList<Magic>();
     }
 
@@ -112,6 +114,10 @@ class Character {
         return hp;
     }
 
+    public int getOriginalHitPoints(){
+        return originalHp;
+    }
+
     public void receiveDamage(int damage) {
         hp -= damage;
         if (hp < 0) {
@@ -125,6 +131,10 @@ class Character {
 
     public String getName() {
         return name;
+    }
+
+    public void setHp(int amount){
+        this.hp = amount;
     }
 
     public void setName(String name) {
@@ -206,6 +216,10 @@ class Character {
 
     public void addStrength(int amount) {
         strength += amount;
+    }
+
+    public void addOriginalHitPoints(int amount) {
+        originalHp += amount;
     }
 
     public void reduceConstitution(int amount) {

@@ -16,11 +16,11 @@ public class Main {
 
         System.out.println(player.getCharacter());
 
-        Character diabrete = new Character("Diabrete", 2, 33, 5, 5, new Weapon(Weapon.DAGGER), null,
+        Character diabrete = new Character("Diabrete", 2, 3, 5, 5, new Weapon(Weapon.DAGGER), null,
                 new Potion(Potion.SMALL));
-        Character aranha = new Character("Aranha", 5, 34, 3, 3, new Weapon(Weapon.DAGGER), null,
+        Character aranha = new Character("Aranha", 5, 4, 3, 3, new Weapon(Weapon.DAGGER), null,
                 new Potion(Potion.SMALL));
-        Character esqueleto = new Character("Esqueleto", 36, 5, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
+        Character esqueleto = new Character("Esqueleto", 6, 5, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
                 new Potion(Potion.MEDIUM));
 
         int enemyChoice = random.nextInt(3);
@@ -310,8 +310,14 @@ public class Main {
         // Thread.sleep(2000);
 
         // clrscr();
+        
 
         if (player.isAlive()) {
+            /*DEBUG*/System.out.println("Vida Total: " + player.getOriginalHitPoints());
+            addAttributes(scanner, 5, player);
+            addHitPoints(player);
+            /*DEBUG*/System.out.println("Vida Total: " + player.getOriginalHitPoints());
+            player.setHp(player.getOriginalHitPoints());
             firstChoiceText();
             System.out.println("1. Go to your house");
             System.out.println("2. Go to the outpost");
@@ -320,7 +326,7 @@ public class Main {
                 System.out.println("Invalid choice. Please choose a valid action (1-2).");
                 System.out.print("Enter your choice (1-2): ");
                 choice = getIntInput(scanner);
-            }
+            } 
             if (choice == 1) {
                 searchWifeChoice();
                 System.out.println("1. Save your wife");
@@ -658,6 +664,11 @@ public class Main {
                         }
                     }
                     if (player.isAlive()) {
+                        /*DEBUG*/System.out.println("\nVida Total: " + player.getOriginalHitPoints());
+                        addAttributes(scanner, 10, player);
+                        addHitPoints(player);
+                        /*DEBUG*/System.out.println("\nVida Total: " + player.getOriginalHitPoints());
+                        player.setHp(player.getOriginalHitPoints());
                         saveWifeChoice();
                         findingVardamir();
                         Character vardamir = new Character("Vardamir", 10, 10, 5, 5, null,
@@ -1028,6 +1039,11 @@ public class Main {
                     }
 
                 } else if (choice == 2) {
+                    /*DEBUG*/System.out.println("\nVida Total: " + player.getOriginalHitPoints());
+                        addAttributes(scanner, 10, player);
+                        addHitPoints(player);
+                        /*DEBUG*/System.out.println("\nVida Total: " + player.getOriginalHitPoints());
+                        player.setHp(player.getOriginalHitPoints());
                     Character nidere = new Character("Nidere", 5, 5, 5, 5, new Weapon(Weapon.DAGGER), null,
                             new Potion(Potion.SMALL));
                     Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
@@ -1350,6 +1366,11 @@ public class Main {
                     }
 
                     if (player.isAlive()) {
+                        /*DEBUG*/System.out.println("\nVida Total: " + player.getOriginalHitPoints());
+                        addAttributes(scanner, 10, player);
+                        addHitPoints(player);
+                        /*DEBUG*/System.out.println("\nVida Total: " + player.getOriginalHitPoints());
+                        player.setHp(player.getOriginalHitPoints());
                         saveTripletsChoice();
                         findingVardamir();
 
@@ -2428,7 +2449,6 @@ public class Main {
                         System.out.println("You are dead!");
                     }
                 } else if (choice == 2) {
-                    goAwayChoice();
                     Character nidere = new Character("Nidere", 5, 5, 5, 5, new Weapon(Weapon.DAGGER), null,
                             new Potion(Potion.SMALL));
                     Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
@@ -3601,7 +3621,7 @@ public class Main {
         System.out.print("Enter character name: ");
         String playerName = scanner.nextLine();
 
-        int pointsRemaining = 50;
+        int pointsRemaining = 15;
         int strength = 0;
         int constitution = 0;
         int agility = 0;
@@ -3691,5 +3711,51 @@ public class Main {
                 Runtime.getRuntime().exec("clear");
         } catch (IOException | InterruptedException ex) {
         }
+    }
+
+    public static void addAttributes(Scanner scanner, int pointsRemaining, Character character){
+        while (pointsRemaining > 0) {
+            System.out.println("\nPoints Remaining: " + pointsRemaining);
+            System.out.println("1. Add to Strength");
+            System.out.println("2. Add to Constitution");
+            System.out.println("3. Add to Agility");
+            System.out.println("4. Add to Dexterity");
+            System.out.print("Choose an attribute to increase (1-4): ");
+            int choice = getIntInput(scanner);
+
+            if (choice < 1 || choice > 4) {
+                System.out.println("Invalid choice. Please choose a valid attribute.");
+                continue;
+            }
+
+            System.out.print("Enter the number of points to add: ");
+            int pointsToAdd = getIntInput(scanner);
+
+            if (pointsToAdd <= 0 || pointsToAdd > pointsRemaining) {
+                System.out.println("Invalid number of points. Please enter a valid number.");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    character.addStrength(pointsToAdd);
+                    break;
+                case 2:
+                    character.addConstitution(pointsToAdd);
+                    break;
+                case 3:
+                    character.addAgility(pointsToAdd);
+                    break;
+                case 4:
+                    character.addDexterity(pointsToAdd);;
+                    break;
+            }
+
+            pointsRemaining -= pointsToAdd;
+        }
+    }
+
+    public static void addHitPoints(Character character){
+        character.addOriginalHitPoints(character.getConstitution());
     }
 }
