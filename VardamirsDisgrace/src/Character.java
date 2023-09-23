@@ -84,6 +84,14 @@ class Character {
         }
     }
 
+    public int getHealUses() {
+        return healUses;
+    }
+
+    public int setHealUses(int amount) {
+        return healUses = amount;
+    }
+
     public Magic[] getMagics() {
         return magic.toArray(new Magic[magic.size()]);
     }
