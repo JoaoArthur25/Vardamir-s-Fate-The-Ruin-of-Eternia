@@ -35,7 +35,7 @@ class Character {
     }
 
     private int calculateHitPoints() {
-        return rollD6() + rollD6() + rollD6() + constitution;
+        return rollD12() + rollD6() + rollD6() + constitution;
     }
 
     public int calculateDamage() {
@@ -43,20 +43,20 @@ class Character {
 
         switch (weapon.getCategory()) {
             case Weapon.LONG_SWORD:
-                weaponDamage += rollD12();
-                weaponDamage += (int) (0.5 * strength);
+            weaponDamage += rollD12() - 2;
+            weaponDamage += (int) (0.5 * strength);
                 break;
             case Weapon.DAGGER:
-                weaponDamage += rollD6() + rollD6() + rollD4();
-                weaponDamage += (int) (0.33 * dexterity);
+            weaponDamage += rollD6() + rollD6() + 2;
+            weaponDamage += (int) (0.4 * dexterity);
                 break;
             case Weapon.BOW:
-                weaponDamage += rollD6() + rollD6() + rollD4();
-                weaponDamage += (int) (0.33 * agility);
+            weaponDamage += rollD6() + rollD6() + 2;
+            weaponDamage += (int) (0.4 * agility);
                 break;
             case Weapon.CROSSBOW:
-                weaponDamage += rollD12();
-                weaponDamage += (int) (0.5 * dexterity);
+            weaponDamage += rollD12() - 2;
+            weaponDamage += (int) (0.5 * dexterity);
                 break;
         }
 
@@ -98,10 +98,6 @@ class Character {
         this.magic.add(magic);
     }
 
-    public void heal(int healingAmount) {
-        hp += healingAmount;
-    }
-
     private int rollD12() {
         Random rand = new Random();
         return rand.nextInt(12) + 1;
@@ -110,11 +106,6 @@ class Character {
     private int rollD6() {
         Random rand = new Random();
         return rand.nextInt(6) + 1;
-    }
-
-    private int rollD4() {
-        Random rand = new Random();
-        return rand.nextInt(4) + 1;
     }
 
     public int getHitPoints() {

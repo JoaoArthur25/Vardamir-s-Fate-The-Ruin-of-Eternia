@@ -23,13 +23,13 @@ public class Weapon {
     private int setDamageConstant(String category) {
         switch (category) {
             case DAGGER:
-                return 4;
+            return 2;
             case LONG_SWORD:
-                return 6; 
-            case BOW:
-                return 3; 
-            case CROSSBOW:
                 return 5; 
+            case BOW:
+                return 2; 
+            case CROSSBOW:
+                return 4; 
             default:
                 return 0;
         }

@@ -48,47 +48,47 @@ public class Main {
             player.getArmor().setDefence();
             System.out.println("Fire Effect turns:" + enemy.getFireEffectTurns());
             if (enemy.getFireEffectTurns() > 0) {
-                    enemy.applyFireEffect();
-                }
+                enemy.applyFireEffect();
+            }
 
-                if (enemy.getPoisonEffectTurns() >= 0) {
-                    enemy.applyPoisonEffect();
-                }
+            if (enemy.getPoisonEffectTurns() >= 0) {
+                enemy.applyPoisonEffect();
+            }
 
-                if (player.getColdEffectTurns() <= 0) {
-                    enemy.removeColdEffect();
-                    coldUsed = false;
-                    player.setColdEffectTurns();
-                }
+            if (player.getColdEffectTurns() <= 0) {
+                enemy.removeColdEffect();
+                coldUsed = false;
+                player.setColdEffectTurns();
+            }
 
-                if (enemy.getFireEffectTurns() > 0) {
-                    player.applyFireEffect();
-                }
+            if (enemy.getFireEffectTurns() > 0) {
+                player.applyFireEffect();
+            }
 
-                if (enemy.getPoisonEffectTurns() > 0) {
-                    player.applyPoisonEffect();
-                }
+            if (enemy.getPoisonEffectTurns() > 0) {
+                player.applyPoisonEffect();
+            }
 
-                if (enemy.getColdEffectTurns() <= 0) {
-                    player.removeColdEffect();
-                    coldUsed = false;
-                    enemy.setColdEffectTurns();
-                }
+            if (enemy.getColdEffectTurns() <= 0) {
+                player.removeColdEffect();
+                coldUsed = false;
+                enemy.setColdEffectTurns();
+            }
 
-                if (player.getShockEffectTurns() <= 0) {
-                    enemy.addDexterity(2);
-                    shockUsed = false;
-                    player.setShockEffectTurns();
-                }
+            if (player.getShockEffectTurns() <= 0) {
+                enemy.addDexterity(2);
+                shockUsed = false;
+                player.setShockEffectTurns();
+            }
 
-                if (enemy.getShockEffectTurns() <= 0) {
-                    player.addDexterity(2);
-                    shockUsed = false;
-                    enemy.setShockEffectTurns();
-                }
+            if (enemy.getShockEffectTurns() <= 0) {
+                player.addDexterity(2);
+                shockUsed = false;
+                enemy.setShockEffectTurns();
+            }
             if (player.getAgility() > enemy.getAgility()) {
                 playerAction = getPlayerAction(scanner);
-                
+
                 switch (playerAction) {
                     case 0:
                         System.out.println();
@@ -147,7 +147,6 @@ public class Main {
                         System.out
                                 .println(player.getName() + " uses a potion and recovers " + player.getHeal() + " HP.");
                         System.out.println(player.getArmor().getDefence());
-                        // System.out.println(enemy.toString() + "\n\n");
 
                         break;
                 }
@@ -167,7 +166,7 @@ public class Main {
 
                 if (enemy.isAlive()) {
                     computerAction = random.nextInt(2);
-                    
+
                     switch (computerAction) {
 
                         case 0:
@@ -184,14 +183,12 @@ public class Main {
                                 System.out.println(
                                         enemy.getName() + " attacks " + player.getName() + " but does no damage.");
                             }
-                            // System.out.println(player.toString() + "\n\n");
                             break;
 
                         case 1:
-                            enemy.heal(enemy.getHeal());
+                            enemy.heal();
                             System.out.println(
                                     enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
-                            // System.out.println(player.toString());
                             break;
 
                     }
@@ -202,7 +199,7 @@ public class Main {
                 }
             } else {
                 computerAction = random.nextInt(2);
-                
+
                 switch (computerAction) {
 
                     case 0:
@@ -219,13 +216,11 @@ public class Main {
                             System.out
                                     .println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
                         }
-                        // System.out.println(player.toString() + "\n\n");
                         break;
 
                     case 1:
-                        enemy.heal(enemy.getHeal());
+                        enemy.heal();
                         System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
-                        // System.out.println(player.toString());
                         break;
 
                 }
@@ -238,7 +233,7 @@ public class Main {
                     playerAction = getPlayerAction(scanner);
                     System.out.println(player.getArmor().getDefence());
                     player.getArmor().setDefence();
-                   
+
                     switch (playerAction) {
                         case 0:
                             System.out.println();
@@ -255,8 +250,6 @@ public class Main {
                                         .println(player.getName() + " attacks " + enemy.getName()
                                                 + " but does no damage.");
                             }
-                            // System.out.println(enemy.toString() + "\n\n");
-
                             break;
 
                         case 1:
@@ -281,16 +274,12 @@ public class Main {
                             System.out.println(player.getMagic(magicChoice).toString() + " used.");
 
                             player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
-                            // System.out.println(enemy.toString() + "\n\n");
-
                             break;
 
                         case 2:
                             player.getArmor().doubleDefence();
                             System.out.println(player.getName() + " doubles their defense for 1 round.");
                             System.out.println("Defesa atual: " + player.getArmor().getDefence());
-                            // System.out.println(enemy.toString() + "\n\n");
-
                             break;
 
                         case 3:
@@ -299,8 +288,6 @@ public class Main {
                                     .println(player.getName() + " uses a potion and recovers " + player.getHeal()
                                             + " HP.");
                             System.out.println(player.getArmor().getDefence());
-                            // System.out.println(enemy.toString() + "\n\n");
-
                             break;
                     }
 
@@ -369,6 +356,7 @@ public class Main {
                     necroticUsed = false;
 
                     while (player.isAlive() && enemy.isAlive()) {
+
                         if (enemy.getFireEffectTurns() > 0) {
                             enemy.applyFireEffect();
                         }
@@ -397,10 +385,10 @@ public class Main {
                             enemy.setColdEffectTurns();
                         }
 
-                        if (enemy.getNecroticEffectTurns() <= 0) {
+                        if (player.getNecroticEffectTurns() <= 0) {
                             player.removeNecroticEffect();
                             necroticUsed = false;
-                            enemy.setNecroticEffectTurns();
+                            player.setNecroticEffectTurns();
                         }
 
                         if (player.getShockEffectTurns() <= 0) {
@@ -437,7 +425,6 @@ public class Main {
                                                 .println(player.getName() + " attacks " + enemy.getName()
                                                         + " but does no damage.");
                                     }
-                                    // System.out.println(enemy.toString() + "\n\n");
 
                                     break;
 
@@ -471,7 +458,6 @@ public class Main {
                                     player.getArmor().doubleDefence();
                                     System.out.println(player.getName() + " doubles their defense for 1 round.");
                                     System.out.println("Defesa atual: " + player.getArmor().getDefence());
-                                    // System.out.println(enemy.toString() + "\n\n");
 
                                     break;
 
@@ -481,7 +467,6 @@ public class Main {
                                             .println(player.getName() + " uses a potion and recovers "
                                                     + player.getHeal() + " HP.");
                                     System.out.println(player.getArmor().getDefence());
-                                    // System.out.println(enemy.toString() + "\n\n");
 
                                     break;
                             }
@@ -491,7 +476,6 @@ public class Main {
                             }
                             if (coldUsed) {
                                 player.removeColdEffectTurns();
-
                             }
                             System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
                             System.out.println(coldUsed);
@@ -521,7 +505,7 @@ public class Main {
                                         break;
 
                                     case 1:
-                                        enemy.heal(enemy.getHeal());
+                                        enemy.heal();
                                         System.out.println(enemy.getName() + " uses a potion and recovers "
                                                 + enemy.getHeal() + " HP.");
                                         break;
@@ -540,9 +524,8 @@ public class Main {
                                 System.out.println(player.getName() + " HP: " + player.getHitPoints());
                                 System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
                                 System.out.println("------");
-
                                 if (necroticUsed) {
-                                    enemy.removeNecroticEffectTurns();
+                                    player.removeNecroticEffectTurns();
                                 }
                             }
                         } else {
@@ -567,7 +550,7 @@ public class Main {
                                     break;
 
                                 case 1:
-                                    enemy.heal(enemy.getHeal());
+                                    enemy.heal();
                                     System.out.println(enemy.getName() + " uses a potion and recovers "
                                             + enemy.getHeal() + " HP.");
                                     break;
@@ -588,7 +571,7 @@ public class Main {
                             System.out.println("------");
 
                             if (necroticUsed) {
-                                enemy.removeNecroticEffectTurns();
+                                player.removeNecroticEffectTurns();
                             }
                             if (player.isAlive()) {
 
@@ -685,6 +668,12 @@ public class Main {
                         createMagic(4, vardamir);
                         createMagic(5, vardamir);
                         createMagic(6, vardamir);
+                        System.out.println("0. " + enemy.getMagic(0));
+                                        System.out.println("1. " + enemy.getMagic(1));
+                                        System.out.println("0. " + player.getMagic(2));
+                                        System.out.println("1. " + player.getMagic(3));
+                                        System.out.println("0. " + player.getMagic(4));
+                                        System.out.println("1. " + player.getMagic(5));
                         vardamir.setArmor(new Armor(Armor.LIGHT, vardamir));
 
                         enemy = vardamir;
@@ -703,11 +692,11 @@ public class Main {
                                 enemy.applyPoisonEffect();
                             }
 
-                            if(player.getPoisonEffectTurns() > 0){
+                            if (player.getPoisonEffectTurns() > 0) {
                                 player.applyPoisonEffect();
                             }
 
-                            if(player.getFireEffectTurns() > 0){
+                            if (player.getFireEffectTurns() > 0) {
                                 player.applyFireEffect();
                             }
 
@@ -742,15 +731,9 @@ public class Main {
                             }
 
                             if (player.getNecroticEffectTurns() <= 0) {
-                                enemy.removeNecroticEffect();
-                                necroticUsed = false;
-                                player.setNecroticEffectTurns();
-                            }
-
-                            if (enemy.getNecroticEffectTurns() <= 0) {
                                 player.removeNecroticEffect();
                                 necroticUsed = false;
-                                enemy.setNecroticEffectTurns();
+                                player.setNecroticEffectTurns();
                             }
 
                             System.out.println(player.toString());
@@ -883,7 +866,7 @@ public class Main {
                                             System.out.println(enemy.toString() + "\n\n");
 
                                         case 2:
-                                            enemy.heal(enemy.getHeal());
+                                            enemy.heal();
                                             System.out.println(enemy.getName() + " uses a potion and recovers "
                                                     + enemy.getHeal() + " HP.");
                                             break;
@@ -954,7 +937,7 @@ public class Main {
                                         System.out.println(enemy.toString() + "\n\n");
 
                                     case 2:
-                                        enemy.heal(enemy.getHeal());
+                                        enemy.heal();
                                         System.out.println(enemy.getName() + " uses a potion and recovers "
                                                 + enemy.getHeal() + " HP.");
                                         break;
@@ -1124,16 +1107,10 @@ public class Main {
                             enemy.setColdEffectTurns();
                         }
 
-                        if (enemy.getNecroticEffectTurns() <= 0) {
-                            player.removeNecroticEffect();
-                            necroticUsed = false;
-                            enemy.setNecroticEffectTurns();
-                        }
-
                         if (player.getNecroticEffectTurns() <= 0) {
                             player.removeNecroticEffect();
                             necroticUsed = false;
-                            enemy.setNecroticEffectTurns();
+                            player.setNecroticEffectTurns();
                         }
 
                         if (player.getShockEffectTurns() <= 0) {
@@ -1254,7 +1231,7 @@ public class Main {
                                         break;
 
                                     case 1:
-                                        enemy.heal(enemy.getHeal());
+                                        enemy.heal();
                                         System.out.println(enemy.getName() + " uses a potion and recovers "
                                                 + enemy.getHeal() + " HP.");
                                         break;
@@ -1300,7 +1277,7 @@ public class Main {
                                     break;
 
                                 case 1:
-                                    enemy.heal(enemy.getHeal());
+                                    enemy.heal();
                                     System.out.println(enemy.getName() + " uses a potion and recovers "
                                             + enemy.getHeal() + " HP.");
                                     break;
@@ -1439,11 +1416,11 @@ public class Main {
                                 enemy.applyPoisonEffect();
                             }
 
-                            if(player.getPoisonEffectTurns() > 0){
+                            if (player.getPoisonEffectTurns() > 0) {
                                 player.applyPoisonEffect();
                             }
 
-                            if(player.getFireEffectTurns() > 0){
+                            if (player.getFireEffectTurns() > 0) {
                                 player.applyFireEffect();
                             }
 
@@ -1477,11 +1454,11 @@ public class Main {
                                 enemy.setShockEffectTurns();
                             }
 
-                           if(player.getNecroticEffectTurns() <= 0){
-                            player.removeNecroticEffect();
-                            necroticUsed = false;
-                            player.setNecroticEffectTurns();
-                        }
+                            if (player.getNecroticEffectTurns() <= 0) {
+                                player.removeNecroticEffect();
+                                necroticUsed = false;
+                                player.setNecroticEffectTurns();
+                            }
                             System.out.println(player.toString());
                             System.out.println(enemy.toString());
                             System.out.println(player.getArmor().getDefence());
@@ -1612,7 +1589,7 @@ public class Main {
                                             System.out.println(enemy.toString() + "\n\n");
 
                                         case 2:
-                                            enemy.heal(enemy.getHeal());
+                                            enemy.heal();
                                             System.out.println(enemy.getName() + " uses a potion and recovers "
                                                     + enemy.getHeal() + " HP.");
                                             break;
@@ -1683,7 +1660,7 @@ public class Main {
                                         System.out.println(enemy.toString() + "\n\n");
 
                                     case 2:
-                                        enemy.heal(enemy.getHeal());
+                                        enemy.heal();
                                         System.out.println(enemy.getName() + " uses a potion and recovers "
                                                 + enemy.getHeal() + " HP.");
                                         break;
@@ -1876,7 +1853,7 @@ public class Main {
                             enemy.setColdEffectTurns();
                         }
 
-                        if(player.getNecroticEffectTurns() <= 0){
+                        if (player.getNecroticEffectTurns() <= 0) {
                             player.removeNecroticEffect();
                             necroticUsed = false;
                             player.setNecroticEffectTurns();
@@ -2000,7 +1977,7 @@ public class Main {
                                         break;
 
                                     case 1:
-                                        enemy.heal(enemy.getHeal());
+                                        enemy.heal();
                                         System.out.println(enemy.getName() + " uses a potion and recovers "
                                                 + enemy.getHeal() + " HP.");
                                         break;
@@ -2046,7 +2023,7 @@ public class Main {
                                     break;
 
                                 case 1:
-                                    enemy.heal(enemy.getHeal());
+                                    enemy.heal();
                                     System.out.println(enemy.getName() + " uses a potion and recovers "
                                             + enemy.getHeal() + " HP.");
                                     break;
@@ -2174,7 +2151,7 @@ public class Main {
                         necroticUsed = false;
 
                         while (player.isAlive() && enemy.isAlive()) {
-                             if (enemy.getFireEffectTurns() > 0) {
+                            if (enemy.getFireEffectTurns() > 0) {
                                 enemy.applyFireEffect();
                             }
 
@@ -2182,11 +2159,11 @@ public class Main {
                                 enemy.applyPoisonEffect();
                             }
 
-                            if(player.getPoisonEffectTurns() > 0){
+                            if (player.getPoisonEffectTurns() > 0) {
                                 player.applyPoisonEffect();
                             }
 
-                            if(player.getFireEffectTurns() > 0){
+                            if (player.getFireEffectTurns() > 0) {
                                 player.applyFireEffect();
                             }
 
@@ -2220,11 +2197,11 @@ public class Main {
                                 enemy.setShockEffectTurns();
                             }
 
-                            if(player.getNecroticEffectTurns() <= 0){
-                            player.removeNecroticEffect();
-                            necroticUsed = false;
-                            player.setNecroticEffectTurns();
-                        }
+                            if (player.getNecroticEffectTurns() <= 0) {
+                                player.removeNecroticEffect();
+                                necroticUsed = false;
+                                player.setNecroticEffectTurns();
+                            }
                             System.out.println(player.toString());
                             System.out.println(enemy.toString());
                             System.out.println(player.getArmor().getDefence());
@@ -2355,7 +2332,7 @@ public class Main {
                                             System.out.println(enemy.toString() + "\n\n");
 
                                         case 2:
-                                            enemy.heal(enemy.getHeal());
+                                            enemy.heal();
                                             System.out.println(enemy.getName() + " uses a potion and recovers "
                                                     + enemy.getHeal() + " HP.");
                                             break;
@@ -2426,7 +2403,7 @@ public class Main {
                                         System.out.println(enemy.toString() + "\n\n");
 
                                     case 2:
-                                        enemy.heal(enemy.getHeal());
+                                        enemy.heal();
                                         System.out.println(enemy.getName() + " uses a potion and recovers "
                                                 + enemy.getHeal() + " HP.");
                                         break;
@@ -2603,7 +2580,7 @@ public class Main {
                             enemy.setColdEffectTurns();
                         }
 
-                        if(player.getNecroticEffectTurns() <= 0){
+                        if (player.getNecroticEffectTurns() <= 0) {
                             player.removeNecroticEffect();
                             necroticUsed = false;
                             player.setNecroticEffectTurns();
@@ -2727,7 +2704,7 @@ public class Main {
                                         break;
 
                                     case 1:
-                                        enemy.heal(enemy.getHeal());
+                                        enemy.heal();
                                         System.out.println(enemy.getName() + " uses a potion and recovers "
                                                 + enemy.getHeal() + " HP.");
                                         break;
@@ -2773,7 +2750,7 @@ public class Main {
                                     break;
 
                                 case 1:
-                                    enemy.heal(enemy.getHeal());
+                                    enemy.heal();
                                     System.out.println(enemy.getName() + " uses a potion and recovers "
                                             + enemy.getHeal() + " HP.");
                                     break;
@@ -3075,7 +3052,7 @@ public class Main {
                                             System.out.println(enemy.toString() + "\n\n");
 
                                         case 2:
-                                            enemy.heal(enemy.getHeal());
+                                            enemy.heal();
                                             System.out.println(enemy.getName() + " uses a potion and recovers "
                                                     + enemy.getHeal() + " HP.");
                                             break;
@@ -3146,7 +3123,7 @@ public class Main {
                                         System.out.println(enemy.toString() + "\n\n");
 
                                     case 2:
-                                        enemy.heal(enemy.getHeal());
+                                        enemy.heal();
                                         System.out.println(enemy.getName() + " uses a potion and recovers "
                                                 + enemy.getHeal() + " HP.");
                                         break;

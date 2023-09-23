@@ -26,11 +26,11 @@ public class Armor {
     private int setDefenceConstant(String category) {
         switch (category) {
             case LIGHT:
-                return (int) (0.33 * character.getConstitution());
+            return (int) (0.4 * character.getConstitution());
             case HEAVY:
                 return (int) (character.getConstitution()); 
             case MEDIUM:
-            	return (int) (0.5 * character.getConstitution());
+            return (int) (0.6 * character.getConstitution());
             default:
                 return 0;
         }

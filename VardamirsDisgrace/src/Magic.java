@@ -74,9 +74,7 @@ public class Magic {
                 target.receiveDamage(necroticDamage);
                 target.reduceStrength(2);
                 target.setNecroticEffectTurns();
-
                 break;
-
         }
     }
 
