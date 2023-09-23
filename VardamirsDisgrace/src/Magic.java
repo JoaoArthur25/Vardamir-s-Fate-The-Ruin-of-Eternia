@@ -24,7 +24,7 @@ public class Magic {
             
         switch (magicCategory) {
             case FIRE:
-                int fireDamage = rollD6() + rollD6() + rollD6();
+                int fireDamage = rollD6() + rollD6();
                 target.receiveDamage(fireDamage);
 
                 dice = rand.nextInt(4);
@@ -49,7 +49,7 @@ public class Magic {
                 break;
 
             case POISON:
-                int poisonDamge = rollD4() + rollD4() + rollD4();
+                int poisonDamge = rollD4() + rollD4();
                 target.receiveDamage(poisonDamge);
 
                 dice = rand.nextInt(2);

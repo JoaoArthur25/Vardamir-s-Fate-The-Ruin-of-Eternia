@@ -12,10 +12,10 @@ class Character {
     private Armor armor;
     private ArrayList<Magic> magic;
     private Potion potion;
-    private int fireEffectTurns = 3;
-    private int poisonEffectTurns = 4;
-    private int coldEffectTurns = 2;
-    private int shockEffectTurns = 2;
+    private int fireEffectTurns = 0;
+    private int poisonEffectTurns = 0;
+    private int coldEffectTurns = 3;
+    private int shockEffectTurns = 3;
     private int necroticEffectTurns = 3;
 
     private int healUses = 0;
@@ -31,8 +31,6 @@ class Character {
         this.armor = armor;
         this.potion = potion;
         this.hp = calculateHitPoints();
-        this.fireEffectTurns = 0;
-        this.poisonEffectTurns = 0;
         this.magic = new ArrayList<Magic>();
     }
 
@@ -232,7 +230,7 @@ class Character {
     }
 
     public void setFireEffectTurns() {
-        fireEffectTurns = 3;
+        fireEffectTurns = 4;
     }
 
     public int getPoisonEffectTurns() {
@@ -240,7 +238,7 @@ class Character {
     }
 
     public void setPoisonEffectTurns() {
-        poisonEffectTurns = 4;
+        poisonEffectTurns = 6;
     }
 
     public int getColdEffectTurns() {
@@ -248,7 +246,7 @@ class Character {
     }
 
     public void setColdEffectTurns() {
-        coldEffectTurns = 2;
+        coldEffectTurns = 3;
     }
 
      public void removeColdEffectTurns() {
@@ -272,7 +270,7 @@ class Character {
     }
 
     public void setShockEffectTurns() {
-        shockEffectTurns = 2;
+        shockEffectTurns = 3;
     }
 
     public void removeShockEffectTurns() {

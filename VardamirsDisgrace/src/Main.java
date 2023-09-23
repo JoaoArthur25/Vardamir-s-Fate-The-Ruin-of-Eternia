@@ -7,6 +7,8 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
+        int playerAction = 0;
+        int computerAction = 0;
 
         beforeFirstBattleTale();
 
@@ -14,11 +16,11 @@ public class Main {
 
         System.out.println(player.getCharacter());
 
-        Character diabrete = new Character("Diabrete", 2, 3, 5, 5, new Weapon(Weapon.DAGGER), null,
+        Character diabrete = new Character("Diabrete", 2, 33, 5, 5, new Weapon(Weapon.DAGGER), null,
                 new Potion(Potion.SMALL));
-        Character aranha = new Character("Aranha", 5, 4, 3, 3, new Weapon(Weapon.DAGGER), null,
+        Character aranha = new Character("Aranha", 5, 34, 3, 3, new Weapon(Weapon.DAGGER), null,
                 new Potion(Potion.SMALL));
-        Character esqueleto = new Character("Esqueleto", 6, 5, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
+        Character esqueleto = new Character("Esqueleto", 36, 5, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
                 new Potion(Potion.MEDIUM));
 
         int enemyChoice = random.nextInt(3);
@@ -37,18 +39,290 @@ public class Main {
         boolean shockUsed = false;
         boolean necroticUsed = false;
 
-        clrscr();
+        // clrscr();
 
         while (player.isAlive() && enemy.isAlive()) {
-            manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
             System.out.println(player.toString());
             System.out.println(enemy.toString());
-            combat1(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+            System.out.println(player.getArmor().getDefence());
+            player.getArmor().setDefence();
+            System.out.println("Fire Effect turns:" + enemy.getFireEffectTurns());
+            if (enemy.getFireEffectTurns() > 0) {
+                    enemy.applyFireEffect();
+                }
+
+                if (enemy.getPoisonEffectTurns() >= 0) {
+                    enemy.applyPoisonEffect();
+                }
+
+                if (player.getColdEffectTurns() <= 0) {
+                    enemy.removeColdEffect();
+                    coldUsed = false;
+                    player.setColdEffectTurns();
+                }
+
+                if (enemy.getFireEffectTurns() > 0) {
+                    player.applyFireEffect();
+                }
+
+                if (enemy.getPoisonEffectTurns() > 0) {
+                    player.applyPoisonEffect();
+                }
+
+                if (enemy.getColdEffectTurns() <= 0) {
+                    player.removeColdEffect();
+                    coldUsed = false;
+                    enemy.setColdEffectTurns();
+                }
+
+                if (player.getShockEffectTurns() <= 0) {
+                    enemy.addDexterity(2);
+                    shockUsed = false;
+                    player.setShockEffectTurns();
+                }
+
+                if (enemy.getShockEffectTurns() <= 0) {
+                    player.addDexterity(2);
+                    shockUsed = false;
+                    enemy.setShockEffectTurns();
+                }
+            if (player.getAgility() > enemy.getAgility()) {
+                playerAction = getPlayerAction(scanner);
+                
+                switch (playerAction) {
+                    case 0:
+                        System.out.println();
+                        int playerDamage = player.calculateDamage();
+                        int damageDealt = playerDamage;
+
+                        if (damageDealt > 0) {
+                            System.out.println(
+                                    player.getName() + " attacks " + enemy.getName() + " for " + playerDamage
+                                            + " damage.");
+                            enemy.receiveDamage(damageDealt);
+                        } else {
+                            System.out
+                                    .println(player.getName() + " attacks " + enemy.getName() + " but does no damage.");
+                        }
+                        // System.out.println(enemy.toString() + "\n\n");
+
+                        break;
+
+                    case 1:
+                        System.out.println("Choose a magic to use: ");
+
+                        System.out.println("0. " + player.getMagic(0));
+                        System.out.println("1. " + player.getMagic(1));
+
+                        int magicChoice = getIntInput(scanner);
+
+                        String magicName = player.getMagic(magicChoice).toString();
+
+                        if (magicName.equals("Eletric Magic")) {
+                            shockUsed = true;
+                        }
+
+                        if (magicName.equals("Ice Magic")) {
+                            coldUsed = true;
+                            System.out.println(coldUsed);
+                        }
+
+                        System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                        player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                        // System.out.println(enemy.toString() + "\n\n");
+
+                        break;
+
+                    case 2:
+                        player.getArmor().doubleDefence();
+                        System.out.println(player.getName() + " doubles their defense for 1 round.");
+                        System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                        // System.out.println(enemy.toString() + "\n\n");
+
+                        break;
+
+                    case 3:
+                        player.heal();
+                        System.out
+                                .println(player.getName() + " uses a potion and recovers " + player.getHeal() + " HP.");
+                        System.out.println(player.getArmor().getDefence());
+                        // System.out.println(enemy.toString() + "\n\n");
+
+                        break;
+                }
+
+                if (shockUsed) {
+                    player.removeShockEffectTurns();
+                }
+                if (coldUsed) {
+                    player.removeColdEffectTurns();
+
+                }
+                System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                System.out.println(coldUsed);
+                System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                System.out.println("------");
+
+                if (enemy.isAlive()) {
+                    computerAction = random.nextInt(2);
+                    
+                    switch (computerAction) {
+
+                        case 0:
+                            int enemyDamage = enemy.calculateDamage();
+                            int playerDefense = player.getArmor().setDefence();
+                            int damageDealt = enemyDamage - playerDefense;
+
+                            if (damageDealt > 0) {
+                                System.out.println(
+                                        enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage
+                                                + " damage.");
+                                player.receiveDamage(damageDealt);
+                            } else {
+                                System.out.println(
+                                        enemy.getName() + " attacks " + player.getName() + " but does no damage.");
+                            }
+                            // System.out.println(player.toString() + "\n\n");
+                            break;
+
+                        case 1:
+                            enemy.heal(enemy.getHeal());
+                            System.out.println(
+                                    enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
+                            // System.out.println(player.toString());
+                            break;
+
+                    }
+
+                    System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                    System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                    System.out.println("------");
+                }
+            } else {
+                computerAction = random.nextInt(2);
+                
+                switch (computerAction) {
+
+                    case 0:
+                        int enemyDamage = enemy.calculateDamage();
+                        int playerDefense = player.getArmor().setDefence();
+                        int damageDealt = enemyDamage - playerDefense;
+
+                        if (damageDealt > 0) {
+                            System.out.println(
+                                    enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage
+                                            + " damage.");
+                            player.receiveDamage(damageDealt);
+                        } else {
+                            System.out
+                                    .println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
+                        }
+                        // System.out.println(player.toString() + "\n\n");
+                        break;
+
+                    case 1:
+                        enemy.heal(enemy.getHeal());
+                        System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
+                        // System.out.println(player.toString());
+                        break;
+
+                }
+
+                System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                System.out.println("------");
+
+                if (player.isAlive()) {
+                    playerAction = getPlayerAction(scanner);
+                    System.out.println(player.getArmor().getDefence());
+                    player.getArmor().setDefence();
+                   
+                    switch (playerAction) {
+                        case 0:
+                            System.out.println();
+                            int playerDamage = player.calculateDamage();
+                            int damageDealt = playerDamage;
+
+                            if (damageDealt > 0) {
+                                System.out.println(
+                                        player.getName() + " attacks " + enemy.getName() + " for " + playerDamage
+                                                + " damage.");
+                                enemy.receiveDamage(damageDealt);
+                            } else {
+                                System.out
+                                        .println(player.getName() + " attacks " + enemy.getName()
+                                                + " but does no damage.");
+                            }
+                            // System.out.println(enemy.toString() + "\n\n");
+
+                            break;
+
+                        case 1:
+                            System.out.println("Choose a magic to use: ");
+
+                            System.out.println("0. " + player.getMagic(0));
+                            System.out.println("1. " + player.getMagic(1));
+
+                            int magicChoice = getIntInput(scanner);
+
+                            String magicName = player.getMagic(magicChoice).toString();
+
+                            if (magicName.equals("Eletric Magic")) {
+                                shockUsed = true;
+                            }
+
+                            if (magicName.equals("Ice Magic")) {
+                                coldUsed = true;
+                                System.out.println(coldUsed);
+                            }
+
+                            System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                            player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                            // System.out.println(enemy.toString() + "\n\n");
+
+                            break;
+
+                        case 2:
+                            player.getArmor().doubleDefence();
+                            System.out.println(player.getName() + " doubles their defense for 1 round.");
+                            System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                            // System.out.println(enemy.toString() + "\n\n");
+
+                            break;
+
+                        case 3:
+                            player.heal();
+                            System.out
+                                    .println(player.getName() + " uses a potion and recovers " + player.getHeal()
+                                            + " HP.");
+                            System.out.println(player.getArmor().getDefence());
+                            // System.out.println(enemy.toString() + "\n\n");
+
+                            break;
+                    }
+
+                    if (shockUsed) {
+                        player.removeShockEffectTurns();
+                    }
+                    if (coldUsed) {
+                        player.removeColdEffectTurns();
+
+                    }
+                    System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                    System.out.println(coldUsed);
+                    System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                    System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                    System.out.println("------");
+                }
+            }
         }
 
-        //Thread.sleep(2000);
+        // Thread.sleep(2000);
 
-        clrscr();
+        // clrscr();
 
         if (player.isAlive()) {
             firstChoiceText();
@@ -95,11 +369,311 @@ public class Main {
                     necroticUsed = false;
 
                     while (player.isAlive() && enemy.isAlive()) {
+                        if (enemy.getFireEffectTurns() > 0) {
+                            enemy.applyFireEffect();
+                        }
 
-                        manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
-                        combat2(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                        if (enemy.getPoisonEffectTurns() > 0) {
+                            enemy.applyPoisonEffect();
+                        }
+
+                        if (player.getColdEffectTurns() <= 0) {
+                            enemy.removeColdEffect();
+                            coldUsed = false;
+                            player.setColdEffectTurns();
+                        }
+
+                        if (enemy.getFireEffectTurns() > 0) {
+                            player.applyFireEffect();
+                        }
+
+                        if (enemy.getPoisonEffectTurns() > 0) {
+                            player.applyPoisonEffect();
+                        }
+
+                        if (enemy.getColdEffectTurns() <= 0) {
+                            player.removeColdEffect();
+                            coldUsed = false;
+                            enemy.setColdEffectTurns();
+                        }
+
+                        if (enemy.getNecroticEffectTurns() <= 0) {
+                            player.removeNecroticEffect();
+                            necroticUsed = false;
+                            enemy.setNecroticEffectTurns();
+                        }
+
+                        if (player.getShockEffectTurns() <= 0) {
+                            enemy.addDexterity(2);
+                            shockUsed = false;
+                            player.setShockEffectTurns();
+                        }
+
+                        if (enemy.getShockEffectTurns() <= 0) {
+                            player.addDexterity(2);
+                            shockUsed = false;
+                            enemy.setShockEffectTurns();
+                        }
+                        System.out.println(player.toString());
+                        System.out.println(enemy.toString());
+                        System.out.println(player.getArmor().getDefence());
+                        player.getArmor().setDefence();
+                        if (player.getAgility() > enemy.getAgility()) {
+                            playerAction = getPlayerAction(scanner);
+                            switch (playerAction) {
+                                case 0:
+                                    System.out.println();
+                                    int playerDamage = player.calculateDamage();
+                                    int damageDealt = playerDamage;
+
+                                    if (damageDealt > 0) {
+                                        System.out.println(
+                                                player.getName() + " attacks " + enemy.getName() + " for "
+                                                        + playerDamage
+                                                        + " damage.");
+                                        enemy.receiveDamage(damageDealt);
+                                    } else {
+                                        System.out
+                                                .println(player.getName() + " attacks " + enemy.getName()
+                                                        + " but does no damage.");
+                                    }
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 1:
+                                    System.out.println("Choose a magic to use: ");
+
+                                    System.out.println("0. " + player.getMagic(0));
+                                    System.out.println("1. " + player.getMagic(1));
+
+                                    int magicChoice = getIntInput(scanner);
+
+                                    String magicName = player.getMagic(magicChoice).toString();
+
+                                    if (magicName.equals("Eletric Magic")) {
+                                        shockUsed = true;
+                                    }
+
+                                    if (magicName.equals("Ice Magic")) {
+                                        coldUsed = true;
+                                        System.out.println(coldUsed);
+                                    }
+
+                                    System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                    player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 2:
+                                    player.getArmor().doubleDefence();
+                                    System.out.println(player.getName() + " doubles their defense for 1 round.");
+                                    System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 3:
+                                    player.heal();
+                                    System.out
+                                            .println(player.getName() + " uses a potion and recovers "
+                                                    + player.getHeal() + " HP.");
+                                    System.out.println(player.getArmor().getDefence());
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+                            }
+
+                            if (shockUsed) {
+                                player.removeShockEffectTurns();
+                            }
+                            if (coldUsed) {
+                                player.removeColdEffectTurns();
+
+                            }
+                            System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                            System.out.println(coldUsed);
+                            System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                            System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                            System.out.println("------");
+
+                            if (enemy.isAlive()) {
+                                computerAction = random.nextInt(3);
+                                switch (computerAction) {
+                                    case 0:
+                                        int enemyDamage = enemy.calculateDamage();
+                                        int playerDefense = player.getArmor().setDefence();
+                                        int damageDealt = enemyDamage - playerDefense;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    enemy.getName() + " attacks " + player.getName() + " for "
+                                                            + enemyDamage + " damage.");
+                                            System.out.println("Dano dado: " + damageDealt);
+                                            System.out.println("Defesa atual: " + playerDefense);
+                                            player.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                    + " but does no damage.");
+                                        }
+                                        break;
+
+                                    case 1:
+                                        enemy.heal(enemy.getHeal());
+                                        System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                + enemy.getHeal() + " HP.");
+                                        break;
+
+                                    case 2:
+
+                                        necroticUsed = true;
+
+                                        System.out.println(enemy.getMagic(0).toString() + " used.");
+
+                                        player.castMagic(player, 0, enemy.getMagic(0));
+                                        System.out.println(player.toString() + "\n\n");
+                                        System.out.println(enemy.toString() + "\n\n");
+                                }
+
+                                System.out.println(player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+
+                                if (necroticUsed) {
+                                    enemy.removeNecroticEffectTurns();
+                                }
+                            }
+                        } else {
+                            computerAction = random.nextInt(3);
+                            switch (computerAction) {
+                                case 0:
+                                    int enemyDamage = enemy.calculateDamage();
+                                    int playerDefense = player.getArmor().setDefence();
+                                    int damageDealt = enemyDamage - playerDefense;
+
+                                    if (damageDealt > 0) {
+                                        System.out.println(
+                                                enemy.getName() + " attacks " + player.getName() + " for "
+                                                        + enemyDamage + " damage.");
+                                        System.out.println("Dano dado: " + damageDealt);
+                                        System.out.println("Defesa atual: " + playerDefense);
+                                        player.receiveDamage(damageDealt);
+                                    } else {
+                                        System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                + " but does no damage.");
+                                    }
+                                    break;
+
+                                case 1:
+                                    enemy.heal(enemy.getHeal());
+                                    System.out.println(enemy.getName() + " uses a potion and recovers "
+                                            + enemy.getHeal() + " HP.");
+                                    break;
+
+                                case 2:
+
+                                    necroticUsed = true;
+
+                                    System.out.println(enemy.getMagic(0).toString() + " used.");
+
+                                    player.castMagic(player, 0, enemy.getMagic(0));
+                                    System.out.println(player.toString() + "\n\n");
+                                    System.out.println(enemy.toString() + "\n\n");
+                            }
+
+                            System.out.println(player.getName() + " HP: " + player.getHitPoints());
+                            System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                            System.out.println("------");
+
+                            if (necroticUsed) {
+                                enemy.removeNecroticEffectTurns();
+                            }
+                            if (player.isAlive()) {
+
+                                playerAction = getPlayerAction(scanner);
+                                switch (playerAction) {
+                                    case 0:
+                                        System.out.println();
+                                        int playerDamage = player.calculateDamage();
+                                        int damageDealt = playerDamage;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    player.getName() + " attacks " + enemy.getName() + " for "
+                                                            + playerDamage
+                                                            + " damage.");
+                                            enemy.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out
+                                                    .println(player.getName() + " attacks " + enemy.getName()
+                                                            + " but does no damage.");
+                                        }
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 1:
+                                        System.out.println("Choose a magic to use: ");
+
+                                        System.out.println("0. " + player.getMagic(0));
+                                        System.out.println("1. " + player.getMagic(1));
+
+                                        int magicChoice = getIntInput(scanner);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                            System.out.println(coldUsed);
+                                        }
+
+                                        System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 2:
+                                        player.getArmor().doubleDefence();
+                                        System.out.println(player.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 3:
+                                        player.heal();
+                                        System.out
+                                                .println(player.getName() + " uses a potion and recovers "
+                                                        + player.getHeal() + " HP.");
+                                        System.out.println(player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+                                }
+
+                                if (shockUsed) {
+                                    player.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    player.removeColdEffectTurns();
+
+                                }
+                                System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                System.out.println(coldUsed);
+                                System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+                            }
+                        }
                     }
-
                     if (player.isAlive()) {
                         saveWifeChoice();
                         findingVardamir();
@@ -121,9 +695,374 @@ public class Main {
                         necroticUsed = false;
 
                         while (player.isAlive() && enemy.isAlive()) {
+                            if (enemy.getFireEffectTurns() > 0) {
+                                enemy.applyFireEffect();
+                            }
 
-                            manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
-                            bossFight(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                            if (enemy.getPoisonEffectTurns() > 0) {
+                                enemy.applyPoisonEffect();
+                            }
+
+                            if(player.getPoisonEffectTurns() > 0){
+                                player.applyPoisonEffect();
+                            }
+
+                            if(player.getFireEffectTurns() > 0){
+                                player.applyFireEffect();
+                            }
+
+                            if (player.getColdEffectTurns() <= 0) {
+                                enemy.removeColdEffect();
+                                coldUsed = false;
+                                player.setColdEffectTurns();
+                            }
+
+                            if (enemy.getColdEffectTurns() <= 0) {
+                                player.removeColdEffect();
+                                coldUsed = false;
+                                enemy.setColdEffectTurns();
+                            }
+
+                            if (player.getColdEffectTurns() <= 0) {
+                                player.removeColdEffect();
+                                coldUsed = false;
+                                player.setColdEffectTurns();
+                            }
+
+                            if (player.getShockEffectTurns() <= 0) {
+                                enemy.addDexterity(2);
+                                shockUsed = false;
+                                player.setShockEffectTurns();
+                            }
+
+                            if (enemy.getShockEffectTurns() <= 0) {
+                                player.addDexterity(2);
+                                shockUsed = false;
+                                enemy.setShockEffectTurns();
+                            }
+
+                            if (player.getNecroticEffectTurns() <= 0) {
+                                enemy.removeNecroticEffect();
+                                necroticUsed = false;
+                                player.setNecroticEffectTurns();
+                            }
+
+                            if (enemy.getNecroticEffectTurns() <= 0) {
+                                player.removeNecroticEffect();
+                                necroticUsed = false;
+                                enemy.setNecroticEffectTurns();
+                            }
+
+                            System.out.println(player.toString());
+                            System.out.println(enemy.toString());
+                            System.out.println(player.getArmor().getDefence());
+                            player.getArmor().setDefence();
+                            if (player.getAgility() > enemy.getAgility()) {
+                                playerAction = getPlayerAction(scanner);
+                                switch (playerAction) {
+                                    case 0:
+                                        System.out.println();
+                                        int playerDamage = player.calculateDamage();
+                                        int damageDealt = playerDamage;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    player.getName() + " attacks " + enemy.getName() + " for "
+                                                            + playerDamage
+                                                            + " damage.");
+                                            enemy.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out
+                                                    .println(player.getName() + " attacks " + enemy.getName()
+                                                            + " but does no damage.");
+                                        }
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 1:
+                                        System.out.println("Choose a magic to use: ");
+
+                                        System.out.println("0. " + player.getMagic(0));
+                                        System.out.println("1. " + player.getMagic(1));
+
+                                        int magicChoice = getIntInput(scanner);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                            System.out.println(coldUsed);
+                                        }
+
+                                        System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 2:
+                                        player.getArmor().doubleDefence();
+                                        System.out
+                                                .println(player.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 3:
+                                        player.heal();
+                                        System.out
+                                                .println(player.getName() + " uses a potion and recovers "
+                                                        + player.getHeal() + " HP.");
+                                        System.out.println(player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+                                }
+
+                                if (shockUsed) {
+                                    player.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    player.removeColdEffectTurns();
+
+                                }
+                                System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                System.out.println(coldUsed);
+                                System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+
+                                if (enemy.isAlive()) {
+                                    computerAction = random.nextInt(4);
+                                    switch (computerAction) {
+                                        case 0:
+                                            int enemyDamage = enemy.calculateDamage();
+                                            int playerDefense = player.getArmor().setDefence();
+                                            int damageDealt = enemyDamage - playerDefense;
+
+                                            if (damageDealt > 0) {
+                                                System.out.println(
+                                                        enemy.getName() + " attacks " + player.getName() + " for "
+                                                                + enemyDamage + " damage.");
+                                                player.receiveDamage(damageDealt);
+                                            } else {
+                                                System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                        + " but does no damage.");
+                                            }
+                                            break;
+
+                                        case 1:
+
+                                            int magicChoice = random.nextInt(6);
+
+                                            String magicName = player.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                            }
+
+                                            if (magicName.equals("Necrotic Magic")) {
+                                                necroticUsed = true;
+                                            }
+
+                                            System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                            player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            System.out.println(player.toString() + "\n\n");
+                                            System.out.println(enemy.toString() + "\n\n");
+
+                                        case 2:
+                                            enemy.heal(enemy.getHeal());
+                                            System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                    + enemy.getHeal() + " HP.");
+                                            break;
+
+                                        case 3:
+
+                                            enemy.getArmor().doubleDefence();
+                                            System.out.println(
+                                                    enemy.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                            System.out.println(player.toString() + "\n\n");
+
+                                            break;
+
+                                    }
+
+                                    if (necroticUsed) {
+                                        enemy.removeNecroticEffectTurns();
+                                    }
+                                    if (shockUsed) {
+                                        enemy.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        enemy.removeColdEffectTurns();
+                                    }
+                                }
+                            } else {
+                                computerAction = random.nextInt(4);
+                                switch (computerAction) {
+                                    case 0:
+                                        int enemyDamage = enemy.calculateDamage();
+                                        int playerDefense = player.getArmor().setDefence();
+                                        int damageDealt = enemyDamage - playerDefense;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    enemy.getName() + " attacks " + player.getName() + " for "
+                                                            + enemyDamage + " damage.");
+                                            player.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                    + " but does no damage.");
+                                        }
+                                        break;
+
+                                    case 1:
+
+                                        int magicChoice = random.nextInt(6);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                        }
+
+                                        if (magicName.equals("Necrotic Magic")) {
+                                            necroticUsed = true;
+                                        }
+
+                                        System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                        System.out.println(player.toString() + "\n\n");
+                                        System.out.println(enemy.toString() + "\n\n");
+
+                                    case 2:
+                                        enemy.heal(enemy.getHeal());
+                                        System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                + enemy.getHeal() + " HP.");
+                                        break;
+
+                                    case 3:
+
+                                        enemy.getArmor().doubleDefence();
+                                        System.out.println(enemy.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                        System.out.println(player.toString() + "\n\n");
+
+                                        break;
+
+                                }
+
+                                if (necroticUsed) {
+                                    enemy.removeNecroticEffectTurns();
+                                }
+                                if (shockUsed) {
+                                    enemy.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    enemy.removeColdEffectTurns();
+                                }
+                                if (player.isAlive()) {
+
+                                    playerAction = getPlayerAction(scanner);
+                                    switch (playerAction) {
+                                        case 0:
+                                            System.out.println();
+                                            int playerDamage = player.calculateDamage();
+                                            int damageDealt = playerDamage;
+
+                                            if (damageDealt > 0) {
+                                                System.out.println(
+                                                        player.getName() + " attacks " + enemy.getName() + " for "
+                                                                + playerDamage
+                                                                + " damage.");
+                                                enemy.receiveDamage(damageDealt);
+                                            } else {
+                                                System.out
+                                                        .println(player.getName() + " attacks " + enemy.getName()
+                                                                + " but does no damage.");
+                                            }
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 1:
+                                            System.out.println("Choose a magic to use: ");
+
+                                            System.out.println("0. " + player.getMagic(0));
+                                            System.out.println("1. " + player.getMagic(1));
+
+                                            int magicChoice = getIntInput(scanner);
+
+                                            String magicName = player.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                                System.out.println(coldUsed);
+                                            }
+
+                                            System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                            player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 2:
+                                            player.getArmor().doubleDefence();
+                                            System.out
+                                                    .println(player.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 3:
+                                            player.heal();
+                                            System.out
+                                                    .println(player.getName() + " uses a potion and recovers "
+                                                            + player.getHeal() + " HP.");
+                                            System.out.println(player.getArmor().getDefence());
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+                                    }
+
+                                    if (shockUsed) {
+                                        player.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        player.removeColdEffectTurns();
+
+                                    }
+                                    System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                    System.out.println(coldUsed);
+                                    System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                    System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                    System.out.println("------");
+                                }
+                            }
                         }
 
                         if (player.isAlive()) {
@@ -165,9 +1104,309 @@ public class Main {
                     necroticUsed = false;
 
                     while (player.isAlive() && enemy.isAlive()) {
+                        if (enemy.getFireEffectTurns() > 0) {
+                            enemy.applyFireEffect();
+                        }
 
-                        manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
-                        combat2(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                        if (enemy.getPoisonEffectTurns() > 0) {
+                            enemy.applyPoisonEffect();
+                        }
+
+                        if (player.getColdEffectTurns() <= 0) {
+                            enemy.removeColdEffect();
+                            coldUsed = false;
+                            player.setColdEffectTurns();
+                        }
+
+                        if (enemy.getColdEffectTurns() <= 0) {
+                            player.removeColdEffect();
+                            coldUsed = false;
+                            enemy.setColdEffectTurns();
+                        }
+
+                        if (enemy.getNecroticEffectTurns() <= 0) {
+                            player.removeNecroticEffect();
+                            necroticUsed = false;
+                            enemy.setNecroticEffectTurns();
+                        }
+
+                        if (player.getNecroticEffectTurns() <= 0) {
+                            player.removeNecroticEffect();
+                            necroticUsed = false;
+                            enemy.setNecroticEffectTurns();
+                        }
+
+                        if (player.getShockEffectTurns() <= 0) {
+                            enemy.addDexterity(2);
+                            shockUsed = false;
+                            player.setShockEffectTurns();
+                        }
+
+                        if (enemy.getShockEffectTurns() <= 0) {
+                            player.addDexterity(2);
+                            shockUsed = false;
+                            enemy.setShockEffectTurns();
+                        }
+                        System.out.println(player.toString());
+                        System.out.println(enemy.toString());
+                        System.out.println(player.getArmor().getDefence());
+                        player.getArmor().setDefence();
+                        if (player.getAgility() > enemy.getAgility()) {
+                            playerAction = getPlayerAction(scanner);
+                            switch (playerAction) {
+                                case 0:
+                                    System.out.println();
+                                    int playerDamage = player.calculateDamage();
+                                    int damageDealt = playerDamage;
+
+                                    if (damageDealt > 0) {
+                                        System.out.println(
+                                                player.getName() + " attacks " + enemy.getName() + " for "
+                                                        + playerDamage
+                                                        + " damage.");
+                                        enemy.receiveDamage(damageDealt);
+                                    } else {
+                                        System.out
+                                                .println(player.getName() + " attacks " + enemy.getName()
+                                                        + " but does no damage.");
+                                    }
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 1:
+                                    System.out.println("Choose a magic to use: ");
+
+                                    System.out.println("0. " + player.getMagic(0));
+                                    System.out.println("1. " + player.getMagic(1));
+
+                                    int magicChoice = getIntInput(scanner);
+
+                                    String magicName = player.getMagic(magicChoice).toString();
+
+                                    if (magicName.equals("Eletric Magic")) {
+                                        shockUsed = true;
+                                    }
+
+                                    if (magicName.equals("Ice Magic")) {
+                                        coldUsed = true;
+                                        System.out.println(coldUsed);
+                                    }
+
+                                    System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                    player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 2:
+                                    player.getArmor().doubleDefence();
+                                    System.out.println(player.getName() + " doubles their defense for 1 round.");
+                                    System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 3:
+                                    player.heal();
+                                    System.out
+                                            .println(player.getName() + " uses a potion and recovers "
+                                                    + player.getHeal() + " HP.");
+                                    System.out.println(player.getArmor().getDefence());
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+                            }
+
+                            if (shockUsed) {
+                                player.removeShockEffectTurns();
+                            }
+                            if (coldUsed) {
+                                player.removeColdEffectTurns();
+
+                            }
+                            System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                            System.out.println(coldUsed);
+                            System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                            System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                            System.out.println("------");
+
+                            if (enemy.isAlive()) {
+                                computerAction = random.nextInt(3);
+                                switch (computerAction) {
+                                    case 0:
+                                        int enemyDamage = enemy.calculateDamage();
+                                        int playerDefense = player.getArmor().setDefence();
+                                        int damageDealt = enemyDamage - playerDefense;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    enemy.getName() + " attacks " + player.getName() + " for "
+                                                            + enemyDamage + " damage.");
+                                            System.out.println("Dano dado: " + damageDealt);
+                                            System.out.println("Defesa atual: " + playerDefense);
+                                            player.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                    + " but does no damage.");
+                                        }
+                                        break;
+
+                                    case 1:
+                                        enemy.heal(enemy.getHeal());
+                                        System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                + enemy.getHeal() + " HP.");
+                                        break;
+
+                                    case 2:
+
+                                        necroticUsed = true;
+
+                                        System.out.println(enemy.getMagic(0).toString() + " used.");
+
+                                        player.castMagic(player, 0, enemy.getMagic(0));
+                                        System.out.println(player.toString() + "\n\n");
+                                        System.out.println(enemy.toString() + "\n\n");
+                                }
+
+                                System.out.println(player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+
+                                if (necroticUsed) {
+                                    enemy.removeNecroticEffectTurns();
+                                }
+                            }
+                        } else {
+                            computerAction = random.nextInt(3);
+                            switch (computerAction) {
+                                case 0:
+                                    int enemyDamage = enemy.calculateDamage();
+                                    int playerDefense = player.getArmor().setDefence();
+                                    int damageDealt = enemyDamage - playerDefense;
+
+                                    if (damageDealt > 0) {
+                                        System.out.println(
+                                                enemy.getName() + " attacks " + player.getName() + " for "
+                                                        + enemyDamage + " damage.");
+                                        System.out.println("Dano dado: " + damageDealt);
+                                        System.out.println("Defesa atual: " + playerDefense);
+                                        player.receiveDamage(damageDealt);
+                                    } else {
+                                        System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                + " but does no damage.");
+                                    }
+                                    break;
+
+                                case 1:
+                                    enemy.heal(enemy.getHeal());
+                                    System.out.println(enemy.getName() + " uses a potion and recovers "
+                                            + enemy.getHeal() + " HP.");
+                                    break;
+
+                                case 2:
+
+                                    necroticUsed = true;
+
+                                    System.out.println(enemy.getMagic(0).toString() + " used.");
+
+                                    player.castMagic(player, 0, enemy.getMagic(0));
+                                    System.out.println(player.toString() + "\n\n");
+                                    System.out.println(enemy.toString() + "\n\n");
+                            }
+
+                            System.out.println(player.getName() + " HP: " + player.getHitPoints());
+                            System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                            System.out.println("------");
+
+                            if (necroticUsed) {
+                                enemy.removeNecroticEffectTurns();
+                            }
+
+                            if (player.isAlive()) {
+
+                                playerAction = getPlayerAction(scanner);
+                                switch (playerAction) {
+                                    case 0:
+                                        System.out.println();
+                                        int playerDamage = player.calculateDamage();
+                                        int damageDealt = playerDamage;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    player.getName() + " attacks " + enemy.getName() + " for "
+                                                            + playerDamage
+                                                            + " damage.");
+                                            enemy.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out
+                                                    .println(player.getName() + " attacks " + enemy.getName()
+                                                            + " but does no damage.");
+                                        }
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 1:
+                                        System.out.println("Choose a magic to use: ");
+
+                                        System.out.println("0. " + player.getMagic(0));
+                                        System.out.println("1. " + player.getMagic(1));
+
+                                        int magicChoice = getIntInput(scanner);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                            System.out.println(coldUsed);
+                                        }
+
+                                        System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 2:
+                                        player.getArmor().doubleDefence();
+                                        System.out.println(player.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 3:
+                                        player.heal();
+                                        System.out
+                                                .println(player.getName() + " uses a potion and recovers "
+                                                        + player.getHeal() + " HP.");
+                                        System.out.println(player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+                                }
+
+                                if (shockUsed) {
+                                    player.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    player.removeColdEffectTurns();
+
+                                }
+                                System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                System.out.println(coldUsed);
+                                System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+                            }
+                        }
                     }
 
                     if (player.isAlive()) {
@@ -192,9 +1431,368 @@ public class Main {
                         necroticUsed = false;
 
                         while (player.isAlive() && enemy.isAlive()) {
+                            if (enemy.getFireEffectTurns() > 0) {
+                                enemy.applyFireEffect();
+                            }
 
-                            manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
-                            bossFight(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                            if (enemy.getPoisonEffectTurns() > 0) {
+                                enemy.applyPoisonEffect();
+                            }
+
+                            if(player.getPoisonEffectTurns() > 0){
+                                player.applyPoisonEffect();
+                            }
+
+                            if(player.getFireEffectTurns() > 0){
+                                player.applyFireEffect();
+                            }
+
+                            if (player.getColdEffectTurns() <= 0) {
+                                enemy.removeColdEffect();
+                                coldUsed = false;
+                                player.setColdEffectTurns();
+                            }
+
+                            if (enemy.getColdEffectTurns() <= 0) {
+                                player.removeColdEffect();
+                                coldUsed = false;
+                                enemy.setColdEffectTurns();
+                            }
+
+                            if (player.getColdEffectTurns() <= 0) {
+                                player.removeColdEffect();
+                                coldUsed = false;
+                                player.setColdEffectTurns();
+                            }
+
+                            if (player.getShockEffectTurns() <= 0) {
+                                enemy.addDexterity(2);
+                                shockUsed = false;
+                                player.setShockEffectTurns();
+                            }
+
+                            if (enemy.getShockEffectTurns() <= 0) {
+                                player.addDexterity(2);
+                                shockUsed = false;
+                                enemy.setShockEffectTurns();
+                            }
+
+                           if(player.getNecroticEffectTurns() <= 0){
+                            player.removeNecroticEffect();
+                            necroticUsed = false;
+                            player.setNecroticEffectTurns();
+                        }
+                            System.out.println(player.toString());
+                            System.out.println(enemy.toString());
+                            System.out.println(player.getArmor().getDefence());
+                            player.getArmor().setDefence();
+                            if (player.getAgility() > enemy.getAgility()) {
+                                playerAction = getPlayerAction(scanner);
+                                switch (playerAction) {
+                                    case 0:
+                                        System.out.println();
+                                        int playerDamage = player.calculateDamage();
+                                        int damageDealt = playerDamage;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    player.getName() + " attacks " + enemy.getName() + " for "
+                                                            + playerDamage
+                                                            + " damage.");
+                                            enemy.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out
+                                                    .println(player.getName() + " attacks " + enemy.getName()
+                                                            + " but does no damage.");
+                                        }
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 1:
+                                        System.out.println("Choose a magic to use: ");
+
+                                        System.out.println("0. " + player.getMagic(0));
+                                        System.out.println("1. " + player.getMagic(1));
+
+                                        int magicChoice = getIntInput(scanner);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                            System.out.println(coldUsed);
+                                        }
+
+                                        System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 2:
+                                        player.getArmor().doubleDefence();
+                                        System.out
+                                                .println(player.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 3:
+                                        player.heal();
+                                        System.out
+                                                .println(player.getName() + " uses a potion and recovers "
+                                                        + player.getHeal() + " HP.");
+                                        System.out.println(player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+                                }
+
+                                if (shockUsed) {
+                                    player.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    player.removeColdEffectTurns();
+
+                                }
+                                System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                System.out.println(coldUsed);
+                                System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+
+                                if (enemy.isAlive()) {
+                                    computerAction = random.nextInt(4);
+                                    switch (computerAction) {
+                                        case 0:
+                                            int enemyDamage = enemy.calculateDamage();
+                                            int playerDefense = player.getArmor().setDefence();
+                                            int damageDealt = enemyDamage - playerDefense;
+
+                                            if (damageDealt > 0) {
+                                                System.out.println(
+                                                        enemy.getName() + " attacks " + player.getName() + " for "
+                                                                + enemyDamage + " damage.");
+                                                player.receiveDamage(damageDealt);
+                                            } else {
+                                                System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                        + " but does no damage.");
+                                            }
+                                            break;
+
+                                        case 1:
+
+                                            int magicChoice = random.nextInt(6);
+
+                                            String magicName = player.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                            }
+
+                                            if (magicName.equals("Necrotic Magic")) {
+                                                necroticUsed = true;
+                                            }
+
+                                            System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                            player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            System.out.println(player.toString() + "\n\n");
+                                            System.out.println(enemy.toString() + "\n\n");
+
+                                        case 2:
+                                            enemy.heal(enemy.getHeal());
+                                            System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                    + enemy.getHeal() + " HP.");
+                                            break;
+
+                                        case 3:
+
+                                            enemy.getArmor().doubleDefence();
+                                            System.out.println(
+                                                    enemy.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                            System.out.println(player.toString() + "\n\n");
+
+                                            break;
+
+                                    }
+
+                                    if (necroticUsed) {
+                                        enemy.removeNecroticEffectTurns();
+                                    }
+                                    if (shockUsed) {
+                                        enemy.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        enemy.removeColdEffectTurns();
+                                    }
+                                }
+                            } else {
+                                computerAction = random.nextInt(4);
+                                switch (computerAction) {
+                                    case 0:
+                                        int enemyDamage = enemy.calculateDamage();
+                                        int playerDefense = player.getArmor().setDefence();
+                                        int damageDealt = enemyDamage - playerDefense;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    enemy.getName() + " attacks " + player.getName() + " for "
+                                                            + enemyDamage + " damage.");
+                                            player.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                    + " but does no damage.");
+                                        }
+                                        break;
+
+                                    case 1:
+
+                                        int magicChoice = random.nextInt(6);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                        }
+
+                                        if (magicName.equals("Necrotic Magic")) {
+                                            necroticUsed = true;
+                                        }
+
+                                        System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                        System.out.println(player.toString() + "\n\n");
+                                        System.out.println(enemy.toString() + "\n\n");
+
+                                    case 2:
+                                        enemy.heal(enemy.getHeal());
+                                        System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                + enemy.getHeal() + " HP.");
+                                        break;
+
+                                    case 3:
+
+                                        enemy.getArmor().doubleDefence();
+                                        System.out.println(enemy.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                        System.out.println(player.toString() + "\n\n");
+
+                                        break;
+
+                                }
+
+                                if (necroticUsed) {
+                                    enemy.removeNecroticEffectTurns();
+                                }
+                                if (shockUsed) {
+                                    enemy.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    enemy.removeColdEffectTurns();
+                                }
+
+                                if (player.isAlive()) {
+
+                                    playerAction = getPlayerAction(scanner);
+                                    switch (playerAction) {
+                                        case 0:
+                                            System.out.println();
+                                            int playerDamage = player.calculateDamage();
+                                            int damageDealt = playerDamage;
+
+                                            if (damageDealt > 0) {
+                                                System.out.println(
+                                                        player.getName() + " attacks " + enemy.getName() + " for "
+                                                                + playerDamage
+                                                                + " damage.");
+                                                enemy.receiveDamage(damageDealt);
+                                            } else {
+                                                System.out
+                                                        .println(player.getName() + " attacks " + enemy.getName()
+                                                                + " but does no damage.");
+                                            }
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 1:
+                                            System.out.println("Choose a magic to use: ");
+
+                                            System.out.println("0. " + player.getMagic(0));
+                                            System.out.println("1. " + player.getMagic(1));
+
+                                            int magicChoice = getIntInput(scanner);
+
+                                            String magicName = player.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                                System.out.println(coldUsed);
+                                            }
+
+                                            System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                            player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 2:
+                                            player.getArmor().doubleDefence();
+                                            System.out
+                                                    .println(player.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 3:
+                                            player.heal();
+                                            System.out
+                                                    .println(player.getName() + " uses a potion and recovers "
+                                                            + player.getHeal() + " HP.");
+                                            System.out.println(player.getArmor().getDefence());
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+                                    }
+
+                                    if (shockUsed) {
+                                        player.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        player.removeColdEffectTurns();
+
+                                    }
+                                    System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                    System.out.println(coldUsed);
+                                    System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                    System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                    System.out.println("------");
+                                }
+                            }
                         }
 
                         if (player.isAlive()) {
@@ -250,9 +1848,310 @@ public class Main {
                     necroticUsed = false;
 
                     while (player.isAlive() && enemy.isAlive()) {
+                        if (enemy.getFireEffectTurns() > 0) {
+                            enemy.applyFireEffect();
+                        }
 
-                        manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
-                        combat2(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                        if (enemy.getPoisonEffectTurns() > 0) {
+                            enemy.applyPoisonEffect();
+                        }
+
+                        if (player.getColdEffectTurns() <= 0) {
+                            enemy.removeColdEffect();
+                            coldUsed = false;
+                            player.setColdEffectTurns();
+                        }
+
+                        if (enemy.getFireEffectTurns() > 0) {
+                            player.applyFireEffect();
+                        }
+
+                        if (enemy.getPoisonEffectTurns() > 0) {
+                            player.applyPoisonEffect();
+                        }
+
+                        if (enemy.getColdEffectTurns() <= 0) {
+                            player.removeColdEffect();
+                            coldUsed = false;
+                            enemy.setColdEffectTurns();
+                        }
+
+                        if(player.getNecroticEffectTurns() <= 0){
+                            player.removeNecroticEffect();
+                            necroticUsed = false;
+                            player.setNecroticEffectTurns();
+                        }
+
+                        if (player.getShockEffectTurns() <= 0) {
+                            enemy.addDexterity(2);
+                            shockUsed = false;
+                            player.setShockEffectTurns();
+                        }
+
+                        if (enemy.getShockEffectTurns() <= 0) {
+                            player.addDexterity(2);
+                            shockUsed = false;
+                            enemy.setShockEffectTurns();
+                        }
+                        System.out.println(player.toString());
+                        System.out.println(enemy.toString());
+                        System.out.println(player.getArmor().getDefence());
+                        player.getArmor().setDefence();
+                        if (player.getAgility() > enemy.getAgility()) {
+                            playerAction = getPlayerAction(scanner);
+                            switch (playerAction) {
+                                case 0:
+                                    System.out.println();
+                                    int playerDamage = player.calculateDamage();
+                                    int damageDealt = playerDamage;
+
+                                    if (damageDealt > 0) {
+                                        System.out.println(
+                                                player.getName() + " attacks " + enemy.getName() + " for "
+                                                        + playerDamage
+                                                        + " damage.");
+                                        enemy.receiveDamage(damageDealt);
+                                    } else {
+                                        System.out
+                                                .println(player.getName() + " attacks " + enemy.getName()
+                                                        + " but does no damage.");
+                                    }
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 1:
+                                    System.out.println("Choose a magic to use: ");
+
+                                    System.out.println("0. " + player.getMagic(0));
+                                    System.out.println("1. " + player.getMagic(1));
+
+                                    int magicChoice = getIntInput(scanner);
+
+                                    String magicName = player.getMagic(magicChoice).toString();
+
+                                    if (magicName.equals("Eletric Magic")) {
+                                        shockUsed = true;
+                                    }
+
+                                    if (magicName.equals("Ice Magic")) {
+                                        coldUsed = true;
+                                        System.out.println(coldUsed);
+                                    }
+
+                                    System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                    player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 2:
+                                    player.getArmor().doubleDefence();
+                                    System.out.println(player.getName() + " doubles their defense for 1 round.");
+                                    System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 3:
+                                    player.heal();
+                                    System.out
+                                            .println(player.getName() + " uses a potion and recovers "
+                                                    + player.getHeal() + " HP.");
+                                    System.out.println(player.getArmor().getDefence());
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+                            }
+
+                            if (shockUsed) {
+                                player.removeShockEffectTurns();
+                            }
+                            if (coldUsed) {
+                                player.removeColdEffectTurns();
+
+                            }
+                            System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                            System.out.println(coldUsed);
+                            System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                            System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                            System.out.println("------");
+
+                            if (enemy.isAlive()) {
+                                computerAction = random.nextInt(3);
+                                switch (computerAction) {
+                                    case 0:
+                                        int enemyDamage = enemy.calculateDamage();
+                                        int playerDefense = player.getArmor().setDefence();
+                                        int damageDealt = enemyDamage - playerDefense;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    enemy.getName() + " attacks " + player.getName() + " for "
+                                                            + enemyDamage + " damage.");
+                                            System.out.println("Dano dado: " + damageDealt);
+                                            System.out.println("Defesa atual: " + playerDefense);
+                                            player.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                    + " but does no damage.");
+                                        }
+                                        break;
+
+                                    case 1:
+                                        enemy.heal(enemy.getHeal());
+                                        System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                + enemy.getHeal() + " HP.");
+                                        break;
+
+                                    case 2:
+
+                                        necroticUsed = true;
+
+                                        System.out.println(enemy.getMagic(0).toString() + " used.");
+
+                                        player.castMagic(player, 0, enemy.getMagic(0));
+                                        System.out.println(player.toString() + "\n\n");
+                                        System.out.println(enemy.toString() + "\n\n");
+                                }
+
+                                System.out.println(player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+
+                                if (necroticUsed) {
+                                    enemy.removeNecroticEffectTurns();
+                                }
+                            }
+                        } else {
+                            computerAction = random.nextInt(3);
+                            switch (computerAction) {
+                                case 0:
+                                    int enemyDamage = enemy.calculateDamage();
+                                    int playerDefense = player.getArmor().setDefence();
+                                    int damageDealt = enemyDamage - playerDefense;
+
+                                    if (damageDealt > 0) {
+                                        System.out.println(
+                                                enemy.getName() + " attacks " + player.getName() + " for "
+                                                        + enemyDamage + " damage.");
+                                        System.out.println("Dano dado: " + damageDealt);
+                                        System.out.println("Defesa atual: " + playerDefense);
+                                        player.receiveDamage(damageDealt);
+                                    } else {
+                                        System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                + " but does no damage.");
+                                    }
+                                    break;
+
+                                case 1:
+                                    enemy.heal(enemy.getHeal());
+                                    System.out.println(enemy.getName() + " uses a potion and recovers "
+                                            + enemy.getHeal() + " HP.");
+                                    break;
+
+                                case 2:
+
+                                    necroticUsed = true;
+
+                                    System.out.println(enemy.getMagic(0).toString() + " used.");
+
+                                    player.castMagic(player, 0, enemy.getMagic(0));
+                                    System.out.println(player.toString() + "\n\n");
+                                    System.out.println(enemy.toString() + "\n\n");
+                            }
+
+                            System.out.println(player.getName() + " HP: " + player.getHitPoints());
+                            System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                            System.out.println("------");
+
+                            if (necroticUsed) {
+                                enemy.removeNecroticEffectTurns();
+                            }
+                            if (player.isAlive()) {
+
+                                playerAction = getPlayerAction(scanner);
+                                switch (playerAction) {
+                                    case 0:
+                                        System.out.println();
+                                        int playerDamage = player.calculateDamage();
+                                        int damageDealt = playerDamage;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    player.getName() + " attacks " + enemy.getName() + " for "
+                                                            + playerDamage
+                                                            + " damage.");
+                                            enemy.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out
+                                                    .println(player.getName() + " attacks " + enemy.getName()
+                                                            + " but does no damage.");
+                                        }
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 1:
+                                        System.out.println("Choose a magic to use: ");
+
+                                        System.out.println("0. " + player.getMagic(0));
+                                        System.out.println("1. " + player.getMagic(1));
+
+                                        int magicChoice = getIntInput(scanner);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                            System.out.println(coldUsed);
+                                        }
+
+                                        System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 2:
+                                        player.getArmor().doubleDefence();
+                                        System.out.println(player.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 3:
+                                        player.heal();
+                                        System.out
+                                                .println(player.getName() + " uses a potion and recovers "
+                                                        + player.getHeal() + " HP.");
+                                        System.out.println(player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+                                }
+
+                                if (shockUsed) {
+                                    player.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    player.removeColdEffectTurns();
+
+                                }
+                                System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                System.out.println(coldUsed);
+                                System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+                            }
+                        }
                     }
                     if (player.isAlive()) {
                         afterReachingMaster();
@@ -275,9 +2174,367 @@ public class Main {
                         necroticUsed = false;
 
                         while (player.isAlive() && enemy.isAlive()) {
+                             if (enemy.getFireEffectTurns() > 0) {
+                                enemy.applyFireEffect();
+                            }
 
-                            manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
-                            bossFight(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                            if (enemy.getPoisonEffectTurns() > 0) {
+                                enemy.applyPoisonEffect();
+                            }
+
+                            if(player.getPoisonEffectTurns() > 0){
+                                player.applyPoisonEffect();
+                            }
+
+                            if(player.getFireEffectTurns() > 0){
+                                player.applyFireEffect();
+                            }
+
+                            if (player.getColdEffectTurns() <= 0) {
+                                enemy.removeColdEffect();
+                                coldUsed = false;
+                                player.setColdEffectTurns();
+                            }
+
+                            if (enemy.getColdEffectTurns() <= 0) {
+                                player.removeColdEffect();
+                                coldUsed = false;
+                                enemy.setColdEffectTurns();
+                            }
+
+                            if (player.getColdEffectTurns() <= 0) {
+                                player.removeColdEffect();
+                                coldUsed = false;
+                                player.setColdEffectTurns();
+                            }
+
+                            if (player.getShockEffectTurns() <= 0) {
+                                enemy.addDexterity(2);
+                                shockUsed = false;
+                                player.setShockEffectTurns();
+                            }
+
+                            if (enemy.getShockEffectTurns() <= 0) {
+                                player.addDexterity(2);
+                                shockUsed = false;
+                                enemy.setShockEffectTurns();
+                            }
+
+                            if(player.getNecroticEffectTurns() <= 0){
+                            player.removeNecroticEffect();
+                            necroticUsed = false;
+                            player.setNecroticEffectTurns();
+                        }
+                            System.out.println(player.toString());
+                            System.out.println(enemy.toString());
+                            System.out.println(player.getArmor().getDefence());
+                            player.getArmor().setDefence();
+                            if (player.getAgility() > enemy.getAgility()) {
+                                playerAction = getPlayerAction(scanner);
+                                switch (playerAction) {
+                                    case 0:
+                                        System.out.println();
+                                        int playerDamage = player.calculateDamage();
+                                        int damageDealt = playerDamage;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    player.getName() + " attacks " + enemy.getName() + " for "
+                                                            + playerDamage
+                                                            + " damage.");
+                                            enemy.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out
+                                                    .println(player.getName() + " attacks " + enemy.getName()
+                                                            + " but does no damage.");
+                                        }
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 1:
+                                        System.out.println("Choose a magic to use: ");
+
+                                        System.out.println("0. " + player.getMagic(0));
+                                        System.out.println("1. " + player.getMagic(1));
+
+                                        int magicChoice = getIntInput(scanner);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                            System.out.println(coldUsed);
+                                        }
+
+                                        System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 2:
+                                        player.getArmor().doubleDefence();
+                                        System.out
+                                                .println(player.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 3:
+                                        player.heal();
+                                        System.out
+                                                .println(player.getName() + " uses a potion and recovers "
+                                                        + player.getHeal() + " HP.");
+                                        System.out.println(player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+                                }
+
+                                if (shockUsed) {
+                                    player.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    player.removeColdEffectTurns();
+
+                                }
+                                System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                System.out.println(coldUsed);
+                                System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+
+                                if (enemy.isAlive()) {
+                                    computerAction = random.nextInt(4);
+                                    switch (computerAction) {
+                                        case 0:
+                                            int enemyDamage = enemy.calculateDamage();
+                                            int playerDefense = player.getArmor().setDefence();
+                                            int damageDealt = enemyDamage - playerDefense;
+
+                                            if (damageDealt > 0) {
+                                                System.out.println(
+                                                        enemy.getName() + " attacks " + player.getName() + " for "
+                                                                + enemyDamage + " damage.");
+                                                player.receiveDamage(damageDealt);
+                                            } else {
+                                                System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                        + " but does no damage.");
+                                            }
+                                            break;
+
+                                        case 1:
+
+                                            int magicChoice = random.nextInt(6);
+
+                                            String magicName = player.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                            }
+
+                                            if (magicName.equals("Necrotic Magic")) {
+                                                necroticUsed = true;
+                                            }
+
+                                            System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                            player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            System.out.println(player.toString() + "\n\n");
+                                            System.out.println(enemy.toString() + "\n\n");
+
+                                        case 2:
+                                            enemy.heal(enemy.getHeal());
+                                            System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                    + enemy.getHeal() + " HP.");
+                                            break;
+
+                                        case 3:
+
+                                            enemy.getArmor().doubleDefence();
+                                            System.out.println(
+                                                    enemy.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                            System.out.println(player.toString() + "\n\n");
+
+                                            break;
+
+                                    }
+
+                                    if (necroticUsed) {
+                                        enemy.removeNecroticEffectTurns();
+                                    }
+                                    if (shockUsed) {
+                                        enemy.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        enemy.removeColdEffectTurns();
+                                    }
+                                }
+                            } else {
+                                computerAction = random.nextInt(4);
+                                switch (computerAction) {
+                                    case 0:
+                                        int enemyDamage = enemy.calculateDamage();
+                                        int playerDefense = player.getArmor().setDefence();
+                                        int damageDealt = enemyDamage - playerDefense;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    enemy.getName() + " attacks " + player.getName() + " for "
+                                                            + enemyDamage + " damage.");
+                                            player.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                    + " but does no damage.");
+                                        }
+                                        break;
+
+                                    case 1:
+
+                                        int magicChoice = random.nextInt(6);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                        }
+
+                                        if (magicName.equals("Necrotic Magic")) {
+                                            necroticUsed = true;
+                                        }
+
+                                        System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                        System.out.println(player.toString() + "\n\n");
+                                        System.out.println(enemy.toString() + "\n\n");
+
+                                    case 2:
+                                        enemy.heal(enemy.getHeal());
+                                        System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                + enemy.getHeal() + " HP.");
+                                        break;
+
+                                    case 3:
+
+                                        enemy.getArmor().doubleDefence();
+                                        System.out.println(enemy.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                        System.out.println(player.toString() + "\n\n");
+
+                                        break;
+
+                                }
+
+                                if (necroticUsed) {
+                                    enemy.removeNecroticEffectTurns();
+                                }
+                                if (shockUsed) {
+                                    enemy.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    enemy.removeColdEffectTurns();
+                                }
+                                if (player.isAlive()) {
+
+                                    playerAction = getPlayerAction(scanner);
+                                    switch (playerAction) {
+                                        case 0:
+                                            System.out.println();
+                                            int playerDamage = player.calculateDamage();
+                                            int damageDealt = playerDamage;
+
+                                            if (damageDealt > 0) {
+                                                System.out.println(
+                                                        player.getName() + " attacks " + enemy.getName() + " for "
+                                                                + playerDamage
+                                                                + " damage.");
+                                                enemy.receiveDamage(damageDealt);
+                                            } else {
+                                                System.out
+                                                        .println(player.getName() + " attacks " + enemy.getName()
+                                                                + " but does no damage.");
+                                            }
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 1:
+                                            System.out.println("Choose a magic to use: ");
+
+                                            System.out.println("0. " + player.getMagic(0));
+                                            System.out.println("1. " + player.getMagic(1));
+
+                                            int magicChoice = getIntInput(scanner);
+
+                                            String magicName = player.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                                System.out.println(coldUsed);
+                                            }
+
+                                            System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                            player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 2:
+                                            player.getArmor().doubleDefence();
+                                            System.out
+                                                    .println(player.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 3:
+                                            player.heal();
+                                            System.out
+                                                    .println(player.getName() + " uses a potion and recovers "
+                                                            + player.getHeal() + " HP.");
+                                            System.out.println(player.getArmor().getDefence());
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+                                    }
+
+                                    if (shockUsed) {
+                                        player.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        player.removeColdEffectTurns();
+
+                                    }
+                                    System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                    System.out.println(coldUsed);
+                                    System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                    System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                    System.out.println("------");
+                                }
+                            }
                         }
 
                         if (player.isAlive()) {
@@ -318,9 +2575,310 @@ public class Main {
                     necroticUsed = false;
 
                     while (player.isAlive() && enemy.isAlive()) {
+                        if (enemy.getFireEffectTurns() > 0) {
+                            enemy.applyFireEffect();
+                        }
 
-                        manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
-                        combat2(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                        if (enemy.getPoisonEffectTurns() > 0) {
+                            enemy.applyPoisonEffect();
+                        }
+
+                        if (player.getColdEffectTurns() <= 0) {
+                            enemy.removeColdEffect();
+                            coldUsed = false;
+                            player.setColdEffectTurns();
+                        }
+
+                        if (enemy.getFireEffectTurns() > 0) {
+                            player.applyFireEffect();
+                        }
+
+                        if (enemy.getPoisonEffectTurns() > 0) {
+                            player.applyPoisonEffect();
+                        }
+
+                        if (enemy.getColdEffectTurns() <= 0) {
+                            player.removeColdEffect();
+                            coldUsed = false;
+                            enemy.setColdEffectTurns();
+                        }
+
+                        if(player.getNecroticEffectTurns() <= 0){
+                            player.removeNecroticEffect();
+                            necroticUsed = false;
+                            player.setNecroticEffectTurns();
+                        }
+
+                        if (player.getShockEffectTurns() <= 0) {
+                            enemy.addDexterity(2);
+                            shockUsed = false;
+                            player.setShockEffectTurns();
+                        }
+
+                        if (enemy.getShockEffectTurns() <= 0) {
+                            player.addDexterity(2);
+                            shockUsed = false;
+                            enemy.setShockEffectTurns();
+                        }
+                        System.out.println(player.toString());
+                        System.out.println(enemy.toString());
+                        System.out.println(player.getArmor().getDefence());
+                        player.getArmor().setDefence();
+                        if (player.getAgility() > enemy.getAgility()) {
+                            playerAction = getPlayerAction(scanner);
+                            switch (playerAction) {
+                                case 0:
+                                    System.out.println();
+                                    int playerDamage = player.calculateDamage();
+                                    int damageDealt = playerDamage;
+
+                                    if (damageDealt > 0) {
+                                        System.out.println(
+                                                player.getName() + " attacks " + enemy.getName() + " for "
+                                                        + playerDamage
+                                                        + " damage.");
+                                        enemy.receiveDamage(damageDealt);
+                                    } else {
+                                        System.out
+                                                .println(player.getName() + " attacks " + enemy.getName()
+                                                        + " but does no damage.");
+                                    }
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 1:
+                                    System.out.println("Choose a magic to use: ");
+
+                                    System.out.println("0. " + player.getMagic(0));
+                                    System.out.println("1. " + player.getMagic(1));
+
+                                    int magicChoice = getIntInput(scanner);
+
+                                    String magicName = player.getMagic(magicChoice).toString();
+
+                                    if (magicName.equals("Eletric Magic")) {
+                                        shockUsed = true;
+                                    }
+
+                                    if (magicName.equals("Ice Magic")) {
+                                        coldUsed = true;
+                                        System.out.println(coldUsed);
+                                    }
+
+                                    System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                    player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 2:
+                                    player.getArmor().doubleDefence();
+                                    System.out.println(player.getName() + " doubles their defense for 1 round.");
+                                    System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+
+                                case 3:
+                                    player.heal();
+                                    System.out
+                                            .println(player.getName() + " uses a potion and recovers "
+                                                    + player.getHeal() + " HP.");
+                                    System.out.println(player.getArmor().getDefence());
+                                    // System.out.println(enemy.toString() + "\n\n");
+
+                                    break;
+                            }
+
+                            if (shockUsed) {
+                                player.removeShockEffectTurns();
+                            }
+                            if (coldUsed) {
+                                player.removeColdEffectTurns();
+
+                            }
+                            System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                            System.out.println(coldUsed);
+                            System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                            System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                            System.out.println("------");
+
+                            if (enemy.isAlive()) {
+                                computerAction = random.nextInt(3);
+                                switch (computerAction) {
+                                    case 0:
+                                        int enemyDamage = enemy.calculateDamage();
+                                        int playerDefense = player.getArmor().setDefence();
+                                        int damageDealt = enemyDamage - playerDefense;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    enemy.getName() + " attacks " + player.getName() + " for "
+                                                            + enemyDamage + " damage.");
+                                            System.out.println("Dano dado: " + damageDealt);
+                                            System.out.println("Defesa atual: " + playerDefense);
+                                            player.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                    + " but does no damage.");
+                                        }
+                                        break;
+
+                                    case 1:
+                                        enemy.heal(enemy.getHeal());
+                                        System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                + enemy.getHeal() + " HP.");
+                                        break;
+
+                                    case 2:
+
+                                        necroticUsed = true;
+
+                                        System.out.println(enemy.getMagic(0).toString() + " used.");
+
+                                        player.castMagic(player, 0, enemy.getMagic(0));
+                                        System.out.println(player.toString() + "\n\n");
+                                        System.out.println(enemy.toString() + "\n\n");
+                                }
+
+                                System.out.println(player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+
+                                if (necroticUsed) {
+                                    enemy.removeNecroticEffectTurns();
+                                }
+                            }
+                        } else {
+                            computerAction = random.nextInt(3);
+                            switch (computerAction) {
+                                case 0:
+                                    int enemyDamage = enemy.calculateDamage();
+                                    int playerDefense = player.getArmor().setDefence();
+                                    int damageDealt = enemyDamage - playerDefense;
+
+                                    if (damageDealt > 0) {
+                                        System.out.println(
+                                                enemy.getName() + " attacks " + player.getName() + " for "
+                                                        + enemyDamage + " damage.");
+                                        System.out.println("Dano dado: " + damageDealt);
+                                        System.out.println("Defesa atual: " + playerDefense);
+                                        player.receiveDamage(damageDealt);
+                                    } else {
+                                        System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                + " but does no damage.");
+                                    }
+                                    break;
+
+                                case 1:
+                                    enemy.heal(enemy.getHeal());
+                                    System.out.println(enemy.getName() + " uses a potion and recovers "
+                                            + enemy.getHeal() + " HP.");
+                                    break;
+
+                                case 2:
+
+                                    necroticUsed = true;
+
+                                    System.out.println(enemy.getMagic(0).toString() + " used.");
+
+                                    player.castMagic(player, 0, enemy.getMagic(0));
+                                    System.out.println(player.toString() + "\n\n");
+                                    System.out.println(enemy.toString() + "\n\n");
+                            }
+
+                            System.out.println(player.getName() + " HP: " + player.getHitPoints());
+                            System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                            System.out.println("------");
+
+                            if (necroticUsed) {
+                                enemy.removeNecroticEffectTurns();
+                            }
+                            if (player.isAlive()) {
+
+                                playerAction = getPlayerAction(scanner);
+                                switch (playerAction) {
+                                    case 0:
+                                        System.out.println();
+                                        int playerDamage = player.calculateDamage();
+                                        int damageDealt = playerDamage;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    player.getName() + " attacks " + enemy.getName() + " for "
+                                                            + playerDamage
+                                                            + " damage.");
+                                            enemy.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out
+                                                    .println(player.getName() + " attacks " + enemy.getName()
+                                                            + " but does no damage.");
+                                        }
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 1:
+                                        System.out.println("Choose a magic to use: ");
+
+                                        System.out.println("0. " + player.getMagic(0));
+                                        System.out.println("1. " + player.getMagic(1));
+
+                                        int magicChoice = getIntInput(scanner);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                            System.out.println(coldUsed);
+                                        }
+
+                                        System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 2:
+                                        player.getArmor().doubleDefence();
+                                        System.out.println(player.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 3:
+                                        player.heal();
+                                        System.out
+                                                .println(player.getName() + " uses a potion and recovers "
+                                                        + player.getHeal() + " HP.");
+                                        System.out.println(player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+                                }
+
+                                if (shockUsed) {
+                                    player.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    player.removeColdEffectTurns();
+
+                                }
+                                System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                System.out.println(coldUsed);
+                                System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+                            }
+                        }
                     }
                     if (player.isAlive()) {
                         findingVardamir();
@@ -342,9 +2900,361 @@ public class Main {
                         necroticUsed = false;
 
                         while (player.isAlive() && enemy.isAlive()) {
+                            if (player.getFireEffectTurns() > 0) {
+                                enemy.applyFireEffect();
+                            }
 
-                            manageEffects(player, enemy, coldUsed, shockUsed, necroticUsed);
-                            bossFight(player, enemy, scanner, coldUsed, shockUsed, necroticUsed, random);
+                            if (player.getPoisonEffectTurns() > 0) {
+                                enemy.applyPoisonEffect();
+                            }
+
+                            if (player.getColdEffectTurns() <= 0) {
+                                enemy.removeColdEffect();
+                                coldUsed = false;
+                                player.setColdEffectTurns();
+                            }
+
+                            if (enemy.getFireEffectTurns() > 0) {
+                                player.applyFireEffect();
+                            }
+
+                            if (enemy.getPoisonEffectTurns() > 0) {
+                                player.applyPoisonEffect();
+                            }
+
+                            if (enemy.getColdEffectTurns() <= 0) {
+                                player.removeColdEffect();
+                                coldUsed = false;
+                                enemy.setColdEffectTurns();
+                            }
+
+                            if (enemy.getNecroticEffectTurns() <= 0) {
+                                player.removeNecroticEffect();
+                                necroticUsed = false;
+                                enemy.setNecroticEffectTurns();
+                            }
+
+                            if (player.getShockEffectTurns() <= 0) {
+                                enemy.addDexterity(2);
+                                shockUsed = false;
+                                player.setShockEffectTurns();
+                            }
+
+                            if (enemy.getShockEffectTurns() <= 0) {
+                                player.addDexterity(2);
+                                shockUsed = false;
+                                enemy.setShockEffectTurns();
+                            }
+                            System.out.println(player.toString());
+                            System.out.println(enemy.toString());
+                            System.out.println(player.getArmor().getDefence());
+                            player.getArmor().setDefence();
+                            if (player.getAgility() > enemy.getAgility()) {
+                                playerAction = getPlayerAction(scanner);
+                                switch (playerAction) {
+                                    case 0:
+                                        System.out.println();
+                                        int playerDamage = player.calculateDamage();
+                                        int damageDealt = playerDamage;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    player.getName() + " attacks " + enemy.getName() + " for "
+                                                            + playerDamage
+                                                            + " damage.");
+                                            enemy.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out
+                                                    .println(player.getName() + " attacks " + enemy.getName()
+                                                            + " but does no damage.");
+                                        }
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 1:
+                                        System.out.println("Choose a magic to use: ");
+
+                                        System.out.println("0. " + player.getMagic(0));
+                                        System.out.println("1. " + player.getMagic(1));
+
+                                        int magicChoice = getIntInput(scanner);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                            System.out.println(coldUsed);
+                                        }
+
+                                        System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 2:
+                                        player.getArmor().doubleDefence();
+                                        System.out
+                                                .println(player.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+
+                                    case 3:
+                                        player.heal();
+                                        System.out
+                                                .println(player.getName() + " uses a potion and recovers "
+                                                        + player.getHeal() + " HP.");
+                                        System.out.println(player.getArmor().getDefence());
+                                        // System.out.println(enemy.toString() + "\n\n");
+
+                                        break;
+                                }
+
+                                if (shockUsed) {
+                                    player.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    player.removeColdEffectTurns();
+
+                                }
+                                System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                System.out.println(coldUsed);
+                                System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                System.out.println("------");
+
+                                if (enemy.isAlive()) {
+                                    computerAction = random.nextInt(4);
+                                    switch (computerAction) {
+                                        case 0:
+                                            int enemyDamage = enemy.calculateDamage();
+                                            int playerDefense = player.getArmor().setDefence();
+                                            int damageDealt = enemyDamage - playerDefense;
+
+                                            if (damageDealt > 0) {
+                                                System.out.println(
+                                                        enemy.getName() + " attacks " + player.getName() + " for "
+                                                                + enemyDamage + " damage.");
+                                                player.receiveDamage(damageDealt);
+                                            } else {
+                                                System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                        + " but does no damage.");
+                                            }
+                                            break;
+
+                                        case 1:
+
+                                            int magicChoice = random.nextInt(6);
+
+                                            String magicName = player.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                            }
+
+                                            if (magicName.equals("Necrotic Magic")) {
+                                                necroticUsed = true;
+                                            }
+
+                                            System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                            player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                            System.out.println(player.toString() + "\n\n");
+                                            System.out.println(enemy.toString() + "\n\n");
+
+                                        case 2:
+                                            enemy.heal(enemy.getHeal());
+                                            System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                    + enemy.getHeal() + " HP.");
+                                            break;
+
+                                        case 3:
+
+                                            enemy.getArmor().doubleDefence();
+                                            System.out.println(
+                                                    enemy.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                            System.out.println(player.toString() + "\n\n");
+
+                                            break;
+
+                                    }
+
+                                    if (necroticUsed) {
+                                        enemy.removeNecroticEffectTurns();
+                                    }
+                                    if (shockUsed) {
+                                        enemy.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        enemy.removeColdEffectTurns();
+                                    }
+                                }
+                            } else {
+                                computerAction = random.nextInt(4);
+                                switch (computerAction) {
+                                    case 0:
+                                        int enemyDamage = enemy.calculateDamage();
+                                        int playerDefense = player.getArmor().setDefence();
+                                        int damageDealt = enemyDamage - playerDefense;
+
+                                        if (damageDealt > 0) {
+                                            System.out.println(
+                                                    enemy.getName() + " attacks " + player.getName() + " for "
+                                                            + enemyDamage + " damage.");
+                                            player.receiveDamage(damageDealt);
+                                        } else {
+                                            System.out.println(enemy.getName() + " attacks " + player.getName()
+                                                    + " but does no damage.");
+                                        }
+                                        break;
+
+                                    case 1:
+
+                                        int magicChoice = random.nextInt(6);
+
+                                        String magicName = player.getMagic(magicChoice).toString();
+
+                                        if (magicName.equals("Eletric Magic")) {
+                                            shockUsed = true;
+                                        }
+
+                                        if (magicName.equals("Ice Magic")) {
+                                            coldUsed = true;
+                                        }
+
+                                        if (magicName.equals("Necrotic Magic")) {
+                                            necroticUsed = true;
+                                        }
+
+                                        System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
+
+                                        player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
+                                        System.out.println(player.toString() + "\n\n");
+                                        System.out.println(enemy.toString() + "\n\n");
+
+                                    case 2:
+                                        enemy.heal(enemy.getHeal());
+                                        System.out.println(enemy.getName() + " uses a potion and recovers "
+                                                + enemy.getHeal() + " HP.");
+                                        break;
+
+                                    case 3:
+
+                                        enemy.getArmor().doubleDefence();
+                                        System.out.println(enemy.getName() + " doubles their defense for 1 round.");
+                                        System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
+                                        System.out.println(player.toString() + "\n\n");
+
+                                        break;
+
+                                }
+
+                                if (necroticUsed) {
+                                    enemy.removeNecroticEffectTurns();
+                                }
+                                if (shockUsed) {
+                                    enemy.removeShockEffectTurns();
+                                }
+                                if (coldUsed) {
+                                    enemy.removeColdEffectTurns();
+                                }
+                                if (player.isAlive()) {
+
+                                    playerAction = getPlayerAction(scanner);
+                                    switch (playerAction) {
+                                        case 0:
+                                            System.out.println();
+                                            int playerDamage = player.calculateDamage();
+                                            int damageDealt = playerDamage;
+
+                                            if (damageDealt > 0) {
+                                                System.out.println(
+                                                        player.getName() + " attacks " + enemy.getName() + " for "
+                                                                + playerDamage
+                                                                + " damage.");
+                                                enemy.receiveDamage(damageDealt);
+                                            } else {
+                                                System.out
+                                                        .println(player.getName() + " attacks " + enemy.getName()
+                                                                + " but does no damage.");
+                                            }
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 1:
+                                            System.out.println("Choose a magic to use: ");
+
+                                            System.out.println("0. " + player.getMagic(0));
+                                            System.out.println("1. " + player.getMagic(1));
+
+                                            int magicChoice = getIntInput(scanner);
+
+                                            String magicName = player.getMagic(magicChoice).toString();
+
+                                            if (magicName.equals("Eletric Magic")) {
+                                                shockUsed = true;
+                                            }
+
+                                            if (magicName.equals("Ice Magic")) {
+                                                coldUsed = true;
+                                                System.out.println(coldUsed);
+                                            }
+
+                                            System.out.println(player.getMagic(magicChoice).toString() + " used.");
+
+                                            player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 2:
+                                            player.getArmor().doubleDefence();
+                                            System.out
+                                                    .println(player.getName() + " doubles their defense for 1 round.");
+                                            System.out.println("Defesa atual: " + player.getArmor().getDefence());
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+
+                                        case 3:
+                                            player.heal();
+                                            System.out
+                                                    .println(player.getName() + " uses a potion and recovers "
+                                                            + player.getHeal() + " HP.");
+                                            System.out.println(player.getArmor().getDefence());
+                                            // System.out.println(enemy.toString() + "\n\n");
+
+                                            break;
+                                    }
+
+                                    if (shockUsed) {
+                                        player.removeShockEffectTurns();
+                                    }
+                                    if (coldUsed) {
+                                        player.removeColdEffectTurns();
+
+                                    }
+                                    System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
+                                    System.out.println(coldUsed);
+                                    System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
+                                    System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
+                                    System.out.println("------");
+                                }
+                            }
                         }
 
                         if (player.isAlive()) {
@@ -842,349 +3752,12 @@ public class Main {
         System.out.println();
     }
 
-    public static void playerAction(Scanner scanner, Character player, Character enemy, boolean coldUsed,
-            boolean shockUsed, boolean necroticUsed, int playerAction) {
-        switch (playerAction) {
-            case 0:
-                System.out.println();
-                int playerDamage = player.calculateDamage();
-                int damageDealt = playerDamage;
-
-                if (damageDealt > 0) {
-                    System.out.println(
-                            player.getName() + " attacks " + enemy.getName() + " for " + playerDamage + " damage.");
-                    enemy.receiveDamage(damageDealt);
-                } else {
-                    System.out.println(player.getName() + " attacks " + enemy.getName() + " but does no damage.");
-                }
-                //System.out.println(enemy.toString() + "\n\n");
-
-                break;
-
-            case 1:
-                System.out.println("Choose a magic to use: ");
-
-                System.out.println("0. " + player.getMagic(0));
-                System.out.println("1. " + player.getMagic(1));
-
-                int magicChoice = getIntInput(scanner);
-
-                String magicName = player.getMagic(magicChoice).toString();
-
-                if (magicName.equals("Eletric Magic")) {
-                    shockUsed = true;
-                }
-
-                if (magicName.equals("Ice Magic")) {
-                    coldUsed = true;
-                }
-
-                System.out.println(player.getMagic(magicChoice).toString() + " used.");
-
-                player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
-                //System.out.println(enemy.toString() + "\n\n");
-
-                break;
-
-            case 2:
-                player.getArmor().doubleDefence();
-                System.out.println(player.getName() + " doubles their defense for 1 round.");
-                System.out.println("Defesa atual: " + player.getArmor().getDefence());
-                //System.out.println(enemy.toString() + "\n\n");
-
-                break;
-
-            case 3:
-                player.heal();
-                System.out.println(player.getName() + " uses a potion and recovers " + player.getHeal() + " HP.");
-                System.out.println(player.getArmor().getDefence());
-                //System.out.println(enemy.toString() + "\n\n");
-
-                break;
-        }
-
-        System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
-        System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
-        System.out.println("------");
-    }
-
-    public static void computerAction1(Scanner scanner, Character player, Character enemy, boolean coldUsed,
-            boolean shockUsed, boolean necroticUsed, int computerAction) {
-        switch (computerAction) {
-
-            case 0:
-                int enemyDamage = enemy.calculateDamage();
-                int playerDefense = player.getArmor().setDefence();
-                int damageDealt = enemyDamage - playerDefense;
-
-                if (damageDealt > 0) {
-                    System.out.println(
-                            enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage + " damage.");
-                    player.receiveDamage(damageDealt);
-                } else {
-                    System.out.println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
-                }
-                //System.out.println(player.toString() + "\n\n");
-                break;
-
-            case 1:
-                enemy.heal(enemy.getHeal());
-                System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
-                //System.out.println(player.toString());
-                break;
-
-        }
-
-        System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
-        System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
-        System.out.println("------");
-    }
-
-    public static void combat1(Character player, Character enemy, Scanner scanner, boolean coldUsed, boolean shockUsed,
-            boolean necroticUsed, Random random) {
-        if (player.getAgility() >= enemy.getAgility()) {
-            int playerAction = getPlayerAction(scanner);
-            System.out.println(player.getArmor().getDefence());
-            player.getArmor().setDefence();
-            playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-            if (enemy.isAlive()) {
-                int computerAction = random.nextInt(2);
-                computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
-            }
-        }
-
-        else {
-            int computerAction = random.nextInt(2);
-            computerAction1(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction);
-            if (player.isAlive()) {
-                int playerAction = getPlayerAction(scanner);
-                System.out.println(player.getArmor().getDefence());
-                player.getArmor().setDefence();
-                playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-            }
-        }
-    }
-
-    public static void combat2(Character player, Character enemy, Scanner scanner, boolean coldUsed, boolean shockUsed,
-            boolean necroticUsed, Random random) {
-        if (player.getAgility() >= enemy.getAgility()) {
-            int playerAction = getPlayerAction(scanner);
-            System.out.println(player.getArmor().getDefence());
-            player.getArmor().setDefence();
-            playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-            if (enemy.isAlive()) {
-                int computerAction = random.nextInt(3);
-                computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
-            }
-        }
-
-        else {
-            int computerAction = random.nextInt(3);
-            computerAction2(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
-            if (player.isAlive()) {
-                int playerAction = getPlayerAction(scanner);
-                System.out.println(player.getArmor().getDefence());
-                player.getArmor().setDefence();
-                playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-            }
-        }
-    }
-
-    public static void bossFight(Character player, Character enemy, Scanner scanner, boolean coldUsed,
-            boolean shockUsed, boolean necroticUsed, Random random) {
-        if (player.getAgility() >= enemy.getAgility()) {
-            int playerAction = getPlayerAction(scanner);
-            System.out.println(player.getArmor().getDefence());
-            player.getArmor().setDefence();
-            playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-            if (enemy.isAlive()) {
-                int computerAction = random.nextInt(4);
-                player.getArmor().setDefence();
-                vardamirAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
-            }
-        }
-
-        else {
-            int computerAction = random.nextInt(4);
-            player.getArmor().setDefence();
-            vardamirAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, computerAction, random);
-            if (player.isAlive()) {
-                int playerAction = getPlayerAction(scanner);
-                System.out.println(player.getArmor().getDefence());
-                player.getArmor().setDefence();
-                playerAction(scanner, player, enemy, coldUsed, shockUsed, necroticUsed, playerAction);
-            }
-        }
-    }
-
-    public static void vardamirAction(Scanner scanner, Character player, Character enemy, boolean coldUsed,
-            boolean shockUsed, boolean necroticUsed, int computerAction, Random random) {
-        switch (computerAction) {
-            case 0:
-                int enemyDamage = enemy.calculateDamage();
-                int playerDefense = player.getArmor().setDefence();
-                int damageDealt = enemyDamage - playerDefense;
-
-                if (damageDealt > 0) {
-                    System.out.println(
-                            enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage + " damage.");
-                    player.receiveDamage(damageDealt);
-                } else {
-                    System.out.println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
-                }
-                break;
-
-            case 1:
-
-                int magicChoice = random.nextInt(6);
-
-                String magicName = player.getMagic(magicChoice).toString();
-
-                if (magicName.equals("Eletric Magic")) {
-                    shockUsed = true;
-                }
-
-                if (magicName.equals("Ice Magic")) {
-                    coldUsed = true;
-                }
-
-                if (magicName.equals("Necrotic Magic")) {
-                    necroticUsed = true;
-                }
-
-                System.out.println(enemy.getMagic(magicChoice).toString() + " used.");
-
-                player.castMagic(player, magicChoice, enemy.getMagic(magicChoice));
-                System.out.println(player.toString() + "\n\n");
-                System.out.println(enemy.toString() + "\n\n");
-
-            case 2:
-                enemy.heal(enemy.getHeal());
-                System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
-                break;
-
-            case 3:
-
-                enemy.getArmor().doubleDefence();
-                System.out.println(enemy.getName() + " doubles their defense for 1 round.");
-                System.out.println("Defesa atual: " + enemy.getArmor().getDefence());
-                System.out.println(player.toString() + "\n\n");
-
-                break;
-
-        }
-
-        if (necroticUsed) {
-            enemy.removeNecroticEffectTurns();
-        }
-        if (shockUsed) {
-            enemy.removeShockEffectTurns();
-        }
-        if (coldUsed) {
-            enemy.removeColdEffectTurns();
-        }
-
-    }
-
-    public static void computerAction2(Scanner scanner, Character player, Character enemy, boolean coldUsed,
-            boolean shockUsed, boolean necroticUsed, int computerAction, Random random) {
-        switch (computerAction) {
-            case 0:
-                int enemyDamage = enemy.calculateDamage();
-                int playerDefense = player.getArmor().setDefence();
-                int damageDealt = enemyDamage - playerDefense;
-
-                if (damageDealt > 0) {
-                    System.out.println(
-                            enemy.getName() + " attacks " + player.getName() + " for " + enemyDamage + " damage.");
-                    System.out.println("Dano dado: " + damageDealt);
-                    System.out.println("Defesa atual: " + playerDefense);
-                    player.receiveDamage(damageDealt);
-                } else {
-                    System.out.println(enemy.getName() + " attacks " + player.getName() + " but does no damage.");
-                }
-                break;
-
-            case 1:
-                enemy.heal(enemy.getHeal());
-                System.out.println(enemy.getName() + " uses a potion and recovers " + enemy.getHeal() + " HP.");
-                break;
-
-            case 2:
-
-                necroticUsed = true;
-
-                System.out.println(enemy.getMagic(0).toString() + " used.");
-
-                player.castMagic(player, 0, enemy.getMagic(0));
-                System.out.println(player.toString() + "\n\n");
-                System.out.println(enemy.toString() + "\n\n");
-        }
-
-        System.out.println(player.getName() + " HP: " + player.getHitPoints());
-        System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
-        System.out.println("------");
-
-        if (necroticUsed) {
-            enemy.removeNecroticEffectTurns();
-        }
-    }
-
-    public static void manageEffects(Character player, Character enemy, boolean coldUsed, boolean shockUsed,
-            boolean necroticUsed) {
-        if (player.getFireEffectTurns() > 0) {
-            enemy.applyFireEffect();
-        }
-
-        if (player.getPoisonEffectTurns() > 0) {
-            enemy.applyPoisonEffect();
-        }
-
-        if (player.getColdEffectTurns() <= 0) {
-            enemy.removeColdEffect();
-            coldUsed = false;
-            player.setColdEffectTurns();
-        }
-
-        if (enemy.getFireEffectTurns() > 0) {
-            player.applyFireEffect();
-        }
-
-        if (enemy.getPoisonEffectTurns() > 0) {
-            player.applyPoisonEffect();
-        }
-
-        if (enemy.getColdEffectTurns() <= 0) {
-            player.removeColdEffect();
-            coldUsed = false;
-            enemy.setColdEffectTurns();
-        }
-
-        if (enemy.getNecroticEffectTurns() <= 0) {
-            player.removeNecroticEffect();
-            necroticUsed = false;
-            enemy.setNecroticEffectTurns();
-        }
-
-        if (player.getShockEffectTurns() <= 0) {
-            enemy.addDexterity(2);
-            shockUsed = false;
-            player.setShockEffectTurns();
-        }
-
-        if (enemy.getShockEffectTurns() <= 0) {
-            player.addDexterity(2);
-            shockUsed = false;
-            enemy.setShockEffectTurns();
-        }
-    }
-
     public static Character createCharacter(Scanner scanner) {
         System.out.println("Character Creation");
         System.out.print("Enter character name: ");
         String playerName = scanner.nextLine();
 
-        int pointsRemaining = 15;
+        int pointsRemaining = 50;
         int strength = 0;
         int constitution = 0;
         int agility = 0;
@@ -1267,7 +3840,6 @@ public class Main {
     }
 
     public static void clrscr() {
-        // Clears Screen in java
         try {
             if (System.getProperty("os.name").contains("Windows"))
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
