@@ -38,6 +38,7 @@ public class Main {
         boolean coldUsed = false;
         boolean shockUsed = false;
         boolean necroticUsed = false;
+        int necroticCount = 0;
 
         // clrscr();
 
@@ -104,7 +105,6 @@ public class Main {
                             System.out
                                     .println(player.getName() + " attacks " + enemy.getName() + " but does no damage.");
                         }
-                        // System.out.println(enemy.toString() + "\n\n");
 
                         break;
 
@@ -130,7 +130,6 @@ public class Main {
                         System.out.println(player.getMagic(magicChoice).toString() + " used.");
 
                         player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
-                        // System.out.println(enemy.toString() + "\n\n");
 
                         break;
 
@@ -138,7 +137,6 @@ public class Main {
                         player.getArmor().doubleDefence();
                         System.out.println(player.getName() + " doubles their defense for 1 round.");
                         System.out.println("Defesa atual: " + player.getArmor().getDefence());
-                        // System.out.println(enemy.toString() + "\n\n");
 
                         break;
 
@@ -159,8 +157,8 @@ public class Main {
                 }
                 if (coldUsed) {
                     player.removeColdEffectTurns();
-
                 }
+
                 System.out.println("Numero de turnos restantes:" + player.getColdEffectTurns());
                 System.out.println(coldUsed);
                 System.out.println("\n" + player.getName() + " HP: " + player.getHitPoints());
@@ -284,7 +282,7 @@ public class Main {
                                 coldUsed = true;
                                 System.out.println(coldUsed);
                             }
-
+                            
                             System.out.println(player.getMagic(magicChoice).toString() + " used.");
 
                             player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
@@ -547,6 +545,7 @@ public class Main {
                                     case 2:
 
                                         necroticUsed = true;
+                                        necroticCount ++;
 
                                         System.out.println(enemy.getMagic(0).toString() + " used.");
 
@@ -598,6 +597,7 @@ public class Main {
                                 case 2:
 
                                     necroticUsed = true;
+                                    necroticCount ++;
 
                                     System.out.println(enemy.getMagic(0).toString() + " used.");
 
@@ -701,6 +701,8 @@ public class Main {
                         }
                     }
                     if (player.isAlive()) {
+                        player.addStrength(necroticCount*2);
+                        necroticCount = 0;
                         player.setHealUses(-1);
                         /* DEBUG */System.out.println("\nVida Total: " + player.getOriginalHitPoints());
                         addAttributes(scanner, 10, player);
@@ -1280,6 +1282,7 @@ public class Main {
                                     case 2:
 
                                         necroticUsed = true;
+                                        necroticCount ++;
 
                                         System.out.println(enemy.getMagic(0).toString() + " used.");
 
@@ -1332,6 +1335,7 @@ public class Main {
                                 case 2:
 
                                     necroticUsed = true;
+                                    necroticCount ++;
 
                                     System.out.println(enemy.getMagic(0).toString() + " used.");
 
@@ -1437,6 +1441,8 @@ public class Main {
 
                     if (player.isAlive()) {
                         player.setHealUses(-1);
+                        player.addStrength(necroticCount*2);
+                        necroticCount = 0;
                         /* DEBUG */System.out.println("\nVida Total: " + player.getOriginalHitPoints());
                         addAttributes(scanner, 10, player);
                         addHitPoints(player);
@@ -2031,7 +2037,7 @@ public class Main {
                                     case 2:
 
                                         necroticUsed = true;
-
+                                        necroticCount ++;
                                         System.out.println(enemy.getMagic(0).toString() + " used.");
 
                                         player.castMagic(player, 0, enemy.getMagic(0));
@@ -2186,6 +2192,8 @@ public class Main {
                     }
                     if (player.isAlive()) {
                         player.setHealUses(-1);
+                        player.addStrength(necroticCount*2);
+                        necroticCount = 0;
                         afterReachingMaster();
                         findingVardamir();
                         Character vardamir = new Character("Vardamir", 10, 10, 5, 5, null,
@@ -2758,7 +2766,7 @@ public class Main {
                                     case 2:
 
                                         necroticUsed = true;
-
+                                        necroticCount ++;
                                         System.out.println(enemy.getMagic(0).toString() + " used.");
 
                                         player.castMagic(player, 0, enemy.getMagic(0));
@@ -2810,7 +2818,7 @@ public class Main {
                                 case 2:
 
                                     necroticUsed = true;
-
+                                    necroticCount ++;
                                     System.out.println(enemy.getMagic(0).toString() + " used.");
 
                                     player.castMagic(player, 0, enemy.getMagic(0));
@@ -2913,6 +2921,8 @@ public class Main {
                     }
                     if (player.isAlive()) {
                         player.setHealUses(-1);
+                        player.addStrength(necroticCount*2);
+                        necroticCount = 0;
                         findingVardamir();
                         Character vardamir = new Character("Vardamir", 10, 10, 5, 5, null,
                                 null, new Potion(Potion.LARGE));
