@@ -105,7 +105,7 @@ public class Main {
                 case 1: 
                     player.getArmor().doubleDefence();
                     System.out.println(player.getName() + " doubles their defense for 1 round.");
-                    System.out.println("Defesa atual: " + player.getArmor().getDefence()); 
+                    System.out.println("Current defense: " + player.getArmor().getDefence()); 
                     break;
 
                 case 2:
@@ -134,7 +134,7 @@ public class Main {
                 case 1: 
                     enemy.getArmor().doubleDefence();
                     System.out.println(enemy.getName() + " doubles their defense for 1 round.");
-                    System.out.println("Defesa atual: " + enemy.getArmor().getDefence()); 
+                    System.out.println("Current defense: " + enemy.getArmor().getDefence()); 
                     break;
 
                 case 2: 

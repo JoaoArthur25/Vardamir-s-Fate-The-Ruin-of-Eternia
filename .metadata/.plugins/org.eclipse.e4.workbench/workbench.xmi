@@ -290,13 +290,13 @@
               <children xsi:type="basic:PartSashContainer" xmi:id="_UCbDa1DjEe6Kk9dpZTZSqA" containerData="6822" selectedElement="_UCbDbFDjEe6Kk9dpZTZSqA" horizontal="true">
                 <children xsi:type="advanced:Placeholder" xmi:id="_UCbDbFDjEe6Kk9dpZTZSqA" elementId="org.eclipse.ui.editorss" containerData="7500" ref="_40QB4FDiEe6Kk9dpZTZSqA"/>
                 <children xsi:type="basic:PartSashContainer" xmi:id="_UCbDbVDjEe6Kk9dpZTZSqA" toBeRendered="false" containerData="2500">
-                  <children xsi:type="basic:PartStack" xmi:id="_UCbDblDjEe6Kk9dpZTZSqA" elementId="org.eclipse.mylyn.tasks.ui.views.tasksMStack" toBeRendered="false" containerData="5000">
+                  <children xsi:type="basic:PartStack" xmi:id="_UCbDblDjEe6Kk9dpZTZSqA" elementId="org.eclipse.mylyn.tasks.ui.views.tasksMStack" toBeRendered="false" containerData="4000">
                     <children xsi:type="advanced:Placeholder" xmi:id="_UCbDb1DjEe6Kk9dpZTZSqA" elementId="org.eclipse.mylyn.tasks.ui.views.tasks" toBeRendered="false" ref="_UCYnIFDjEe6Kk9dpZTZSqA" closeable="true">
                       <tags>View</tags>
                       <tags>categoryTag:Mylyn</tags>
                     </children>
                   </children>
-                  <children xsi:type="basic:PartStack" xmi:id="_UCbDcFDjEe6Kk9dpZTZSqA" elementId="right" toBeRendered="false" containerData="5000">
+                  <children xsi:type="basic:PartStack" xmi:id="_UCbDcFDjEe6Kk9dpZTZSqA" elementId="right" toBeRendered="false" containerData="4000">
                     <tags>org.eclipse.e4.secondaryNavigationStack</tags>
                     <children xsi:type="advanced:Placeholder" xmi:id="_UCbDcVDjEe6Kk9dpZTZSqA" elementId="org.eclipse.ui.views.ContentOutline" toBeRendered="false" ref="_45XydFDiEe6Kk9dpZTZSqA" closeable="true">
                       <tags>View</tags>
