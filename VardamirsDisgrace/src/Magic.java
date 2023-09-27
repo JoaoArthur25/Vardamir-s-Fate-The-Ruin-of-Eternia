@@ -24,7 +24,7 @@ public class Magic {
             
         switch (magicCategory) {
             case FIRE:
-                int fireDamage = rollD6() + rollD6();
+                int fireDamage = rollD6() + rollD6() - 2;
                 target.receiveDamage(fireDamage);
 
                 dice = rand.nextInt(4);
@@ -42,15 +42,15 @@ public class Magic {
                 break;
 
             case ELECTRIC:
-                int electricDamage = rollD6() + rollD6();
+                int electricDamage = rollD6() + rollD4();
                 target.receiveDamage(electricDamage);
                 target.setShockEffectTurns();
                 target.applyShockEffect();
                 break;
 
             case POISON:
-                int poisonDamge = rollD4() + rollD4();
-                target.receiveDamage(poisonDamge);
+                int poisonDamage = rollD4() + rollD4();
+                target.receiveDamage(poisonDamage);
 
                 dice = rand.nextInt(2);
                     if (dice == 0) {
@@ -62,11 +62,7 @@ public class Magic {
             case DARK:
                 int darkDamage = rollD12() + rollD12();
                 target.receiveDamage(darkDamage);
-
-                dice = rand.nextInt(3);
-                if (dice != 0) {
-                    target.reduceStrength(2);
-                }
+                target.reduceStrength(2);
                 break;
 
             case NECROTIC:

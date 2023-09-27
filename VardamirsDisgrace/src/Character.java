@@ -19,7 +19,7 @@ class Character {
     private int shockEffectTurns = 3;
     private int necroticEffectTurns = 3;
 
-    private int healUses = 0;
+    private int healUses = -1;
 
     public Character(String name, int strength, int constitution, int agility, int dexterity, Weapon weapon,
             Armor armor, Potion potion) {
@@ -62,7 +62,7 @@ class Character {
                 break;
             case Weapon.ELVEN_BLADE:
             weaponDamage += rollD12() + rollD6() - 2;
-            weaponDamage += ((int) (0.3 * strength) + (int) (0.3 * dexterity));
+            weaponDamage += ((int) (0.5 * strength) + (int) (0.3 * dexterity)) + (int) (0.3 * agility);
                 break;
             case Weapon.SPEAR:
             weaponDamage += rollD6() + rollD6() + 2;
@@ -71,6 +71,10 @@ class Character {
             case Weapon.AXE:
             weaponDamage += rollD12() + 2;
             weaponDamage += (int) (0.6 * strength);
+                break;
+            case Weapon.LONG_BOW:
+            weaponDamage += rollD12() - 2;
+            weaponDamage += (int) (0.5 * agility);
                 break;
         }
 
@@ -163,6 +167,14 @@ class Character {
 
     public Weapon getWeapon() {
         return weapon;
+    }
+
+    public Potion getPotion() {
+        return potion;
+    }
+
+    public void setPotion(Potion potion) {
+        this.potion = potion;
     }
 
     public void setWeapon(Weapon weapon) {

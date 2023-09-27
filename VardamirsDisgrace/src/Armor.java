@@ -27,13 +27,13 @@ public class Armor {
     private int setDefenceConstant(String category) {
         switch (category) {
             case LIGHT:
-            return (int) (0.4 * character.getConstitution());
+            return ((int) (0.4 * character.getConstitution()) + (int) (0.2 * character.getAgility()));
             case HEAVY:
-                return (int) (character.getConstitution()); 
+                return ((int) (character.getConstitution()) + (int) (0.2 * character.getStrength()));
             case MEDIUM:
-            return (int) (0.6 * character.getConstitution());
+            return (int) (0.6 * character.getConstitution() + (int) (0.2 * character.getStrength()));
             case ELVEN_ARMOR:
-                return (int) (0.8 * character.getConstitution());
+                return (int) (1.2 * character.getConstitution() + (int) (0.2 * character.getStrength()) + (int) (0.2 * character.getAgility()));
             default:
                 return 0;
         }
