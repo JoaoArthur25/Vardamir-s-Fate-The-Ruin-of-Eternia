@@ -1164,14 +1164,19 @@ public class Main {
                                     ifTheWifeWasSavedFinal();
                                 } else if (enemy.isAlive()) {
                                     System.out.println("You are dead!");
+                                    Thread.sleep(2000);
                                 } else {
                                     System.out.println("You are dead!");
+                                    Thread.sleep(2000);
                                 }
 
                             } else if (enemy.isAlive()) {
                                 System.out.println("You are dead!");
+                                Thread.sleep(2000);
+
                             } else {
                                 System.out.println("You are dead!");
+                                Thread.sleep(2000);
                             }
 
                         } else if (choice == 2) {
@@ -1926,14 +1931,22 @@ public class Main {
                                     ifTheTripletsWereSavedFinal();
                                 } else if (enemy.isAlive()) {
                                     System.out.println("You are dead!");
+                                    Thread.sleep(2000);
+
                                 } else {
                                     System.out.println("You are dead!");
+                                    Thread.sleep(2000);
+
                                 }
 
                             } else if (enemy.isAlive()) {
                                 System.out.println("You are dead!");
+                                Thread.sleep(2000);
+
                             } else {
                                 System.out.println("You are dead!");
+                                Thread.sleep(2000);
+
                             }
 
                         }
@@ -2396,7 +2409,7 @@ public class Main {
                                         player.setNecroticEffectTurns();
                                     }
                                     System.out.println(player.toString() + "\n");
-                                    System.out.println(enemy.toString()+ "\n");
+                                    System.out.println(enemy.toString() + "\n");
                                     player.getArmor().setDefence();
                                     if (player.getAgility() > enemy.getAgility()) {
                                         playerAction = getPlayerAction(scanner);
@@ -2704,13 +2717,21 @@ public class Main {
                                     ifNoOneWasSavedFinal();
                                 } else if (enemy.isAlive()) {
                                     System.out.println("You are dead!");
+                                    Thread.sleep(2000);
+
                                 } else {
                                     System.out.println("You are dead!");
+                                    Thread.sleep(2000);
+
                                 }
                             } else if (enemy.isAlive()) {
                                 System.out.println("You are dead!");
+                                Thread.sleep(2000);
+
                             } else {
                                 System.out.println("You are dead!");
+                                Thread.sleep(2000);
+
                             }
                         } else if (choice == 2) {
                             clrscr();
@@ -3450,24 +3471,35 @@ public class Main {
                                     ifNoOneWasSavedFinal();
                                 } else if (enemy.isAlive()) {
                                     System.out.println("You are dead!");
+                                    Thread.sleep(2000);
+
                                 } else {
                                     System.out.println("You are dead!");
+                                    Thread.sleep(2000);
+
                                 }
                             } else if (enemy.isAlive()) {
                                 System.out.println("You are dead!");
+                                Thread.sleep(2000);
+
                             } else {
                                 System.out.println("You are dead!");
+                                Thread.sleep(2000);
+
                             }
                         }
                     }
 
                 } else if (enemy.isAlive()) {
                     System.out.println("You are dead!");
+                    Thread.sleep(2000);
+
                 } else {
                     System.out.println("You are dead!");
+                    Thread.sleep(2000);
+
                 }
 
-                //scanner.close();
             }
 
             else if (menuChoice == 2) {
@@ -3958,7 +3990,10 @@ public class Main {
     }
 
     private static void backgroundHistory() {
-        slowPrint("anuisniuerghu");
+        slowPrint(
+                "This is the legendary saga of the Ruin of Eternia, a once prosperous and peaceful kingdom that now is collapsing into ruins.\n"
+                        + "In the heart of unexpected chaos within the kingdom of Eternia, an unlikely champion steps forward \n"
+                        + "to confront the evil threatening to lay waste to their homeland.");
     }
 
     private static void newLevelText() {
@@ -4124,7 +4159,7 @@ public class Main {
     }
 
     public static void menu() {
-        slowPrint("Welcome to Vardamir's Fate: The Ruin of Eternia! \n"
+        System.out.println("Welcome to Vardamir's Fate: The Ruin of Eternia! \n"
                 + "1. Start Game \n"
                 + "2. History \n"
                 + "3. Exit");
