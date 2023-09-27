@@ -60,6 +60,18 @@ class Character {
             weaponDamage += rollD12() - 2;
             weaponDamage += (int) (0.5 * dexterity);
                 break;
+            case Weapon.ELVEN_BLADE:
+            weaponDamage += rollD12() + rollD6() - 2;
+            weaponDamage += ((int) (0.3 * strength) + (int) (0.3 * dexterity));
+                break;
+            case Weapon.SPEAR:
+            weaponDamage += rollD6() + rollD6() + 2;
+            weaponDamage += (int) (0.6 * agility);
+                break;
+            case Weapon.AXE:
+            weaponDamage += rollD12() + 2;
+            weaponDamage += (int) (0.6 * strength);
+                break;
         }
 
         return Math.max(0, weaponDamage);

@@ -2,6 +2,7 @@ public class Armor {
     public static final String LIGHT = "Light Armor";
     public static final String HEAVY = "Heavy Armor";
     public static final String MEDIUM = "Medium Armor";
+    public static final String ELVEN_ARMOR = "Elven Armor";
 
     private String category;
     private int defenceConstant;
@@ -20,7 +21,7 @@ public class Armor {
     }
 
     private boolean isValidCategory(String category) {
-        return category.equals(LIGHT) || category.equals(HEAVY) || category.equals(MEDIUM);
+        return category.equals(LIGHT) || category.equals(HEAVY) || category.equals(MEDIUM) || category.equals(ELVEN_ARMOR);
     }
 
     private int setDefenceConstant(String category) {
@@ -31,6 +32,8 @@ public class Armor {
                 return (int) (character.getConstitution()); 
             case MEDIUM:
             return (int) (0.6 * character.getConstitution());
+            case ELVEN_ARMOR:
+                return (int) (0.8 * character.getConstitution());
             default:
                 return 0;
         }

@@ -159,7 +159,6 @@ public class Main {
                     player.removeColdEffectTurns();
                 }
 
-                
                 System.out.println("\n------");
                 System.out.println(player.getName() + " HP: " + player.getHitPoints());
                 System.out.println(enemy.getName() + " HP: " + enemy.getHitPoints());
@@ -282,7 +281,7 @@ public class Main {
                             if (magicName.equals("Ice Magic")) {
                                 coldUsed = true;
                             }
-                            
+
                             System.out.println(player.getMagic(magicChoice).toString() + " used.");
 
                             player.castMagic(enemy, magicChoice, player.getMagic(magicChoice));
@@ -326,6 +325,29 @@ public class Main {
         clrscr();
 
         if (player.isAlive()) {
+
+            findingWeapon();
+            System.out.println("Wich weapon do you want to take? ");
+            System.out.println("1. Spear");
+            System.out.println("2. Axe");
+            System.out.println("3. Long Bow");
+
+            int weaponChoice = getIntInput(scanner);
+
+            while (weaponChoice < 1 || weaponChoice > 3) {
+                System.out.println("Invalid choice. Please choose a valid action (1-3).");
+                System.out.print("Enter your choice (1-3): ");
+                weaponChoice = getIntInput(scanner);
+            }
+
+            if (weaponChoice == 1) {
+                player.setWeapon(new Weapon(Weapon.SPEAR));
+            } else if (weaponChoice == 2) {
+                player.setWeapon(new Weapon(Weapon.AXE));
+            } else {
+                player.setWeapon(new Weapon(Weapon.LONG_BOW));
+            }
+
             player.setHealUses(-1);
             addAttributes(scanner, 5, player);
             addHitPoints(player);
@@ -543,7 +565,7 @@ public class Main {
                                     case 2:
 
                                         necroticUsed = true;
-                                        necroticCount ++;
+                                        necroticCount++;
 
                                         System.out.println(enemy.getMagic(0).toString() + " used.");
 
@@ -581,8 +603,8 @@ public class Main {
                                     if (enemy.getHealUses() < 3) {
                                         enemy.heal();
                                         System.out.println(enemy.getName() + " uses a potion and recovers "
-                                                        + enemy.getHeal()
-                                                        + " HP.");
+                                                + enemy.getHeal()
+                                                + " HP.");
                                     } else {
                                         System.out.println("You have used all your healing potions.");
                                     }
@@ -591,7 +613,7 @@ public class Main {
                                 case 2:
 
                                     necroticUsed = true;
-                                    necroticCount ++;
+                                    necroticCount++;
 
                                     System.out.println(enemy.getMagic(0).toString() + " used.");
 
@@ -693,7 +715,7 @@ public class Main {
 
                         clrscr();
 
-                        player.addStrength(necroticCount*2);
+                        player.addStrength(necroticCount * 2);
                         necroticCount = 0;
                         player.setHealUses(-1);
                         addAttributes(scanner, 10, player);
@@ -701,6 +723,10 @@ public class Main {
                         player.setHp(player.getOriginalHitPoints());
 
                         saveWifeChoice();
+                        findingArmor();
+                        System.out.println("Your new armor ready.");
+
+                        player.setArmor(new Armor(Armor.ELVEN_ARMOR, player));
 
                         Thread.sleep(4000);
 
@@ -841,8 +867,8 @@ public class Main {
                                         if (player.getHealUses() < 3) {
                                             player.heal();
                                             System.out.println(player.getName() + " uses a potion and recovers "
-                                                            + player.getHeal()
-                                                            + " HP.");
+                                                    + player.getHeal()
+                                                    + " HP.");
                                         } else {
                                             System.out.println("You have used all your healing potions.");
                                         }
@@ -892,8 +918,8 @@ public class Main {
                                             if (enemy.getHealUses() < 3) {
                                                 enemy.heal();
                                                 System.out.println(enemy.getName() + " uses a potion and recovers "
-                                                                + enemy.getHeal()
-                                                                + " HP.");
+                                                        + enemy.getHeal()
+                                                        + " HP.");
                                             } else {
                                                 System.out.println("You have used all your healing potions.");
                                             }
@@ -947,8 +973,8 @@ public class Main {
                                         if (enemy.getHealUses() < 3) {
                                             enemy.heal();
                                             System.out.println(enemy.getName() + " uses a potion and recovers "
-                                                            + enemy.getHeal()
-                                                            + " HP.");
+                                                    + enemy.getHeal()
+                                                    + " HP.");
                                         } else {
                                             System.out.println("You have used all your healing potions.");
                                         }
@@ -982,7 +1008,8 @@ public class Main {
                                             int damageDealt = playerDamage;
 
                                             if (damageDealt > 0) {
-                                                System.out.println(player.getName() + " attacks " + enemy.getName() + " for "
+                                                System.out.println(
+                                                        player.getName() + " attacks " + enemy.getName() + " for "
                                                                 + playerDamage
                                                                 + " damage.");
                                                 enemy.receiveDamage(damageDealt);
@@ -1079,6 +1106,9 @@ public class Main {
 
                 } else if (choice == 2) {
                     clrscr();
+
+                    findingWeapon();
+
                     Character nidere = new Character("Nidere", 5, 5, 5, 5, new Weapon(Weapon.DAGGER), null,
                             new Potion(Potion.SMALL));
                     Character specter = new Character("Specter", 4, 8, 3, 5, new Weapon(Weapon.DAGGER), null,
@@ -1258,7 +1288,7 @@ public class Main {
                                     case 2:
 
                                         necroticUsed = true;
-                                        necroticCount ++;
+                                        necroticCount++;
 
                                         System.out.println(enemy.getMagic(0).toString() + " used.");
 
@@ -1308,7 +1338,7 @@ public class Main {
                                 case 2:
 
                                     necroticUsed = true;
-                                    necroticCount ++;
+                                    necroticCount++;
 
                                     System.out.println(enemy.getMagic(0).toString() + " used.");
 
@@ -1410,12 +1440,17 @@ public class Main {
 
                     if (player.isAlive()) {
                         player.setHealUses(-1);
-                        player.addStrength(necroticCount*2);
+                        player.addStrength(necroticCount * 2);
                         necroticCount = 0;
                         addAttributes(scanner, 10, player);
                         addHitPoints(player);
                         player.setHp(player.getOriginalHitPoints());
                         saveTripletsChoice();
+                        findingArmor();
+                        System.out.println("Your new armor ready.");
+
+                        player.setArmor(new Armor(Armor.ELVEN_ARMOR, player));
+
                         Thread.sleep(4000);
                         clrscr();
                         findingVardamir();
@@ -1996,7 +2031,7 @@ public class Main {
                                     case 2:
 
                                         necroticUsed = true;
-                                        necroticCount ++;
+                                        necroticCount++;
                                         System.out.println(enemy.getMagic(0).toString() + " used.");
 
                                         player.castMagic(player, 0, enemy.getMagic(0));
@@ -2143,14 +2178,20 @@ public class Main {
                     if (player.isAlive()) {
                         clrscr();
                         player.setHealUses(-1);
-                        player.addStrength(necroticCount*2);
+                        player.addStrength(necroticCount * 2);
                         necroticCount = 0;
                         addAttributes(scanner, 10, player);
                         addHitPoints(player);
                         player.setHp(player.getOriginalHitPoints());
-                        player.addStrength(necroticCount*2);
+                        player.addStrength(necroticCount * 2);
                         necroticCount = 0;
                         afterReachingMaster();
+                        player.setWeapon(new Weapon(Weapon.ELVEN_BLADE));
+                        findingArmor();
+                        System.out.println("Your new armor ready.");
+
+                        player.setArmor(new Armor(Armor.ELVEN_ARMOR, player));
+
                         Thread.sleep(4000);
                         clrscr();
                         findingVardamir();
@@ -2718,7 +2759,7 @@ public class Main {
                                     case 2:
 
                                         necroticUsed = true;
-                                        necroticCount ++;
+                                        necroticCount++;
                                         System.out.println(enemy.getMagic(0).toString() + " used.");
 
                                         player.castMagic(player, 0, enemy.getMagic(0));
@@ -2767,7 +2808,7 @@ public class Main {
                                 case 2:
 
                                     necroticUsed = true;
-                                    necroticCount ++;
+                                    necroticCount++;
                                     System.out.println(enemy.getMagic(0).toString() + " used.");
 
                                     player.castMagic(player, 0, enemy.getMagic(0));
@@ -2865,8 +2906,12 @@ public class Main {
 
                     if (player.isAlive()) {
                         player.setHealUses(-1);
-                        player.addStrength(necroticCount*2);
+                        player.addStrength(necroticCount * 2);
                         necroticCount = 0;
+                        findingArmor();
+                        System.out.println("Your new armor ready.");
+                        player.setArmor(new Armor(Armor.ELVEN_ARMOR, player));
+
                         findingVardamir();
                         Character vardamir = new Character("Vardamir", 10, 10, 5, 5, null,
                                 null, new Potion(Potion.LARGE));
@@ -3666,7 +3711,8 @@ public class Main {
     }
 
     private static void vardamirPerspectiveFinal() {
-        slowPrint(" In the aftermath of the cataclysmic battle, the malevolent shroud that had ensnared Vardamir's being begins to unravel, \n"
+        slowPrint(
+                " In the aftermath of the cataclysmic battle, the malevolent shroud that had ensnared Vardamir's being begins to unravel, \n"
                         + "unveiling a figure left battered and shattered by the relentless grip of dark magic. \n"
                         + "Slowly, as if rousing from an agonizing and endless slumber, Vardamir stirs. \n"
                         + "\n"
@@ -3699,23 +3745,23 @@ public class Main {
                         + "hoping that one day he will be able to find Velyar and avenge all that he destroied. \n");
     }
 
-    private static void findingWeapon(){
+    private static void findingWeapon() {
         slowPrint(" As you pass through the imposing city gates, a chilling sight unfolds before my eyes. \n"
-            + "The once-familiar streets now bear witness to the fallen, \n" 
-            + "your valiant companions who sacrificed their lives defending the honor of your kingdom. \n"
-            + "\n"
-            + " These noble souls, who fought bravely till their last breath, have left behind a poignant legacy of valor. \n" 
-            + "You ause to pay your respects, your heart heavy with sorrow, for their sacrifice shall not be in vain. \n"
-            + "\n"
-            + " Amidst the fallen, glimmers of hope emerge, a cache of valuos weapons lies nearby, it could be of some use to your noble cause. \n");
+                + "The once-familiar streets now bear witness to the fallen, \n"
+                + "your valiant companions who sacrificed their lives defending the honor of your kingdom. \n"
+                + "\n"
+                + " These noble souls, who fought bravely till their last breath, have left behind a poignant legacy of valor. \n"
+                + "You ause to pay your respects, your heart heavy with sorrow, for their sacrifice shall not be in vain. \n"
+                + "\n"
+                + " Amidst the fallen, glimmers of hope emerge, a cache of valuos weapons lies nearby, it could be of some use to your noble cause. \n");
     }
 
-    private static void findingArmor(){
-        slowPrint("Worn down by unending battles, yet determined to persevere, you approached the central square. \n" 
-            + "As you reached its entrance, you discovered the commander's lifeless body, \n" 
-            + "draped in the most exquisite armor from Eternia's elite ranks. \n" 
-            + "This splendid armor, emerging like an omen of the imminent challenges, sparked a fire of hope and resolve within you. \n" 
-            + "It was an unforeseen gift amidst the chaos, a beacon of strength to carry you through the daunting trials that lay ahead. \n");
+    private static void findingArmor() {
+        slowPrint("Worn down by unending battles, yet determined to persevere, you approached the central square. \n"
+                + "As you reached its entrance, you discovered the commander's lifeless body, \n"
+                + "draped in the most exquisite armor from Eternia's elite ranks. \n"
+                + "This splendid armor, emerging like an omen of the imminent challenges, sparked a fire of hope and resolve within you. \n"
+                + "It was an unforeseen gift amidst the chaos, a beacon of strength to carry you through the daunting trials that lay ahead. \n");
     }
 
     private static void slowPrint(String text) {
