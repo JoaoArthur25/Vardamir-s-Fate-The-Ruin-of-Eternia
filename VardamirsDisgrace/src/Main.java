@@ -20,11 +20,11 @@ public class Main {
 
                 Character player = createCharacter(scanner);
 
-                Character diabrete = new Character("Diabrete", 2, 3, 5, 5, new Weapon(Weapon.DAGGER), null,
+                Character diabrete = new Character("Diabrete", 2, 5, 5, 5, new Weapon(Weapon.DAGGER), null,
                         new Potion(Potion.SMALL));
-                Character aranha = new Character("Aranha", 5, 4, 3, 3, new Weapon(Weapon.DAGGER), null,
+                Character aranha = new Character("Aranha", 5, 4, 6, 5, new Weapon(Weapon.DAGGER), null,
                         new Potion(Potion.SMALL));
-                Character esqueleto = new Character("Esqueleto", 6, 5, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
+                Character esqueleto = new Character("Esqueleto", 5, 7, 2, 2, new Weapon(Weapon.LONG_SWORD), null,
                         new Potion(Potion.MEDIUM));
 
                 diabrete.setArmor(new Armor(Armor.LIGHT, diabrete));
